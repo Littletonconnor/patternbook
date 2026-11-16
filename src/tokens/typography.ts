@@ -43,6 +43,12 @@ export const type = stylex.create({
     letterSpacing: "0.06em",
     textTransform: "uppercase",
   },
+  control: {
+    fontFamily: fonts.sans,
+    fontSize: 14,
+    lineHeight: "20px",
+    fontWeight: 500,
+  },
   code: {
     fontFamily: fonts.mono,
     fontSize: 14,

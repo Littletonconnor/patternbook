@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import * as stylex from "@stylexjs/stylex";
-import { colors, measure, radius, space } from "@/tokens/tokens.stylex";
+import { colors, fonts, measure, radius, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
 
 const styles = stylex.create({
@@ -22,6 +22,18 @@ const styles = stylex.create({
   },
   cardTitle: { fontWeight: 600 },
   token: { color: colors.inkMuted, textTransform: "none", letterSpacing: 0 },
+  specs: { display: "flex", flexDirection: "column" },
+  specRow: {
+    display: "grid",
+    gridTemplateColumns: "112px minmax(0, 1fr)",
+    gap: space.s3,
+    paddingBlock: space.s2,
+    borderTopWidth: 1,
+    borderTopStyle: "solid",
+    borderTopColor: colors.line,
+  },
+  specKey: { fontFamily: fonts.mono, fontSize: 12, lineHeight: "20px", color: colors.inkMuted },
+  specValue: { fontSize: 13, lineHeight: "20px", color: colors.ink },
 });
 
 type SectionProps = {
@@ -55,4 +67,17 @@ export function Card({ title, children }: { title?: string; children: ReactNode 
 
 export function Token({ children }: { children: ReactNode }) {
   return <span {...stylex.props(type.label, styles.token)}>{children}</span>;
+}
+
+export function Specs({ rows }: { rows: [string, ReactNode][] }) {
+  return (
+    <div {...stylex.props(styles.specs)}>
+      {rows.map(([name, value]) => (
+        <div key={name} {...stylex.props(styles.specRow)}>
+          <span {...stylex.props(styles.specKey)}>{name}</span>
+          <span {...stylex.props(styles.specValue)}>{value}</span>
+        </div>
+      ))}
+    </div>
+  );
 }

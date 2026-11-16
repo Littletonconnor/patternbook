@@ -5,6 +5,7 @@ import { type } from "@/tokens/typography";
 import { Colour } from "./Colour";
 import { Layout } from "./Layout";
 import { Typography } from "./Typography";
+import { Primitives } from "./Primitives";
 
 export const metadata: Metadata = { title: "Foundations · Patternbook" };
 
@@ -37,6 +38,7 @@ export default function Foundations() {
       <Colour />
       <Typography />
       <Layout />
+      <Primitives />
     </main>
   );
 }

@@ -49,6 +49,9 @@ export function Typography() {
               Used for sidebar items, captions under figures and secondary notes.
             </span>
           </Row>
+          <Row spec="type.control · 14/20 · 500">
+            <span {...stylex.props(type.control)}>Load next page · Offset · Cursor</span>
+          </Row>
         </Card>
         <Card>
           <Row spec="type.label · 12/16 · 500 · +0.06em · uppercase">
