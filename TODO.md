@@ -31,10 +31,10 @@ Base UI parts styled with tokens. No app knowledge. Board 04.
 
 The sidebar, homepage and pager all read the same list.
 
-- [ ] Decide the source: typed file in `src/content` or parse `CATALOG.md`
+- [x] Source: typed file, `src/content/catalog.ts`
 - [x] Types: Topic, Lesson (number, slug, title, level, minutes, status)
-- [ ] All 16 topics and 83 lessons entered
-- [ ] Helpers: lesson by slug, previous and next, lessons by level, totals
+- [x] All 16 topics and 83 lessons entered
+- [x] Helpers: lesson by slug, previous and next, lessons by level, totals
 
 ## 3. App shell
 
@@ -44,8 +44,8 @@ Board 03 shows the shell around a lesson.
 - [x] Sidebar: collapsible topics, only the current topic open
 - [x] Sidebar: lesson rows with number, title, read tick, current state
 - [x] Sidebar: footer count ("16 topics · 83 lessons · 2 read")
-- [ ] Layout: sidebar + content + "On this page" rail at the measure widths
-- [ ] Mobile: sidebar becomes a drawer, rail hides
+- [x] Layout: sidebar + content + "On this page" rail at the measure widths
+- [x] Mobile: sidebar becomes a drawer, rail hides
 - [x] Footer
 - [x] Read state stored in localStorage (no account)
 
@@ -64,7 +64,7 @@ Board 00.
 
 Everything a lesson page needs apart from figures. Boards 03 and 04.
 
-- [ ] Lesson route: `/lessons/[slug]` with a placeholder body
+- [x] Lesson route: `/lessons/[slug]` with a placeholder body
 - [ ] Decide how lessons are written (MDX or TSX)
 - [x] Lesson header: topic, number, title, level badge, minutes
 - [x] Prose styles: headings, paragraphs, lists, inline code

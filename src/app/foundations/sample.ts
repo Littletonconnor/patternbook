@@ -4,6 +4,7 @@ export const sampleTopics: Topic[] = [
   {
     slug: "git",
     title: "Git",
+    description: "Version control without the fear.",
     lessons: [
       {
         number: 1,
@@ -28,6 +29,7 @@ export const sampleTopics: Topic[] = [
   {
     slug: "apis",
     title: "APIs",
+    description: "The contract between frontend and backend.",
     lessons: [
       {
         number: 31,

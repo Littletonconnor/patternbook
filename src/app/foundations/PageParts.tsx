@@ -24,6 +24,7 @@ const styles = stylex.create({
   grid: { display: "flex", flexDirection: "column", gap: space.s4 },
   bleed: { marginInline: `calc(-1 * ${space.s6})`, marginBlock: `calc(-1 * ${space.s6})` },
   stack: { display: "flex", flexDirection: "column", gap: space.s3 },
+  sidebar: { width: 268 },
 });
 
 const apis = sampleTopics[1];
@@ -64,7 +65,9 @@ export function PageParts() {
 
           <Card title="Sidebar">
             <Preview>
-              <Sidebar topics={sampleTopics} currentSlug={sampleLesson.slug} />
+              <div {...stylex.props(styles.sidebar)}>
+                <Sidebar topics={sampleTopics} currentSlug={sampleLesson.slug} />
+              </div>
             </Preview>
             <Specs
               rows={[

@@ -59,6 +59,7 @@ export const measure = stylex.defineVars({
   prose: "680px",
   figure: "960px",
   rail: "200px",
+  page: "1440px",
 });
 
 export const motion = stylex.defineVars({

@@ -10,11 +10,15 @@ export type Lesson = {
   level: Level;
   minutes: number;
   status: LessonStatus;
+  /** one of the starter lessons written first */
+  starter?: boolean;
 };
 
 export type Topic = {
   slug: string;
   title: string;
+  /** one line under the topic name */
+  description: string;
   lessons: Lesson[];
 };
 

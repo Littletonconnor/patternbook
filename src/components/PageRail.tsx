@@ -15,7 +15,7 @@ const styles = stylex.create({
     gap: space.s3,
     width: measure.rail,
     position: "sticky",
-    top: space.s6,
+    top: `calc(57px + ${space.s6})`, // below the sticky top bar
     alignSelf: "flex-start",
   },
   label: { color: colors.inkMuted },

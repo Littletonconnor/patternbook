@@ -3,7 +3,7 @@
 import * as stylex from "@stylexjs/stylex";
 import { Menu } from "lucide-react";
 import type { ReactNode } from "react";
-import { colors, radius, space } from "@/tokens/tokens.stylex";
+import { colors, measure, radius, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
 import { Drawer } from "@/ui/Drawer";
 import { IconButton } from "@/ui/IconButton";
@@ -18,9 +18,14 @@ const styles = stylex.create({
     display: "flex",
     alignItems: "center",
     gap: space.s6,
-    minHeight: 57,
+    boxSizing: "border-box",
+    height: 57,
     paddingBlock: space.s3,
-    paddingInline: { default: space.s4, [WIDE]: space.s6 },
+    // The border runs edge to edge; the contents line up with the page measure.
+    paddingInline: {
+      default: space.s4,
+      [WIDE]: `max(${space.s6}, calc((100% - ${measure.page}) / 2 + ${space.s6}))`,
+    },
     backgroundColor: colors.paper,
     borderBottomWidth: 1,
     borderBottomStyle: "solid",

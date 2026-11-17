@@ -8,13 +8,13 @@ const styles = stylex.create({
   h2: {
     marginTop: { default: space.s12, ":first-child": 0 },
     marginBottom: space.s3,
-    scrollMarginTop: space.s6,
+    scrollMarginTop: `calc(57px + ${space.s6})`,
   },
   h3: {
     marginTop: { default: space.s8, ":first-child": 0 },
     marginBottom: space.s2,
     fontWeight: 600,
-    scrollMarginTop: space.s6,
+    scrollMarginTop: `calc(57px + ${space.s6})`,
   },
   p: { marginTop: 0, marginBottom: space.s4 },
   list: { marginTop: 0, marginBottom: space.s4, paddingInlineStart: 20 },
