@@ -6,6 +6,7 @@ import { Colour } from "./Colour";
 import { Layout } from "./Layout";
 import { Typography } from "./Typography";
 import { Primitives } from "./Primitives";
+import { PageParts } from "./PageParts";
 
 export const metadata: Metadata = { title: "Foundations · Patternbook" };
 
@@ -31,14 +32,15 @@ export default function Foundations() {
         <div {...stylex.props(type.label, styles.eyebrow)}>Patternbook · Design system</div>
         <h1 {...stylex.props(type.display, styles.title)}>Foundations</h1>
         <p {...stylex.props(styles.lede)}>
-          A quiet page so the figures can be loud. Neutrals carry the reading; colour is reserved
-          for meaning inside a figure.
+          The Patternbook design system: the tokens, primitives and page parts every lesson and
+          figure is built from, shown in every state.
         </p>
       </header>
       <Colour />
       <Typography />
       <Layout />
       <Primitives />
+      <PageParts />
     </main>
   );
 }

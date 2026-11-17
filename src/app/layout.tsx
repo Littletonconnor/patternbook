@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import * as stylex from "@stylexjs/stylex";
 import { colors } from "@/tokens/tokens.stylex";
@@ -24,6 +24,15 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Patternbook",
   description: "An interactive notebook of everyday engineering problems.",
+  applicationName: "Patternbook",
+  appleWebApp: { title: "Patternbook", statusBarStyle: "default" },
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#FBFBF9" },
+    { media: "(prefers-color-scheme: dark)", color: "#0F1114" },
+  ],
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

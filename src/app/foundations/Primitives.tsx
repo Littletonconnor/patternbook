@@ -2,11 +2,16 @@ import * as stylex from "@stylexjs/stylex";
 import { space } from "@/tokens/tokens.stylex";
 import { Section } from "./Section";
 import { ButtonExample } from "./Button";
+import { IconButtonExample } from "./IconButton";
+import { LinkExample } from "./Link";
+import { BadgeExample, KbdExample } from "./Badge";
+import { SliderExample, SwitchExample, TabsExample, ToggleGroupExample } from "./Controls";
+import { CollapsibleExample, DrawerExample, TooltipExample } from "./Overlays";
 
 const styles = stylex.create({
   grid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+    display: "flex",
+    flexDirection: "column",
     gap: space.s4,
   },
 });
@@ -20,6 +25,17 @@ export function Primitives() {
     >
       <div {...stylex.props(styles.grid)}>
         <ButtonExample />
+        <IconButtonExample />
+        <LinkExample />
+        <BadgeExample />
+        <KbdExample />
+        <ToggleGroupExample />
+        <TabsExample />
+        <SwitchExample />
+        <SliderExample />
+        <TooltipExample />
+        <CollapsibleExample />
+        <DrawerExample />
       </div>
     </Section>
   );

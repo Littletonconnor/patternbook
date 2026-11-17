@@ -2,7 +2,7 @@ import type { LucideIcon } from "lucide-react";
 
 type IconProps = {
   icon: LucideIcon;
-  size?: 14 | 16 | 20;
+  size?: 12 | 14 | 16 | 20;
   label?: string;
 };
 

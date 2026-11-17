@@ -52,6 +52,12 @@ export function Typography() {
           <Row spec="type.control · 14/20 · 500">
             <span {...stylex.props(type.control)}>Load next page · Offset · Cursor</span>
           </Row>
+          <Row spec="type.ui · 14/20 · 400">
+            <span {...stylex.props(type.ui)}>Lessons · Figures · About</span>
+          </Row>
+          <Row spec="type.caption · 12/16 · 400">
+            <span {...stylex.props(type.caption)}>All · Foundations · Core · Advanced</span>
+          </Row>
         </Card>
         <Card>
           <Row spec="type.label · 12/16 · 500 · +0.06em · uppercase">
@@ -63,6 +69,18 @@ export function Typography() {
               <br />
               WHERE id &lt; 9 ORDER BY id DESC LIMIT 4
             </span>
+          </Row>
+          <Row spec="type.codeSmall · 13/20 · 400">
+            <span {...stylex.props(type.codeSmall)}>SQL · TypeScript · HTTP</span>
+          </Row>
+          <Row spec="type.tag · 11/16 · 500">
+            <span {...stylex.props(type.tag)}>Foundations · Read · ⌘K</span>
+          </Row>
+          <Row spec="type.number · 12/16 · 400 · tabular numerals">
+            <span {...stylex.props(type.number)}>01 02 03 32 33 · 1/6</span>
+          </Row>
+          <Row spec="type.value · 14/20 · 500 · tabular numerals">
+            <span {...stylex.props(type.value)}>4 · 240 ms</span>
           </Row>
           <Row spec="type.readout · 28/32 · 500 · tabular numerals">
             <span {...stylex.props(type.readout)}>12 rows · 240 ms</span>

@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import * as stylex from "@stylexjs/stylex";
-import { colors, fonts, measure, radius, space } from "@/tokens/tokens.stylex";
+import { colors, measure, radius, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
 
 const styles = stylex.create({
@@ -32,8 +32,8 @@ const styles = stylex.create({
     borderTopStyle: "solid",
     borderTopColor: colors.line,
   },
-  specKey: { fontFamily: fonts.mono, fontSize: 12, lineHeight: "20px", color: colors.inkMuted },
-  specValue: { fontSize: 13, lineHeight: "20px", color: colors.ink },
+  specKey: { paddingTop: 2, color: colors.inkMuted },
+  specValue: { color: colors.ink },
 });
 
 type SectionProps = {
@@ -74,8 +74,8 @@ export function Specs({ rows }: { rows: [string, ReactNode][] }) {
     <div {...stylex.props(styles.specs)}>
       {rows.map(([name, value]) => (
         <div key={name} {...stylex.props(styles.specRow)}>
-          <span {...stylex.props(styles.specKey)}>{name}</span>
-          <span {...stylex.props(styles.specValue)}>{value}</span>
+          <span {...stylex.props(type.number, styles.specKey)}>{name}</span>
+          <span {...stylex.props(type.ui, styles.specValue)}>{value}</span>
         </div>
       ))}
     </div>
