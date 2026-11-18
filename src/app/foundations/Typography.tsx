@@ -29,6 +29,9 @@ export function Typography() {
     <Section eyebrow="02 · Typography" title="Two voices: Geist explains, Geist Mono labels">
       <div {...stylex.props(styles.grid)}>
         <Card>
+          <Row spec="type.hero · 56/58 (40/44 on phones) · 600 · -0.03em">
+            <span {...stylex.props(type.hero)}>Break it first</span>
+          </Row>
           <Row spec="type.display · 40/44 · 600 · -0.02em">
             <span {...stylex.props(type.display)}>Offset vs cursor</span>
           </Row>

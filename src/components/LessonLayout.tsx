@@ -85,7 +85,7 @@ export function LessonLayout({ rail = [], children }: LessonLayoutProps) {
         <main {...stylex.props(styles.main)}>
           <div {...stylex.props(styles.container)}>
             <div {...stylex.props(styles.content)}>{children}</div>
-            <Footer updated="16 Nov 2026" />
+            <Footer />
           </div>
         </main>
         {rail.length > 0 && (

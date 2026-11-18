@@ -53,12 +53,12 @@ Board 03 shows the shell around a lesson.
 
 Board 00.
 
-- [ ] Hero: headline, two CTAs, the "16 topics / 83 lessons / about 10 hours" line
-- [ ] Hero figure placeholder (static for now, real figure in phase 6)
+- [x] Hero: headline, two CTAs, the "16 topics / 83 lessons / about 10 hours" line
+- [x] Hero figure placeholder (static for now, real figure in phase 6)
 - [x] LessonCard component with mini-diagram thumbnail slot
-- [ ] "Good places to start": the five starter lessons
-- [ ] Three level cards
-- [ ] "Everything, by topic" list of all 16 topics
+- [x] "Good places to start": the five starter lessons
+- [x] Three level cards
+- [x] "Everything, by topic" list of all 16 topics
 
 ## 5. Lesson components (`src/components`)
 

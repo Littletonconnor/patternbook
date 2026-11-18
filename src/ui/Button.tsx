@@ -33,6 +33,7 @@ export const buttonStyles = stylex.create({
     outlineColor: colors.focus,
   },
   small: { height: 32, paddingInline: 10, gap: space.s1 },
+  large: { height: 44, paddingInline: 18 },
   disabled: { opacity: 0.5, cursor: "not-allowed", transform: null },
 });
 
@@ -68,7 +69,7 @@ export const buttonHovers = stylex.create({
 
 type ButtonProps = Omit<ComponentProps<typeof BaseButton>, "className" | "style"> & {
   variant?: keyof typeof buttonVariants;
-  size?: "default" | "small";
+  size?: "default" | "small" | "large";
 };
 
 export function Button({ variant = "secondary", size = "default", ...props }: ButtonProps) {
@@ -78,7 +79,7 @@ export function Button({ variant = "secondary", size = "default", ...props }: Bu
       {...stylex.props(
         type.control,
         buttonStyles.base,
-        size === "small" && buttonStyles.small,
+        size !== "default" && buttonStyles[size],
         buttonVariants[variant],
         props.disabled ? buttonStyles.disabled : buttonHovers[variant],
       )}

@@ -1,7 +1,16 @@
 import * as stylex from "@stylexjs/stylex";
 import { fonts } from "./tokens.stylex";
 
+const WIDE = "@media (min-width: 768px)";
+
 export const type = stylex.create({
+  hero: {
+    fontFamily: fonts.sans,
+    fontSize: { default: 40, [WIDE]: 56 },
+    lineHeight: { default: "44px", [WIDE]: "58px" },
+    fontWeight: 600,
+    letterSpacing: "-0.03em",
+  },
   display: {
     fontFamily: fonts.sans,
     fontSize: 40,

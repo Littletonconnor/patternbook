@@ -344,7 +344,7 @@ export function PageParts() {
 
           <Card title="Footer">
             <Preview>
-              <Footer updated="16 Nov 2026" />
+              <Footer />
             </Preview>
             <Specs
               rows={[

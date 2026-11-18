@@ -32,14 +32,15 @@ const styles = stylex.create({
 const links = [
   { label: "Figures", href: "/figures" },
   { label: "About", href: "/about" },
+  { label: "Foundations", href: "/foundations" },
   { label: "GitHub", href: "https://github.com/Littletonconnor/patternbook" },
   { label: "RSS", href: "/rss.xml" },
 ];
 
-export function Footer({ updated }: { updated: string }) {
+export function Footer() {
   return (
     <footer {...stylex.props(type.number, styles.footer)}>
-      <span>Patternbook · updated {updated}</span>
+      <span>Patternbook</span>
       <nav aria-label="Footer" {...stylex.props(styles.links)}>
         {links.map((link) => (
           <NextLink key={link.label} href={link.href} {...stylex.props(styles.link)}>
