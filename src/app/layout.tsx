@@ -4,6 +4,8 @@ import * as stylex from "@stylexjs/stylex";
 import { colors } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
 
+import { sidebarScript } from "@/components/sidebarScript";
+
 import "./globals.css";
 
 const styles = stylex.create({
@@ -37,7 +39,16 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${geistSans.variable} ${geistMono.variable}`}
+    >
+      <head>
+        {/* Applies the saved sidebar width before first paint. It lives in the root layout,
+            which React never re-renders, so React doesn't warn about a script tag. */}
+        <script dangerouslySetInnerHTML={{ __html: sidebarScript }} />
+      </head>
       <body {...stylex.props(type.body, styles.body)}>
         <div {...stylex.props(styles.root)}>{children}</div>
       </body>

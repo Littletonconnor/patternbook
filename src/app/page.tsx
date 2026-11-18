@@ -63,8 +63,6 @@ const styles = stylex.create({
     gridTemplateColumns: "repeat(auto-fit, minmax(min(200px, 100%), 1fr))",
     gap: space.s4,
   },
-  levelsHead: { maxWidth: 680, display: "flex", flexDirection: "column", gap: space.s2 },
-  levelsNote: { margin: 0, color: colors.inkSoft },
 });
 
 export default function Home() {
@@ -103,7 +101,6 @@ export default function Home() {
               <span>{topics.length} topics</span>
               <span>{all.lessons} lessons</span>
               <span>about {hours} hours</span>
-              <span>no account</span>
             </div>
           </div>
           <HeroFigure />
@@ -111,8 +108,9 @@ export default function Home() {
 
         <section {...stylex.props(styles.section)}>
           <SectionHead
-            title="Good places to start"
+            title="Start with the failure modes"
             meta={`${starters.lessons} lessons · ${formatMinutes(starters.minutes)}`}
+            description="Each one reproduces the kind of bug most teams ship at least once, like a row that repeats on page 2 or a stale response that overwrites a fresh one. You trigger the failure in the figure, apply the fix, and measure what it costs."
           />
           <div {...stylex.props(styles.starters)}>
             {starterLessons.map((lesson) => (
@@ -126,20 +124,18 @@ export default function Home() {
         </section>
 
         <section {...stylex.props(styles.section)}>
-          <div {...stylex.props(styles.levelsHead)}>
-            <SectionHead title="Or go from zero, one level at a time" />
-            <p {...stylex.props(type.small, styles.levelsNote)}>
-              Every lesson has a level. Read all of one level across every topic before moving to
-              the next.
-            </p>
-          </div>
+          <SectionHead
+            title="Or build up from first principles"
+            description="Every lesson is tagged by level. Foundations covers the layers underneath (HTTP, the shell, Git, how the browser renders). Core covers the patterns you reach for every day. Advanced covers behavior under load, partial failure and scale. Finish one level across every topic before starting the next."
+          />
           <LevelCards />
         </section>
 
         <section id="topics" {...stylex.props(styles.section)}>
           <SectionHead
-            title="Everything, by topic"
+            title="The full catalog, by topic"
             meta={`${topics.length} topics · ${all.lessons} lessons`}
+            description="Topics stand on their own, and lessons within a topic run from the core mechanism to its edge cases. Jump straight to the problem in front of you."
           />
           <TopicList />
         </section>

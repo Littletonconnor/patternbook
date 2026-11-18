@@ -56,8 +56,9 @@ export const radius = stylex.defineVars({
 
 export const measure = stylex.defineVars({
   sidebar: "240px",
-  prose: "680px",
+  prose: "720px",
   figure: "960px",
+  lesson: "1120px",
   rail: "200px",
   page: "1440px",
 });

@@ -53,10 +53,10 @@ const styles = stylex.create({
     paddingInline: space.s1,
     paddingBottom: space.s1,
   },
-  titleRow: {
+  heading: {
     display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: "column",
+    alignItems: "flex-start",
     gap: space.s2,
   },
   title: {
@@ -88,9 +88,9 @@ export function LessonCard({ lesson, thumbnail }: LessonCardProps) {
         )}
       </div>
       <div {...stylex.props(styles.text)}>
-        <div {...stylex.props(styles.titleRow)}>
-          <span {...stylex.props(type.body, styles.title)}>{lesson.title}</span>
+        <div {...stylex.props(styles.heading)}>
           <Badge level={lesson.level} />
+          <span {...stylex.props(type.body, styles.title)}>{lesson.title}</span>
         </div>
         <p {...stylex.props(type.small, styles.hook)}>{lesson.hook}</p>
       </div>

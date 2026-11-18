@@ -7,7 +7,8 @@ const styles = stylex.create({
   base: {
     display: "inline-flex",
     alignItems: "center",
-    paddingBlock: 2,
+    paddingTop: 3,
+    paddingBottom: 1,
     paddingInline: 7,
     whiteSpace: "nowrap",
     borderRadius: radius.mark,

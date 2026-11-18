@@ -61,15 +61,19 @@ type SliderProps = Omit<
 > & {
   label: ReactNode;
   unit?: string;
+  /** full control over the readout, e.g. (v) => `${v}×`; wins over `unit` */
+  renderValue?: (value: number) => ReactNode;
 };
 
-export function Slider({ label, unit, ...props }: SliderProps) {
+export function Slider({ label, unit, renderValue, ...props }: SliderProps) {
   return (
     <BaseSlider.Root {...props} {...stylex.props(styles.root)}>
       <div {...stylex.props(styles.header)}>
         <BaseSlider.Label {...stylex.props(type.ui, styles.label)}>{label}</BaseSlider.Label>
         <BaseSlider.Value {...stylex.props(type.value, styles.value)}>
-          {(formatted) => (unit ? `${formatted[0]} ${unit}` : formatted[0])}
+          {(formatted, values) =>
+            renderValue ? renderValue(values[0]) : unit ? `${formatted[0]} ${unit}` : formatted[0]
+          }
         </BaseSlider.Value>
       </div>
       <BaseSlider.Control {...stylex.props(styles.control)}>

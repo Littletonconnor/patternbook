@@ -21,7 +21,6 @@ const styles = stylex.create({
     boxSizing: "border-box",
     height: 57,
     paddingBlock: space.s3,
-    // The border runs edge to edge; the contents line up with the page measure.
     paddingInline: {
       default: space.s4,
       [WIDE]: `max(${space.s6}, calc((100% - ${measure.page}) / 2 + ${space.s6}))`,
@@ -31,6 +30,8 @@ const styles = stylex.create({
     borderBottomStyle: "solid",
     borderBottomColor: colors.line,
   },
+  fluid: { paddingInline: space.s4 },
+  start: { display: "flex", alignItems: "center", gap: space.s3 },
   nav: { display: { default: "none", [WIDE]: "flex" }, gap: space.s6 },
   end: { marginInlineStart: "auto", display: "flex", alignItems: "center" },
   search: {
@@ -69,9 +70,11 @@ const links: { section: Section; label: string; href: string }[] = [
 type TopBarProps = {
   current?: Section;
   drawer?: ReactNode;
+  start?: ReactNode;
+  fluid?: boolean;
 };
 
-export function TopBar({ current, drawer }: TopBarProps) {
+export function TopBar({ current, drawer, start, fluid = false }: TopBarProps) {
   const nav = links.map((link) => (
     <Link key={link.section} variant="nav" href={link.href} current={link.section === current}>
       {link.label}
@@ -79,8 +82,11 @@ export function TopBar({ current, drawer }: TopBarProps) {
   ));
 
   return (
-    <header {...stylex.props(styles.bar)}>
-      <Brand />
+    <header {...stylex.props(styles.bar, fluid && styles.fluid)}>
+      <div {...stylex.props(styles.start)}>
+        {start}
+        <Brand />
+      </div>
       <nav aria-label="Main" {...stylex.props(styles.nav)}>
         {nav}
       </nav>

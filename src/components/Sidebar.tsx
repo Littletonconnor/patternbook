@@ -3,29 +3,104 @@
 import NextLink from "next/link";
 import { usePathname } from "next/navigation";
 import * as stylex from "@stylexjs/stylex";
-import { Check } from "lucide-react";
+import {
+  Binary,
+  Braces,
+  ChevronsDownUp,
+  CircleCheck,
+  Container,
+  Database,
+  FileText,
+  FlaskConical,
+  Gauge,
+  GitBranch,
+  Globe,
+  MousePointerClick,
+  Network,
+  PanelLeftClose,
+  PanelsTopLeft,
+  Radio,
+  RefreshCcwDot,
+  Rocket,
+  ShieldCheck,
+  SquareTerminal,
+  type LucideIcon,
+} from "lucide-react";
 import { useState } from "react";
-import { lessonHref, type Topic } from "@/content/types";
-import { colors, fonts, space } from "@/tokens/tokens.stylex";
+import { lessonHref, type Lesson, type Topic } from "@/content/types";
+import { colors, motion, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
 import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from "@/ui/Collapsible";
 import { Icon } from "@/ui/Icon";
+import { Tooltip } from "@/ui/Tooltip";
 import { useReadLessons } from "./readState";
+import { toggleSidebar } from "./sidebarState";
 
 const HOVER = "@media (hover: hover)";
+const OPEN = ":is([data-panel-open])";
+
+const topicIcons: Record<string, LucideIcon> = {
+  "how-the-web-works": Globe,
+  "the-terminal-and-linux": SquareTerminal,
+  git: GitBranch,
+  "frontend-and-ui": PanelsTopLeft,
+  "data-on-the-client": RefreshCcwDot,
+  apis: Braces,
+  databases: Database,
+  "tricky-data": Binary,
+  "auth-and-security": ShieldCheck,
+  performance: Gauge,
+  "reliability-and-scale": Network,
+  "real-time": Radio,
+  testing: FlaskConical,
+  docker: Container,
+  "shipping-and-operations": Rocket,
+  "interactive-explainers": MousePointerClick,
+};
 
 const styles = stylex.create({
   aside: {
     boxSizing: "border-box",
     display: "flex",
     flexDirection: "column",
-    gap: space.s4,
     width: "100%",
     height: "100%",
-    paddingTop: 20,
-    paddingInlineEnd: 0,
-    paddingBottom: space.s6,
-    paddingInlineStart: space.s4,
+    paddingTop: space.s4,
+    paddingBottom: space.s4,
+    paddingInlineStart: space.s3,
+  },
+  head: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    flexShrink: 0,
+    height: 28,
+    marginBottom: space.s1,
+    paddingInlineStart: 10,
+    paddingInlineEnd: space.s3,
+    color: colors.inkMuted,
+  },
+  actions: { display: "flex", alignItems: "center", gap: 2 },
+  collapseAll: {
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    width: 24,
+    height: 24,
+    padding: 0,
+    borderWidth: 0,
+    borderRadius: 6,
+    cursor: "pointer",
+    color: { default: colors.inkMuted, ":hover": { default: null, [HOVER]: colors.ink } },
+    backgroundColor: {
+      default: "transparent",
+      ":hover": { default: null, [HOVER]: colors.sunken },
+    },
+    opacity: { default: 1, ":disabled": 0.4 },
+    outlineStyle: { default: "none", ":focus-visible": "solid" },
+    outlineWidth: 2,
+    outlineOffset: -2,
+    outlineColor: colors.focus,
   },
   topics: {
     flexGrow: 1,
@@ -37,25 +112,33 @@ const styles = stylex.create({
     scrollbarColor: `${colors.line} transparent`,
     display: "flex",
     flexDirection: "column",
-    gap: 2,
+    gap: 1,
+  },
+  truncate: {
+    flexGrow: 1,
+    minWidth: 0,
+    overflow: "hidden",
+    whiteSpace: "nowrap",
+    textOverflow: "ellipsis",
+  },
+  topicIcon: {
+    display: "inline-flex",
+    flexShrink: 0,
+    color: { default: colors.inkMuted, [stylex.when.ancestor(OPEN)]: colors.ink },
   },
   lessons: {
     display: "flex",
     flexDirection: "column",
-    gap: 2,
-    marginTop: 2,
-    marginBottom: 6,
-    marginInlineStart: 15,
-    paddingInlineStart: 5,
-    borderLeftWidth: 1,
-    borderLeftStyle: "solid",
-    borderLeftColor: colors.line,
+    gap: 1,
+    paddingTop: 1,
+    paddingBottom: space.s2,
+    paddingInlineStart: 20,
   },
   row: {
     display: "flex",
     alignItems: "center",
     gap: 10,
-    paddingBlock: 6,
+    height: 30,
     paddingInline: 10,
     borderRadius: 6,
     textDecorationLine: "none",
@@ -65,6 +148,8 @@ const styles = stylex.create({
     outlineWidth: 2,
     outlineOffset: -2,
     outlineColor: colors.focus,
+    transitionProperty: "background-color, color",
+    transitionDuration: motion.press,
   },
   rowLink: {
     color: { default: colors.inkSoft, ":hover": { default: null, [HOVER]: colors.ink } },
@@ -79,16 +164,20 @@ const styles = stylex.create({
     fontWeight: 500,
   },
   planned: { color: colors.inkMuted },
-  number: { fontFamily: fonts.mono, color: colors.inkMuted, minWidth: 16 },
-  title: { flexGrow: 1, minWidth: 0 },
-  tick: { display: "inline-flex", color: colors.sound },
+  lessonIcon: { display: "inline-flex", flexShrink: 0, color: colors.inkMuted },
+  lessonIconCurrent: { color: colors.ink },
+  lessonIconRead: { color: colors.sound },
   count: {
     flexShrink: 0,
     margin: 0,
+    marginTop: space.s3,
     marginInlineEnd: space.s3,
     paddingTop: space.s3,
     paddingInline: 10,
     color: colors.inkMuted,
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
     borderTopWidth: 1,
     borderTopStyle: "solid",
     borderTopColor: colors.line,
@@ -98,9 +187,10 @@ const styles = stylex.create({
 type SidebarProps = {
   topics: readonly Topic[];
   currentSlug?: string;
+  closable?: boolean;
 };
 
-export function Sidebar({ topics, currentSlug: slugProp }: SidebarProps) {
+export function Sidebar({ topics, currentSlug: slugProp, closable = false }: SidebarProps) {
   const { read } = useReadLessons();
   const pathname = usePathname();
   const currentSlug = slugProp ?? pathname.match(/^\/lessons\/([^/]+)/)?.[1];
@@ -132,6 +222,35 @@ export function Sidebar({ topics, currentSlug: slugProp }: SidebarProps) {
 
   return (
     <aside aria-label="Lessons" {...stylex.props(styles.aside)}>
+      <div {...stylex.props(styles.head)}>
+        <span {...stylex.props(type.labelSmall)}>Topics</span>
+        <div {...stylex.props(styles.actions)}>
+          <Tooltip label="Collapse all topics">
+            <button
+              type="button"
+              aria-label="Collapse all topics"
+              disabled={open.size === 0}
+              onClick={() => setOpen(new Set())}
+              {...stylex.props(styles.collapseAll)}
+            >
+              <Icon icon={ChevronsDownUp} size={14} />
+            </button>
+          </Tooltip>
+          {closable && (
+            <Tooltip label="Hide sidebar" shortcut="⌘\">
+              <button
+                type="button"
+                aria-label="Hide sidebar"
+                aria-controls="lesson-sidebar"
+                onClick={toggleSidebar}
+                {...stylex.props(styles.collapseAll)}
+              >
+                <Icon icon={PanelLeftClose} size={14} />
+              </button>
+            </Tooltip>
+          )}
+        </div>
+      </div>
       <nav {...stylex.props(styles.topics)}>
         {topics.map((topic) => {
           const isOpen = open.has(topic.slug);
@@ -142,57 +261,24 @@ export function Sidebar({ topics, currentSlug: slugProp }: SidebarProps) {
               open={isOpen}
               onOpenChange={(next) => toggle(topic.slug, next)}
             >
-              <CollapsibleTrigger
-                meta={isOpen ? `${readHere}/${topic.lessons.length}` : topic.lessons.length}
-              >
-                {topic.title}
+              <CollapsibleTrigger meta={isOpen ? `${readHere}/${topic.lessons.length}` : undefined}>
+                <span {...stylex.props(styles.topicIcon)}>
+                  <Icon icon={topicIcons[topic.slug] ?? FileText} />
+                </span>
+                <span title={topic.title} {...stylex.props(styles.truncate)}>
+                  {topic.title}
+                </span>
               </CollapsibleTrigger>
               <CollapsiblePanel>
                 <div {...stylex.props(styles.lessons)}>
-                  {topic.lessons.map((lesson) => {
-                    const number = (
-                      <span {...stylex.props(type.number, styles.number)}>{lesson.number}</span>
-                    );
-                    const isCurrent = lesson.slug === currentSlug;
-                    if (lesson.status === "planned") {
-                      return (
-                        <span
-                          key={lesson.slug}
-                          aria-current={isCurrent ? "page" : undefined}
-                          {...stylex.props(
-                            type.ui,
-                            styles.row,
-                            styles.planned,
-                            isCurrent && styles.current,
-                          )}
-                        >
-                          {number}
-                          <span {...stylex.props(styles.title)}>{lesson.title}</span>
-                        </span>
-                      );
-                    }
-                    return (
-                      <NextLink
-                        key={lesson.slug}
-                        href={lessonHref(lesson)}
-                        aria-current={isCurrent ? "page" : undefined}
-                        {...stylex.props(
-                          type.ui,
-                          styles.row,
-                          styles.rowLink,
-                          isCurrent && styles.current,
-                        )}
-                      >
-                        {number}
-                        <span {...stylex.props(styles.title)}>{lesson.title}</span>
-                        {read.has(lesson.slug) && (
-                          <span {...stylex.props(styles.tick)}>
-                            <Icon icon={Check} size={14} label="Read" />
-                          </span>
-                        )}
-                      </NextLink>
-                    );
-                  })}
+                  {topic.lessons.map((lesson) => (
+                    <LessonRow
+                      key={lesson.slug}
+                      lesson={lesson}
+                      isCurrent={lesson.slug === currentSlug}
+                      isRead={read.has(lesson.slug)}
+                    />
+                  ))}
                 </div>
               </CollapsiblePanel>
             </Collapsible>
@@ -203,5 +289,48 @@ export function Sidebar({ topics, currentSlug: slugProp }: SidebarProps) {
         {topics.length} topics · {lessonCount} lessons · {readCount} read
       </p>
     </aside>
+  );
+}
+
+type LessonRowProps = { lesson: Lesson; isCurrent: boolean; isRead: boolean };
+
+function LessonRow({ lesson, isCurrent, isRead }: LessonRowProps) {
+  const planned = lesson.status === "planned";
+  const glyph = isRead ? CircleCheck : FileText;
+  const contents = (
+    <>
+      <span
+        {...stylex.props(
+          styles.lessonIcon,
+          isCurrent && styles.lessonIconCurrent,
+          isRead && styles.lessonIconRead,
+        )}
+      >
+        <Icon icon={glyph} size={14} label={isRead ? "Read" : undefined} />
+      </span>
+      <span title={lesson.title} {...stylex.props(styles.truncate)}>
+        {lesson.title}
+      </span>
+    </>
+  );
+
+  if (planned) {
+    return (
+      <span
+        aria-current={isCurrent ? "page" : undefined}
+        {...stylex.props(type.ui, styles.row, styles.planned, isCurrent && styles.current)}
+      >
+        {contents}
+      </span>
+    );
+  }
+  return (
+    <NextLink
+      href={lessonHref(lesson)}
+      aria-current={isCurrent ? "page" : undefined}
+      {...stylex.props(type.ui, styles.row, styles.rowLink, isCurrent && styles.current)}
+    >
+      {contents}
+    </NextLink>
   );
 }

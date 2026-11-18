@@ -29,10 +29,7 @@ const styles = stylex.create({
     whiteSpace: "nowrap",
   },
   breakout: {
-    position: "relative",
-    left: "50%",
-    width: `min(${measure.figure}, calc(100vw - 32px))`,
-    transform: "translateX(-50%)",
+    width: "100cqi",
     marginBlock: space.s8,
   },
 });
@@ -80,7 +77,7 @@ export function Code({ children }: Children) {
   return <code {...stylex.props(type.code, styles.code)}>{children}</code>;
 }
 
-/** figures and wide code break out of the text column to measure.figure */
+/** figures and wide code break out of the text column to the full lesson width */
 export function Breakout({ children }: Children) {
   return <div {...stylex.props(styles.breakout)}>{children}</div>;
 }
