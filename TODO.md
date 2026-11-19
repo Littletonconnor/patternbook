@@ -227,10 +227,10 @@ The part that matters most. Board 02.
 
 ## 7. Remaining pages
 
-- [ ] Figures page with kind filter (board 05)
-- [ ] About page (board 06)
-- [ ] 404 page
-- [ ] Metadata, favicon, Open Graph image
+- [x] Figures page with kind filter (board 05)
+- [x] About page (board 06)
+- [x] 404 page
+- [x] Metadata, favicon, Open Graph image
 
 ## 8. First lesson
 

@@ -28,11 +28,13 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { lessonHref, type Lesson, type Topic } from "@/content/types";
-import { colors, motion, space } from "@/tokens/tokens.stylex";
+import { colors, motion, radius, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
 import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from "@/ui/Collapsible";
 import { Icon } from "@/ui/Icon";
+import { ToggleGroup } from "@/ui/ToggleGroup";
 import { Tooltip } from "@/ui/Tooltip";
+import { levelFilterOptions, setLevelFilter, useLevelFilter } from "./levelFilter";
 import { useReadLessons } from "./readState";
 import { toggleSidebar } from "./sidebarState";
 
@@ -81,6 +83,23 @@ const styles = stylex.create({
     color: colors.inkMuted,
   },
   actions: { display: "flex", alignItems: "center", gap: 2 },
+  filter: {
+    flexShrink: 0,
+    marginBottom: space.s2,
+    marginInlineEnd: space.s3,
+    borderRadius: radius.control,
+    backgroundColor: colors.sunken,
+    overflowX: "auto",
+    overscrollBehaviorX: "contain",
+    scrollbarWidth: "thin",
+    scrollbarColor: `${colors.line} transparent`,
+  },
+  empty: {
+    margin: 0,
+    paddingBlock: space.s2,
+    paddingInline: 10,
+    color: colors.inkMuted,
+  },
   collapseAll: {
     display: "inline-flex",
     alignItems: "center",
@@ -192,6 +211,7 @@ type SidebarProps = {
 
 export function Sidebar({ topics, currentSlug: slugProp, closable = false }: SidebarProps) {
   const { read } = useReadLessons();
+  const level = useLevelFilter();
   const pathname = usePathname();
   const currentSlug = slugProp ?? pathname.match(/^\/lessons\/([^/]+)/)?.[1];
   const topicOfCurrent = topics.find((t) => t.lessons.some((l) => l.slug === currentSlug))?.slug;
@@ -205,8 +225,15 @@ export function Sidebar({ topics, currentSlug: slugProp, closable = false }: Sid
     if (topicOfCurrent && !open.has(topicOfCurrent)) setOpen(new Set([...open, topicOfCurrent]));
   }
 
-  const lessonCount = topics.reduce((sum, t) => sum + t.lessons.length, 0);
-  const readCount = topics.reduce(
+  const visible = topics
+    .map((topic) => ({
+      topic,
+      lessons: level === "all" ? topic.lessons : topic.lessons.filter((l) => l.level === level),
+    }))
+    .filter((t) => t.lessons.length > 0);
+
+  const lessonCount = visible.reduce((sum, t) => sum + t.lessons.length, 0);
+  const readCount = visible.reduce(
     (sum, t) => sum + t.lessons.filter((l) => read.has(l.slug)).length,
     0,
   );
@@ -251,17 +278,29 @@ export function Sidebar({ topics, currentSlug: slugProp, closable = false }: Sid
           )}
         </div>
       </div>
+      <div {...stylex.props(styles.filter)}>
+        <ToggleGroup
+          aria-label="Filter lessons by level"
+          size="small"
+          options={levelFilterOptions}
+          value={level}
+          onValueChange={setLevelFilter}
+        />
+      </div>
       <nav {...stylex.props(styles.topics)}>
-        {topics.map((topic) => {
+        {visible.length === 0 && (
+          <p {...stylex.props(type.ui, styles.empty)}>No lessons at this level yet.</p>
+        )}
+        {visible.map(({ topic, lessons }) => {
           const isOpen = open.has(topic.slug);
-          const readHere = topic.lessons.filter((l) => read.has(l.slug)).length;
+          const readHere = lessons.filter((l) => read.has(l.slug)).length;
           return (
             <Collapsible
               key={topic.slug}
               open={isOpen}
               onOpenChange={(next) => toggle(topic.slug, next)}
             >
-              <CollapsibleTrigger meta={isOpen ? `${readHere}/${topic.lessons.length}` : undefined}>
+              <CollapsibleTrigger meta={isOpen ? `${readHere}/${lessons.length}` : undefined}>
                 <span {...stylex.props(styles.topicIcon)}>
                   <Icon icon={topicIcons[topic.slug] ?? FileText} />
                 </span>
@@ -271,7 +310,7 @@ export function Sidebar({ topics, currentSlug: slugProp, closable = false }: Sid
               </CollapsibleTrigger>
               <CollapsiblePanel>
                 <div {...stylex.props(styles.lessons)}>
-                  {topic.lessons.map((lesson) => (
+                  {lessons.map((lesson) => (
                     <LessonRow
                       key={lesson.slug}
                       lesson={lesson}
@@ -286,7 +325,7 @@ export function Sidebar({ topics, currentSlug: slugProp, closable = false }: Sid
         })}
       </nav>
       <p {...stylex.props(type.tag, styles.count)}>
-        {topics.length} topics · {lessonCount} lessons · {readCount} read
+        {visible.length} topics · {lessonCount} lessons · {readCount} read
       </p>
     </aside>
   );

@@ -1,0 +1,124 @@
+import type { Metadata } from "next";
+import NextLink from "next/link";
+import * as stylex from "@stylexjs/stylex";
+import { lessonBySlug } from "@/content/catalog";
+import { figureLesson, figures } from "@/content/figures";
+import { lessonHref, type Lesson } from "@/content/types";
+import { FigureIndex } from "@/components/FigureIndex";
+import { PageIntro } from "@/components/PageIntro";
+import { PageShell } from "@/components/PageShell";
+import { colors, radius, space } from "@/tokens/tokens.stylex";
+import { type } from "@/tokens/typography";
+
+export const metadata: Metadata = {
+  title: "Figures",
+  description:
+    "Every interactive figure in Patternbook, out of its lesson. Operate it here, then follow it back to the lesson that explains it.",
+};
+
+const HOVER = "@media (hover: hover)";
+
+const craftSlugs = [
+  "building-interactive-svg-explainers",
+  "animating-svg-paths",
+  "scroll-driven-diagrams",
+];
+
+const styles = stylex.create({
+  behind: {
+    display: "flex",
+    flexWrap: "wrap",
+    gap: `${space.s6} ${space.s16}`,
+    paddingTop: space.s12,
+    borderTopWidth: 1,
+    borderTopStyle: "solid",
+    borderTopColor: colors.line,
+  },
+  behindText: { flex: "1 1 280px", display: "flex", flexDirection: "column", gap: space.s2 },
+  eyebrow: { color: colors.inkMuted },
+  heading: { margin: 0 },
+  blurb: { margin: 0, color: colors.inkSoft },
+  list: {
+    flex: "2 1 420px",
+    margin: 0,
+    padding: 0,
+    listStyle: "none",
+    overflow: "hidden",
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderStyle: "solid",
+    borderColor: colors.line,
+    borderRadius: radius.frame,
+  },
+  item: {
+    borderTopWidth: { default: 1, ":first-child": 0 },
+    borderTopStyle: "solid",
+    borderTopColor: colors.line,
+  },
+  row: {
+    display: "flex",
+    alignItems: "baseline",
+    gap: space.s4,
+    paddingBlock: 14,
+    paddingInline: 18,
+    color: colors.ink,
+    textDecorationLine: "none",
+    backgroundColor: {
+      default: "transparent",
+      ":hover": { default: null, [HOVER]: colors.sunken },
+    },
+    outlineStyle: { default: "none", ":focus-visible": "solid" },
+    outlineWidth: 2,
+    outlineOffset: -2,
+    outlineColor: colors.focus,
+  },
+  number: { color: colors.inkMuted },
+  title: { flexGrow: 1, fontWeight: 500 },
+  minutes: { color: colors.inkMuted, whiteSpace: "nowrap" },
+});
+
+export default function FiguresPage() {
+  const entries = figures.map((figure) => {
+    const { number, slug, title } = figureLesson(figure);
+    return { figure, lesson: { number, slug, title } };
+  });
+  const craft = craftSlugs
+    .map((slug) => lessonBySlug(slug))
+    .filter((lesson): lesson is Lesson => lesson !== undefined);
+
+  return (
+    <PageShell current="figures">
+      <PageIntro
+        eyebrow={`Figures · ${figures.length} planned`}
+        title="Every figure, out of its lesson"
+      >
+        Each one is a small machine you can operate. Pick any, play with it here, then follow it
+        back to the lesson that explains what you just saw.
+      </PageIntro>
+
+      <FigureIndex entries={entries} />
+
+      <section {...stylex.props(styles.behind)}>
+        <div {...stylex.props(styles.behindText)}>
+          <div {...stylex.props(type.label, styles.eyebrow)}>Behind the figures</div>
+          <h2 {...stylex.props(type.heading, styles.heading)}>How these are built</h2>
+          <p {...stylex.props(type.small, styles.blurb)}>
+            Every figure is hand-written SVG and React on one shared kit. These lessons take it
+            apart.
+          </p>
+        </div>
+        <ul {...stylex.props(styles.list)}>
+          {craft.map((lesson) => (
+            <li key={lesson.slug} {...stylex.props(styles.item)}>
+              <NextLink href={lessonHref(lesson)} {...stylex.props(styles.row)}>
+                <span {...stylex.props(type.number, styles.number)}>{lesson.number}</span>
+                <span {...stylex.props(type.body, styles.title)}>{lesson.title}</span>
+                <span {...stylex.props(type.number, styles.minutes)}>{lesson.minutes} min</span>
+              </NextLink>
+            </li>
+          ))}
+        </ul>
+      </section>
+    </PageShell>
+  );
+}

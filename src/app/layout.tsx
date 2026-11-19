@@ -23,10 +23,14 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const description = "An interactive notebook of everyday engineering problems.";
+
 export const metadata: Metadata = {
-  title: "Patternbook",
-  description: "An interactive notebook of everyday engineering problems.",
+  title: { default: "Patternbook", template: "%s · Patternbook" },
+  description,
   applicationName: "Patternbook",
+  openGraph: { type: "website", siteName: "Patternbook", locale: "en", description },
+  twitter: { card: "summary_large_image" },
   appleWebApp: { title: "Patternbook", statusBarStyle: "default" },
 };
 

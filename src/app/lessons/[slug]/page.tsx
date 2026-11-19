@@ -16,7 +16,18 @@ export async function generateMetadata({
   params,
 }: PageProps<"/lessons/[slug]">): Promise<Metadata> {
   const lesson = lessonBySlug((await params).slug);
-  return lesson ? { title: `${lesson.title} · Patternbook`, description: lesson.hook } : {};
+  return lesson
+    ? {
+        title: lesson.title,
+        description: lesson.hook,
+        openGraph: {
+          type: "article",
+          siteName: "Patternbook",
+          title: lesson.title,
+          description: lesson.hook,
+        },
+      }
+    : {};
 }
 
 export default function LessonPage({ params }: PageProps<"/lessons/[slug]">) {

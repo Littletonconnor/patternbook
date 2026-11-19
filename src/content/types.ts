@@ -10,14 +10,12 @@ export type Lesson = {
   level: Level;
   minutes: number;
   status: LessonStatus;
-  /** one of the starter lessons written first */
   starter?: boolean;
 };
 
 export type Topic = {
   slug: string;
   title: string;
-  /** one line under the topic name */
   description: string;
   lessons: Lesson[];
 };
@@ -25,3 +23,12 @@ export type Topic = {
 export function lessonHref(lesson: Pick<Lesson, "slug">) {
   return `/lessons/${lesson.slug}`;
 }
+
+export type FigureKind = "playground" | "race" | "timeline" | "flow" | "structure" | "meter";
+
+export type Figure = {
+  number: string;
+  kind: FigureKind;
+  title: string;
+  lesson: string;
+};

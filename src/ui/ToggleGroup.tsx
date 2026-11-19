@@ -18,7 +18,7 @@ const styles = stylex.create({
     backgroundColor: colors.sunken,
     borderRadius: radius.control,
   },
-  trackSmall: { display: "flex", width: "100%" },
+  trackSmall: { display: "flex", width: "max-content", minWidth: "100%" },
   item: {
     paddingBlock: 5,
     paddingInline: 12,
@@ -42,9 +42,10 @@ const styles = stylex.create({
   },
   itemSmall: {
     flexGrow: 1,
-    flexBasis: 0,
+    flexBasis: "auto",
     paddingBlock: 6,
-    paddingInline: 0,
+    paddingInline: 8,
+    outlineOffset: -2,
   },
 });
 
