@@ -45,7 +45,7 @@ const styles = stylex.create({
   },
   meta: { position: "absolute", top: space.s2, left: space.s3, color: colors.inkMuted },
   read: { position: "absolute", right: space.s2, bottom: space.s2 },
-  figure: { position: "absolute", inset: 0, display: "grid", placeItems: "center" },
+  diagram: { position: "absolute", inset: 0, display: "grid", placeItems: "center" },
   text: {
     display: "flex",
     flexDirection: "column",
@@ -77,7 +77,7 @@ export function LessonCard({ lesson, thumbnail }: LessonCardProps) {
   return (
     <NextLink href={lessonHref(lesson)} {...stylex.props(styles.card, stylex.defaultMarker())}>
       <div {...stylex.props(styles.thumb)}>
-        {thumbnail && <div {...stylex.props(styles.figure)}>{thumbnail}</div>}
+        {thumbnail && <div {...stylex.props(styles.diagram)}>{thumbnail}</div>}
         <span {...stylex.props(type.number, styles.meta)}>
           {lesson.number} · {lesson.minutes} min
         </span>

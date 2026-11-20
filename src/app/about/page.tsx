@@ -9,29 +9,28 @@ import { Link } from "@/ui/Link";
 
 export const metadata: Metadata = {
   title: "About",
-  description:
-    "Why Patternbook exists, how a lesson works, and the house rules every figure follows.",
+  description: "What Patternbook covers, how each lesson is structured, and who writes it.",
 };
 
 const steps = [
   {
-    title: "The problem",
-    body: "A situation you will recognise, in plain words, before any solution is named.",
+    title: "Problem",
+    body: "The situation and its symptoms, described before any solution is named.",
     tone: "muted",
   },
   {
-    title: "Break it",
-    body: "The obvious approach, running, until it fails in front of you.",
+    title: "Failure",
+    body: "The naive approach running in the diagram until it breaks.",
     tone: "fault",
   },
   {
-    title: "Fix it",
-    body: "The pattern, in the same figure, so you can flip between the two.",
+    title: "Fix",
+    body: "The pattern applied in the same diagram, with a toggle to switch between the broken and fixed versions.",
     tone: "sound",
   },
   {
-    title: "Meet it in the wild",
-    body: "Trade-offs, where you will run into it, and a short list of things worth reading next.",
+    title: "Trade-offs",
+    body: "What the pattern adds in complexity or performance, when not to use it, and further reading.",
     tone: "muted",
   },
 ] as const;
@@ -43,27 +42,30 @@ const areas = [
   },
   {
     title: "Under the hood",
-    body: "Everything between typing a URL and seeing a page, what the shell and Linux are doing, how Git stores history, and what a container actually is.",
+    body: "HTTP and the browser, the shell and Linux processes, how Git stores history, and how containers are built from namespaces and cgroups.",
   },
   {
-    title: "The craft",
-    body: "How the figures themselves are made: interactive SVG, animated paths and diagrams that follow your scroll.",
+    title: "Diagrams",
+    body: "How the diagrams on this site are built: interactive SVG, path animation and scroll-driven diagrams.",
   },
 ];
 
 const rules = [
   {
-    title: "Show the failure first",
-    body: "A fix means nothing until you have seen what it prevents.",
-  },
-  { title: "One idea per figure", body: "If a figure needs a manual, it becomes two figures." },
-  {
-    title: "No term without a definition",
-    body: "Every piece of jargon is one hover away from plain words.",
+    title: "Failure before fix",
+    body: "Each lesson shows the problem happening before it introduces the solution.",
   },
   {
-    title: "Nothing in the way",
-    body: "No account and no sign-up. Your progress is kept in your own browser.",
+    title: "One idea per diagram",
+    body: "A diagram that needs more than a short caption is split into two.",
+  },
+  {
+    title: "Terms are defined",
+    body: "Every technical term has a short definition, shown on hover.",
+  },
+  {
+    title: "No account",
+    body: "Read progress is stored in localStorage in your browser.",
   },
 ];
 
@@ -151,26 +153,25 @@ const stepTones = stylex.create({
 export default function AboutPage() {
   return (
     <PageShell current="about" width="narrow">
-      <PageIntro
-        eyebrow="About"
-        size="hero"
-        title="The problems every engineer meets, made to be poked at."
-      >
-        Patternbook is a notebook of everyday engineering problems and the patterns that solve them.
-        Not interview puzzles. The things that turn up in ordinary work: paging a list, taming a
-        burst of events, understanding what a container really is.
+      <PageIntro eyebrow="About" title="About Patternbook">
+        Patternbook is a set of short lessons on problems that come up in everyday software work,
+        such as paginating a list that changes between requests, handling bursts of input events,
+        and isolating processes in containers. Each lesson covers one problem and its standard
+        solution.
       </PageIntro>
 
       <section {...stylex.props(styles.prose)}>
-        <h2 {...stylex.props(type.heading, styles.heading)}>Why it exists</h2>
+        <h2 {...stylex.props(type.heading, styles.heading)}>Why every lesson has a diagram</h2>
         <p {...stylex.props(type.body, styles.paragraph)}>
-          Most of these patterns are easy to read about and hard to believe. You nod along to
-          &ldquo;offset pagination can return duplicates&rdquo; and then ship it anyway, because you
-          have never watched it happen.
+          Many of these bugs are easy to describe and easy to miss. Offset pagination can return the
+          same row on two pages, but only when rows are inserted between requests, so it rarely
+          shows up in testing.
         </p>
         <p {...stylex.props(type.body, styles.paragraph)}>
-          So every lesson here is built around a figure you operate yourself. You cause the bug with
-          your own clicks, then switch on the fix and watch the same input come out right.
+          Each diagram shows the broken and fixed versions of the pattern. You can change the
+          inputs, step through each version and watch what happens, so you can reproduce the failure
+          yourself, switch on the fix and see why it works. The diagram makes the timing and
+          ordering visible, which is usually where these bugs hide.
         </p>
       </section>
 
@@ -207,7 +208,7 @@ export default function AboutPage() {
       </section>
 
       <section {...stylex.props(styles.section)}>
-        <h2 {...stylex.props(type.heading, styles.heading)}>House rules</h2>
+        <h2 {...stylex.props(type.heading, styles.heading)}>Conventions</h2>
         <ol {...stylex.props(styles.rules)}>
           {rules.map((rule) => (
             <li key={rule.title} {...stylex.props(styles.rule)}>
@@ -219,12 +220,11 @@ export default function AboutPage() {
       </section>
 
       <section {...stylex.props(styles.section)}>
-        <h2 {...stylex.props(type.heading, styles.heading)}>Who makes it</h2>
+        <h2 {...stylex.props(type.heading, styles.heading)}>Author</h2>
         <div {...stylex.props(styles.author)}>
           <span {...stylex.props(type.body, styles.title)}>Connor Littleton</span>
           <p {...stylex.props(type.body, styles.paragraph, styles.soft)}>
-            I&rsquo;m a software engineer. Patternbook started as my own notes on the problems I
-            kept running into at work, rebuilt as figures I could actually poke at.
+            Software engineer. Patternbook started as my notes on problems I ran into at work.
           </p>
           <div {...stylex.props(type.ui, styles.links)}>
             <Link variant="external" href="https://github.com/Littletonconnor">

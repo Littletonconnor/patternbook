@@ -29,7 +29,7 @@ const rows = [
   },
   {
     name: "ghost",
-    use: "Reset a figure",
+    use: "Reset a diagram",
     variant: "ghost",
     size: "default",
     icon: RotateCcw,

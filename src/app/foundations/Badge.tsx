@@ -34,7 +34,7 @@ export function BadgeExample() {
           },
           {
             name: "kind",
-            use: "Figures page",
+            use: "Diagrams page",
             example: (
               <>
                 <Badge tone="kind">Race</Badge>
@@ -73,7 +73,7 @@ export function KbdExample() {
           { name: "shortcut", use: "Search trigger", example: <Kbd>⌘K</Kbd> },
           {
             name: "keys",
-            use: "Figure controls",
+            use: "Diagram controls",
             example: (
               <>
                 <Kbd>Space</Kbd>
@@ -84,7 +84,7 @@ export function KbdExample() {
           },
           {
             name: "in a sentence",
-            use: "Figure captions",
+            use: "Diagram captions",
             example: (
               <span {...stylex.props(type.small)}>
                 Press <Kbd>Space</Kbd> to step.
@@ -98,7 +98,7 @@ export function KbdExample() {
           ["Status", "Built: src/ui/Kbd.tsx, a kbd element"],
           ["Text", "type.tag · inkSoft"],
           ["Box", "padding 1 × 5 · surface · 1px line border, 2px at the bottom · radius.mark"],
-          ["Use", "keyboard hints in the search trigger, figure captions and tooltips"],
+          ["Use", "keyboard hints in the search trigger, diagram captions and tooltips"],
         ]}
       />
     </Card>

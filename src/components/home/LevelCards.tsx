@@ -9,11 +9,11 @@ import { Badge } from "@/ui/Badge";
 const HOVER = "@media (hover: hover)";
 
 const levels: { level: Level; blurb: string }[] = [
-  { level: "foundations", blurb: "How the web, the terminal, Git and the browser actually work." },
-  { level: "core", blurb: "The everyday patterns: client data, APIs, databases, auth, testing." },
+  { level: "foundations", blurb: "How HTTP, the browser, the shell and Git work." },
+  { level: "core", blurb: "Client data, APIs, databases, auth and testing." },
   {
     level: "advanced",
-    blurb: "Performance, reliability at scale, real-time and running in production.",
+    blurb: "Performance, reliability at scale, real-time systems and production operations.",
   },
 ];
 

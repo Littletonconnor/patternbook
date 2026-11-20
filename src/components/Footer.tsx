@@ -30,7 +30,7 @@ const styles = stylex.create({
 });
 
 const links = [
-  { label: "Figures", href: "/figures" },
+  { label: "Diagrams", href: "/diagrams" },
   { label: "About", href: "/about" },
   { label: "Foundations", href: "/foundations" },
   { label: "GitHub", href: "https://github.com/Littletonconnor/patternbook" },

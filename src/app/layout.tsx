@@ -23,7 +23,8 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const description = "An interactive notebook of everyday engineering problems.";
+const description =
+  "Interactive lessons on software engineering patterns, each with a diagram of the broken and fixed versions that you can change and step through.";
 
 export const metadata: Metadata = {
   title: { default: "Patternbook", template: "%s · Patternbook" },

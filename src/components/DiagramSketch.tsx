@@ -1,6 +1,6 @@
 import * as stylex from "@stylexjs/stylex";
 import type { ReactNode } from "react";
-import type { FigureKind } from "@/content/types";
+import type { DiagramKind } from "@/content/types";
 import { colors } from "@/tokens/tokens.stylex";
 
 const styles = stylex.create({
@@ -156,7 +156,7 @@ function Meter() {
   );
 }
 
-const byKind: Record<FigureKind, () => ReactNode> = {
+const byKind: Record<DiagramKind, () => ReactNode> = {
   playground: Playground,
   race: Race,
   timeline: Timeline,
@@ -165,7 +165,7 @@ const byKind: Record<FigureKind, () => ReactNode> = {
   meter: Meter,
 };
 
-export function FigureSketch({ kind }: { kind: FigureKind }) {
+export function DiagramSketch({ kind }: { kind: DiagramKind }) {
   const Sketch = byKind[kind];
   return <Sketch />;
 }

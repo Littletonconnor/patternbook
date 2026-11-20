@@ -15,7 +15,7 @@ const DISTANCE = 248;
 const easeInOut = (p: number) => (p < 0.5 ? 4 * p * p * p : 1 - (-2 * p + 2) ** 3 / 2);
 
 const styles = stylex.create({
-  figure: {
+  diagram: {
     flex: "1 1 420px",
     minWidth: 0,
     maxWidth: 520,
@@ -45,7 +45,7 @@ const styles = stylex.create({
     borderBottomStyle: "solid",
     borderBottomColor: colors.line,
   },
-  fig: { color: colors.inkMuted },
+  diagramLabel: { color: colors.inkMuted },
   stage: {
     position: "relative",
     display: "grid",
@@ -93,7 +93,7 @@ const nodes = [
   { x: 344, name: "Database", sub: "posts" },
 ];
 
-export function HeroFigure() {
+export function HeroDiagram() {
   const [playing, setPlaying] = useState(false);
   const [started, setStarted] = useState(false);
   const [slowdown, setSlowdown] = useState(100);
@@ -139,10 +139,10 @@ export function HeroFigure() {
   };
 
   return (
-    <figure {...stylex.props(styles.figure)}>
+    <figure {...stylex.props(styles.diagram)}>
       <div {...stylex.props(styles.frame)}>
         <div {...stylex.props(styles.titleBar)}>
-          <span {...stylex.props(type.label, styles.fig)}>Fig 0.1</span>
+          <span {...stylex.props(type.label, styles.diagramLabel)}>Diagram 0.1</span>
           <span {...stylex.props(type.control)}>One request, one round trip</span>
         </div>
         <div {...stylex.props(styles.stage)}>
@@ -215,8 +215,8 @@ export function HeroFigure() {
       </div>
       <figcaption {...stylex.props(type.small, styles.caption)}>
         <span {...stylex.props(type.labelSmall, styles.disclosure)}>Illustrative</span>
-        Simplified timings, not a live request. Every lesson is built around an interactive figure
-        like this one: change the inputs and watch the system respond.
+        Simplified timings, not a live request. Every lesson has an interactive diagram like this
+        one: change the inputs and watch how the system responds.
       </figcaption>
     </figure>
   );

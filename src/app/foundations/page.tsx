@@ -33,7 +33,7 @@ export default function Foundations() {
         <h1 {...stylex.props(type.display, styles.title)}>Foundations</h1>
         <p {...stylex.props(styles.lede)}>
           The Patternbook design system: the tokens, primitives and page parts every lesson and
-          figure is built from, shown in every state.
+          diagram is built from, shown in every state.
         </p>
       </header>
       <Colour />

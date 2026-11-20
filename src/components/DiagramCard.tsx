@@ -1,13 +1,13 @@
 import NextLink from "next/link";
 import * as stylex from "@stylexjs/stylex";
 import { ArrowRight } from "lucide-react";
-import { figureKinds } from "@/content/figures";
-import { lessonHref, type Figure, type Lesson } from "@/content/types";
+import { diagramKinds } from "@/content/diagrams";
+import { lessonHref, type Diagram, type Lesson } from "@/content/types";
 import { colors, motion, radius, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
 import { Badge } from "@/ui/Badge";
 import { Icon } from "@/ui/Icon";
-import { FigureSketch } from "./FigureSketch";
+import { DiagramSketch } from "./DiagramSketch";
 
 const HOVER = "@media (hover: hover)";
 
@@ -71,23 +71,23 @@ const styles = stylex.create({
   lessonNumber: { color: colors.inkMuted, marginInlineEnd: space.s2 },
 });
 
-type FigureCardProps = {
-  figure: Figure;
+type DiagramCardProps = {
+  diagram: Diagram;
   lesson: Pick<Lesson, "number" | "slug" | "title">;
 };
 
-export function FigureCard({ figure, lesson }: FigureCardProps) {
+export function DiagramCard({ diagram, lesson }: DiagramCardProps) {
   return (
     <NextLink href={lessonHref(lesson)} {...stylex.props(styles.card, stylex.defaultMarker())}>
       <div {...stylex.props(styles.stage)}>
-        <span {...stylex.props(type.labelSmall, styles.number)}>Fig {figure.number}</span>
+        <span {...stylex.props(type.labelSmall, styles.number)}>Diagram {diagram.number}</span>
         <span {...stylex.props(styles.kind)}>
-          <Badge tone="kind">{figureKinds[figure.kind]}</Badge>
+          <Badge tone="kind">{diagramKinds[diagram.kind]}</Badge>
         </span>
-        <FigureSketch kind={figure.kind} />
+        <DiagramSketch kind={diagram.kind} />
       </div>
       <div {...stylex.props(styles.text)}>
-        <span {...stylex.props(type.body, styles.title)}>{figure.title}</span>
+        <span {...stylex.props(type.body, styles.title)}>{diagram.title}</span>
         <span {...stylex.props(type.ui, styles.lesson)}>
           <span>
             <span {...stylex.props(type.number, styles.lessonNumber)}>

@@ -4,7 +4,8 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "Patternbook",
     short_name: "Patternbook",
-    description: "An interactive notebook of everyday engineering problems.",
+    description:
+      "Interactive lessons on software engineering patterns, each with a diagram of the broken and fixed versions that you can change and step through.",
     start_url: "/",
     display: "standalone",
     background_color: "#FBFBF9",

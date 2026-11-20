@@ -44,7 +44,7 @@ export function PageParts() {
               rows={[
                 [
                   "Props",
-                  "current: lessons | figures | about · drawer: extra content for the phone drawer",
+                  "current: lessons | diagrams | about · drawer: extra content for the phone drawer",
                 ],
                 ["Layout", "padding 12 × 24 · 1px line bottom border · paper · height 57"],
                 [
@@ -99,7 +99,7 @@ export function PageParts() {
                   title: "Offset vs cursor pagination",
                   hook: "Why page two sometimes shows a row you already saw.",
                 }}
-                figures={2}
+                diagrams={2}
                 languages={["SQL", "TypeScript"]}
               />
             </Preview>
@@ -112,7 +112,7 @@ export function PageParts() {
                 ],
                 [
                   "Meta",
-                  "level Badge, minutes, figures, languages · type.number inkMuted · gap 8 × 16",
+                  "level Badge, minutes, diagrams, languages · type.number inkMuted · gap 8 × 16",
                 ],
               ]}
             />
@@ -128,7 +128,7 @@ export function PageParts() {
             </Preview>
             <Specs
               rows={[
-                ["Props", "lesson · thumbnail: the figure at rest (empty until the figure kit)"],
+                ["Props", "lesson · thumbnail: the diagram at rest (empty until the diagram kit)"],
                 [
                   "Box",
                   "surface · 1px line · radius.frame · padding 12 · the whole card is one link",

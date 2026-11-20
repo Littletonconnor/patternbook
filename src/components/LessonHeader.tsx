@@ -26,11 +26,11 @@ const styles = stylex.create({
 type LessonHeaderProps = {
   topic: string;
   lesson: Pick<Lesson, "number" | "title" | "hook" | "level" | "minutes">;
-  figures?: number;
+  diagrams?: number;
   languages?: readonly string[];
 };
 
-export function LessonHeader({ topic, lesson, figures = 0, languages = [] }: LessonHeaderProps) {
+export function LessonHeader({ topic, lesson, diagrams = 0, languages = [] }: LessonHeaderProps) {
   return (
     <header {...stylex.props(styles.header)}>
       <div {...stylex.props(type.label, styles.eyebrow)}>
@@ -41,9 +41,9 @@ export function LessonHeader({ topic, lesson, figures = 0, languages = [] }: Les
       <div {...stylex.props(type.number, styles.meta)}>
         <Badge level={lesson.level} />
         <span>{lesson.minutes} min</span>
-        {figures > 0 && (
+        {diagrams > 0 && (
           <span>
-            {figures} {figures === 1 ? "figure" : "figures"}
+            {diagrams} {diagrams === 1 ? "diagram" : "diagrams"}
           </span>
         )}
         {languages.length > 0 && <span>{languages.join(" · ")}</span>}

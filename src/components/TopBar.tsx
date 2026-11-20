@@ -59,11 +59,11 @@ const styles = stylex.create({
   drawerNav: { display: "flex", flexDirection: "column", gap: space.s3, paddingBottom: space.s4 },
 });
 
-export type Section = "lessons" | "figures" | "about";
+export type Section = "lessons" | "diagrams" | "about";
 
 const links: { section: Section; label: string; href: string }[] = [
   { section: "lessons", label: "Lessons", href: "/lessons" },
-  { section: "figures", label: "Figures", href: "/figures" },
+  { section: "diagrams", label: "Diagrams", href: "/diagrams" },
   { section: "about", label: "About", href: "/about" },
 ];
 

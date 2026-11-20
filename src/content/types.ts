@@ -24,11 +24,11 @@ export function lessonHref(lesson: Pick<Lesson, "slug">) {
   return `/lessons/${lesson.slug}`;
 }
 
-export type FigureKind = "playground" | "race" | "timeline" | "flow" | "structure" | "meter";
+export type DiagramKind = "playground" | "race" | "timeline" | "flow" | "structure" | "meter";
 
-export type Figure = {
+export type Diagram = {
   number: string;
-  kind: FigureKind;
+  kind: DiagramKind;
   title: string;
   lesson: string;
 };

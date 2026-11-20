@@ -44,13 +44,13 @@ const spaces = [
 const radii = [
   { token: "mark", px: 4, use: "rows, chips, keys" },
   { token: "control", px: 8, use: "buttons, inputs" },
-  { token: "frame", px: 12, use: "figures, cards" },
+  { token: "frame", px: 12, use: "diagrams, cards" },
 ] as const;
 
 const measures = [
   { token: "sidebar", px: 240, share: "25%", color: colors.lineStrong },
   { token: "prose", px: 680, share: "71%", color: colors.ink },
-  { token: "figure", px: 960, share: "100%", color: colors.signal },
+  { token: "diagram", px: 960, share: "100%", color: colors.signal },
   { token: "rail", px: 200, share: "21%", color: colors.lineStrong },
 ] as const;
 
@@ -84,7 +84,7 @@ export function Layout() {
             ))}
           </div>
           <p {...stylex.props(type.small, styles.note)}>
-            Borders are 1 px Line. Marks inside figures use a 1.5 px Ink stroke. No shadows on the
+            Borders are 1 px Line. Marks inside diagrams use a 1.5 px Ink stroke. No shadows on the
             page; one soft shadow is reserved for things that float.
           </p>
         </Card>
@@ -99,7 +99,7 @@ export function Layout() {
             </div>
           ))}
           <p {...stylex.props(type.small, styles.note)}>
-            Figures are wider than the text on purpose. The break in the column edge tells the
+            Diagrams are wider than the text on purpose. The break in the column edge tells the
             reader it is time to play.
           </p>
         </Card>

@@ -42,7 +42,7 @@ export function ToggleGroupExample() {
         rows={[
           {
             name: "default",
-            use: "Figure mode switch",
+            use: "Diagram mode switch",
             example: (
               <>
                 <ToggleGroup
@@ -80,7 +80,7 @@ export function ToggleGroupExample() {
             "padding 5 × 12, type.control · small: 6 × 0, type.caption, items share the width",
           ],
           ["On", "surface, 1px line border, ink, weight 500 · styled with :is([data-pressed])"],
-          ["Motion", "none: the switch is instant so a figure can be compared before and after"],
+          ["Motion", "none: the switch is instant so a diagram can be compared before and after"],
         ]}
       />
     </Card>
@@ -100,7 +100,7 @@ export function TabsExample() {
         rows={[
           {
             name: "code languages",
-            use: "Code blocks, figure views",
+            use: "Code blocks, diagram views",
             example: (
               <div {...stylex.props(styles.wide)}>
                 <Tabs defaultValue="sql">
@@ -144,10 +144,10 @@ export function SwitchExample() {
         rows={[
           {
             name: "on",
-            use: "Figure condition",
+            use: "Diagram condition",
             example: <Switch label="New rows keep arriving" defaultChecked />,
           },
-          { name: "off", use: "Figure condition", example: <Switch label="Slow network" /> },
+          { name: "off", use: "Diagram condition", example: <Switch label="Slow network" /> },
           {
             name: "disabled",
             use: "Not available yet",

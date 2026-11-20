@@ -2,18 +2,18 @@ import type { Metadata } from "next";
 import NextLink from "next/link";
 import * as stylex from "@stylexjs/stylex";
 import { lessonBySlug } from "@/content/catalog";
-import { figureLesson, figures } from "@/content/figures";
+import { diagramLesson, diagrams } from "@/content/diagrams";
 import { lessonHref, type Lesson } from "@/content/types";
-import { FigureIndex } from "@/components/FigureIndex";
+import { DiagramIndex } from "@/components/DiagramIndex";
 import { PageIntro } from "@/components/PageIntro";
 import { PageShell } from "@/components/PageShell";
 import { colors, radius, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
 
 export const metadata: Metadata = {
-  title: "Figures",
+  title: "Diagrams",
   description:
-    "Every interactive figure in Patternbook, out of its lesson. Operate it here, then follow it back to the lesson that explains it.",
+    "Every interactive diagram on Patternbook, filterable by kind, each linked to its lesson.",
 };
 
 const HOVER = "@media (hover: hover)";
@@ -77,34 +77,32 @@ const styles = stylex.create({
   minutes: { color: colors.inkMuted, whiteSpace: "nowrap" },
 });
 
-export default function FiguresPage() {
-  const entries = figures.map((figure) => {
-    const { number, slug, title } = figureLesson(figure);
-    return { figure, lesson: { number, slug, title } };
+export default function DiagramsPage() {
+  const entries = diagrams.map((diagram) => {
+    const { number, slug, title } = diagramLesson(diagram);
+    return { diagram, lesson: { number, slug, title } };
   });
   const craft = craftSlugs
     .map((slug) => lessonBySlug(slug))
     .filter((lesson): lesson is Lesson => lesson !== undefined);
 
   return (
-    <PageShell current="figures">
-      <PageIntro
-        eyebrow={`Figures · ${figures.length} planned`}
-        title="Every figure, out of its lesson"
-      >
-        Each one is a small machine you can operate. Pick any, play with it here, then follow it
-        back to the lesson that explains what you just saw.
+    <PageShell current="diagrams">
+      <PageIntro eyebrow={`Diagrams · ${diagrams.length} planned`} title="All diagrams">
+        Every interactive diagram on the site, filterable by kind. Each one shows a pattern working:
+        change the inputs, step through it, and compare the broken and fixed versions. Each card
+        links to the lesson that explains it.
       </PageIntro>
 
-      <FigureIndex entries={entries} />
+      <DiagramIndex entries={entries} />
 
       <section {...stylex.props(styles.behind)}>
         <div {...stylex.props(styles.behindText)}>
-          <div {...stylex.props(type.label, styles.eyebrow)}>Behind the figures</div>
-          <h2 {...stylex.props(type.heading, styles.heading)}>How these are built</h2>
+          <div {...stylex.props(type.label, styles.eyebrow)}>Implementation</div>
+          <h2 {...stylex.props(type.heading, styles.heading)}>How the diagrams are built</h2>
           <p {...stylex.props(type.small, styles.blurb)}>
-            Every figure is hand-written SVG and React on one shared kit. These lessons take it
-            apart.
+            The diagrams are SVG rendered by React components from one shared kit. These three
+            lessons cover the techniques.
           </p>
         </div>
         <ul {...stylex.props(styles.list)}>

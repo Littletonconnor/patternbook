@@ -117,7 +117,7 @@ export function Colour() {
       <Section
         eyebrow="01 · Colour"
         title="Meaning"
-        note="Four colours, each with one job, used only inside figures and never as decoration. Each has a solid for marks, a wash for areas, and a darker ink that is safe for small text."
+        note="Four colours, each with one job, used only inside diagrams and never as decoration. Each has a solid for marks, a wash for areas, and a darker ink that is safe for small text."
       >
         <div {...stylex.props(styles.meanings)}>
           {meanings.map((m) => (

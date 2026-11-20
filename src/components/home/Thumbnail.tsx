@@ -1,7 +1,7 @@
-import type { FigureKind } from "@/content/types";
-import { FigureSketch } from "@/components/FigureSketch";
+import type { DiagramKind } from "@/content/types";
+import { DiagramSketch } from "@/components/DiagramSketch";
 
-const bySlug: Record<string, FigureKind> = {
+const bySlug: Record<string, DiagramKind> = {
   "debounce-vs-throttle": "timeline",
   "optimistic-updates-and-rollback": "flow",
   "infinite-scroll-and-virtualization": "playground",
@@ -10,5 +10,5 @@ const bySlug: Record<string, FigureKind> = {
 };
 
 export function Thumbnail({ slug }: { slug: string }) {
-  return <FigureSketch kind={bySlug[slug] ?? "flow"} />;
+  return <DiagramSketch kind={bySlug[slug] ?? "flow"} />;
 }

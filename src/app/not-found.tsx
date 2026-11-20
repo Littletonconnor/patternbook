@@ -30,23 +30,23 @@ export default function NotFound() {
   return (
     <PageShell>
       <div {...stylex.props(styles.intro)}>
-        <PageIntro eyebrow="404" title="This page isn’t in the notebook">
-          The link may be old, or the lesson may have moved. Everything that exists is one click
-          from the homepage.
+        <PageIntro eyebrow="404" title="Page not found">
+          Nothing exists at this URL. If you followed a link to a lesson, the lesson may have been
+          renamed.
         </PageIntro>
         <div {...stylex.props(styles.actions)}>
           <ButtonLink variant="primary" size="large" href="/">
-            Back to the homepage
+            Go to the homepage
             <Icon icon={ArrowRight} size={14} />
           </ButtonLink>
           <ButtonLink size="large" href="/#topics">
-            Browse all topics
+            All topics
           </ButtonLink>
         </div>
       </div>
 
       <section {...stylex.props(styles.section)}>
-        <SectionHead title="Or start with one of these" />
+        <SectionHead title="Starter lessons" />
         <div {...stylex.props(styles.grid)}>
           {starterLessons.map((lesson) => (
             <LessonCard

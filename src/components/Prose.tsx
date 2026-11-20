@@ -77,7 +77,7 @@ export function Code({ children }: Children) {
   return <code {...stylex.props(type.code, styles.code)}>{children}</code>;
 }
 
-/** figures and wide code break out of the text column to the full lesson width */
+/** diagrams and wide code break out of the text column to the full lesson width */
 export function Breakout({ children }: Children) {
   return <div {...stylex.props(styles.breakout)}>{children}</div>;
 }

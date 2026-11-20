@@ -2,12 +2,12 @@
 
 import * as stylex from "@stylexjs/stylex";
 import { useState } from "react";
-import { figureKinds } from "@/content/figures";
-import type { Figure, FigureKind, Lesson } from "@/content/types";
+import { diagramKinds } from "@/content/diagrams";
+import type { Diagram, DiagramKind, Lesson } from "@/content/types";
 import { colors, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
 import { ToggleGroup } from "@/ui/ToggleGroup";
-import { FigureCard } from "./FigureCard";
+import { DiagramCard } from "./DiagramCard";
 
 const styles = stylex.create({
   root: { display: "flex", flexDirection: "column", gap: space.s6 },
@@ -25,22 +25,22 @@ const styles = stylex.create({
   },
 });
 
-type Entry = { figure: Figure; lesson: Pick<Lesson, "number" | "slug" | "title"> };
+type Entry = { diagram: Diagram; lesson: Pick<Lesson, "number" | "slug" | "title"> };
 
-type Filter = "all" | FigureKind;
+type Filter = "all" | DiagramKind;
 
-export function FigureIndex({ entries }: { entries: readonly Entry[] }) {
+export function DiagramIndex({ entries }: { entries: readonly Entry[] }) {
   const [filter, setFilter] = useState<Filter>("all");
 
-  const kinds = (Object.keys(figureKinds) as FigureKind[]).filter((kind) =>
-    entries.some((entry) => entry.figure.kind === kind),
+  const kinds = (Object.keys(diagramKinds) as DiagramKind[]).filter((kind) =>
+    entries.some((entry) => entry.diagram.kind === kind),
   );
   const options = [
     { value: "all" as const, label: "All", count: entries.length },
     ...kinds.map((kind) => ({
       value: kind,
-      label: figureKinds[kind],
-      count: entries.filter((entry) => entry.figure.kind === kind).length,
+      label: diagramKinds[kind],
+      count: entries.filter((entry) => entry.diagram.kind === kind).length,
     })),
   ].map(({ value, label, count }) => ({
     value,
@@ -52,7 +52,7 @@ export function FigureIndex({ entries }: { entries: readonly Entry[] }) {
     ),
   }));
 
-  const shown = entries.filter((entry) => filter === "all" || entry.figure.kind === filter);
+  const shown = entries.filter((entry) => filter === "all" || entry.diagram.kind === filter);
 
   return (
     <div {...stylex.props(styles.root)}>
@@ -66,7 +66,7 @@ export function FigureIndex({ entries }: { entries: readonly Entry[] }) {
       </div>
       <div {...stylex.props(styles.grid)}>
         {shown.map((entry) => (
-          <FigureCard key={entry.figure.number} figure={entry.figure} lesson={entry.lesson} />
+          <DiagramCard key={entry.diagram.number} diagram={entry.diagram} lesson={entry.lesson} />
         ))}
       </div>
     </div>

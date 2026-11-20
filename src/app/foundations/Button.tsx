@@ -51,7 +51,7 @@ export function ButtonExample() {
         ]}
       />
       <p {...stylex.props(type.small, styles.note)}>
-        One primary per figure or section; everything else is secondary or ghost.
+        One primary per diagram or section; everything else is secondary or ghost.
       </p>
     </Card>
   );

@@ -49,14 +49,14 @@ export function Typography() {
           </Row>
           <Row spec="type.small · 14/22 · 400">
             <span {...stylex.props(type.small, styles.soft)}>
-              Used for sidebar items, captions under figures and secondary notes.
+              Used for sidebar items, captions under diagrams and secondary notes.
             </span>
           </Row>
           <Row spec="type.control · 14/20 · 500">
             <span {...stylex.props(type.control)}>Load next page · Offset · Cursor</span>
           </Row>
           <Row spec="type.ui · 14/20 · 400">
-            <span {...stylex.props(type.ui)}>Lessons · Figures · About</span>
+            <span {...stylex.props(type.ui)}>Lessons · Diagrams · About</span>
           </Row>
           <Row spec="type.caption · 12/16 · 400">
             <span {...stylex.props(type.caption)}>All · Foundations · Core · Advanced</span>
@@ -64,7 +64,7 @@ export function Typography() {
         </Card>
         <Card>
           <Row spec="type.label · 12/16 · 500 · +0.06em · uppercase">
-            <span {...stylex.props(type.label)}>Fig 33.1 · Page window</span>
+            <span {...stylex.props(type.label)}>Diagram 33.1 · Page window</span>
           </Row>
           <Row spec="type.code · 14/22 · 400">
             <span {...stylex.props(type.code)}>
@@ -89,7 +89,7 @@ export function Typography() {
             <span {...stylex.props(type.readout)}>12 rows · 240 ms</span>
           </Row>
           <p {...stylex.props(type.small, styles.rule)}>
-            Rule of thumb: if it is part of a figure or names something in code, it is mono.
+            Rule of thumb: if it is part of a diagram or names something in code, it is mono.
             Everything a person reads as a sentence is Geist.
           </p>
         </Card>

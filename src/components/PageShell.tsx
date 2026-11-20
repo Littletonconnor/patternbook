@@ -31,7 +31,7 @@ const styles = stylex.create({
 
 const widths = stylex.create({
   wide: { maxWidth: measure.lesson },
-  narrow: { maxWidth: measure.figure },
+  narrow: { maxWidth: measure.diagram },
 });
 
 type PageShellProps = {

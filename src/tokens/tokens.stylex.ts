@@ -13,7 +13,7 @@ export const colors = stylex.defineVars({
   inkSoft: { default: "#50545C", [DARK]: "#A9ADB4" },
   ink: { default: "#16181D", [DARK]: "#ECEDEA" },
 
-  // Meaning: only used inside figures
+  // Meaning: only used inside diagrams
   signal: { default: "#F0590E", [DARK]: "#FF7F45" },
   signalWash: { default: "#FFEEE3", [DARK]: "#3A1D0E" },
   signalInk: { default: "#B03C00", [DARK]: "#FFA57A" },
@@ -57,7 +57,7 @@ export const radius = stylex.defineVars({
 export const measure = stylex.defineVars({
   sidebar: "240px",
   prose: "720px",
-  figure: "960px",
+  diagram: "960px",
   lesson: "1120px",
   rail: "200px",
   page: "1440px",

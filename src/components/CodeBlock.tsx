@@ -36,7 +36,7 @@ export type CodeSample = {
   label: string;
   lang: BundledLanguage;
   code: string;
-  /** 1-based line held in focusWash while a figure is on that step */
+  /** 1-based line held in focusWash while a diagram is on that step */
   highlight?: number;
 };
 

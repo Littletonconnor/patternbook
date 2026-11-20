@@ -1,7 +1,7 @@
 import { lessonBySlug } from "./catalog";
-import type { Figure, FigureKind } from "./types";
+import type { Diagram, DiagramKind } from "./types";
 
-export const figureKinds: Record<FigureKind, string> = {
+export const diagramKinds: Record<DiagramKind, string> = {
   playground: "Playground",
   race: "Race",
   timeline: "Timeline",
@@ -10,7 +10,7 @@ export const figureKinds: Record<FigureKind, string> = {
   meter: "Meter",
 };
 
-export const figures: Figure[] = [
+export const diagrams: Diagram[] = [
   {
     number: "1.1",
     kind: "flow",
@@ -67,9 +67,9 @@ export const figures: Figure[] = [
   },
 ];
 
-export function figureLesson(figure: Figure) {
-  const lesson = lessonBySlug(figure.lesson);
+export function diagramLesson(diagram: Diagram) {
+  const lesson = lessonBySlug(diagram.lesson);
   if (!lesson)
-    throw new Error(`Figure ${figure.number} points at a missing lesson: ${figure.lesson}`);
+    throw new Error(`Diagram ${diagram.number} points at a missing lesson: ${diagram.lesson}`);
   return lesson;
 }
