@@ -11,13 +11,17 @@ Work top to bottom. Each phase builds on the one before it. Board numbers refer 
 
 ## Agent-driven repo
 
-Design and reasoning: [RFC 0001: Agent-first repository](rfc/0001-agent-first-repo.md). Each sub-section below matches a layer of the RFC's priority pyramid, from most to least deterministic. They stay empty until the implementation details are agreed.
+Design and reasoning: [RFC 0001: Agent-first repository](rfc/0001-agent-first-repo.md). Each sub-section below matches a layer of the RFC's priority pyramid, from most to least deterministic. Where a layer has its own RFC, the sub-section links to it. Sub-sections stay empty until the implementation details are agreed.
 
 ### 1. Architecture
+
+Design: [RFC 0003: Repository architecture](rfc/0003-architecture.md).
 
 ### 2. Types
 
 ### 3. Lint rules
+
+Design: [RFC 0002: Lint and format with the Oxc toolchain](rfc/0002-oxlint.md).
 
 ### 4. Tests
 
@@ -149,6 +153,6 @@ Not started. Everything that needs a test runner lives here, so the rest of the 
 - [ ] `test` script: all unit tests. `test:rules`: only the lint rule tests, so changing a rule is fast to check.
 - [ ] Catalog integrity: slugs unique, numbers 1 to 83 with no gaps, every topic has lessons, previous and next wrap correctly, starter lessons exist. Glossary terms unique.
 - [ ] Content checks: every lesson marked written in `catalog.ts` has an MDX file, and every MDX file has a catalog entry.
-- [ ] Local lint rules: `RuleTester` cases in `eslint/rules/*.test.ts`, at least one valid and one invalid example taken from real code in this repo.
+- [ ] Local lint rules: `RuleTester` cases in `lint/rules/*.test.ts`, at least one valid and one invalid example taken from real code in this repo.
 - [ ] Structure test: every file in `src` sits in an allowed path, and the failure message says where it belongs.
 - [ ] `AGENTS.md` files: line limits, and every file path they mention exists.

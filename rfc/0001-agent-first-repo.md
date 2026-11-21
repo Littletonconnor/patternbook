@@ -20,7 +20,7 @@ Each goal states an outcome and how it is measured. All of them hold on a clean 
 2. **One command defines done, and it is clean.** `npm run verify` exits 0 with zero errors and zero warnings. A change is not done until it does, and no other command is needed to know.
 3. **Feedback arrives inside the edit that caused it.** The per-file hook reports violations for the edited file in a few seconds. The full `verify` run stays under about 60 seconds without `next build`. If either budget is exceeded, the hook or gate is restructured, not skipped.
 4. **Checks cannot be bypassed from the code.** Zero lint disable directives, zero `@ts-` directives, and zero non-`const` type assertions in `src`. Every exception is a named override in the lint config, so the full list of exceptions is reviewable in one file.
-5. **File placement is deterministic.** Given a file's kind and its importers, the placement table yields exactly one location. Any import that breaks the layer direction fails lint. Once testing lands, any file outside the allowed paths fails the structure check.
+5. **File placement is deterministic.** Every file has one valid location and imports only point down, as measured in [RFC 0003](0003-architecture.md).
 6. **Design values have a single source.** Zero literal colours, font sizes, weights, line heights, letter spacings or font families outside `src/tokens`. The count of raw spacing values never increases, and reaches zero when spacing tokens land.
 7. **Context stays within a budget and carries only instructions.** The root `AGENTS.md` stays under about 80 lines and each local file under about 30. None of them describe what files contain or repeat a rule a check already enforces.
 8. **UI changes are verified on rendered output.** A UI change is done only with screenshots at phone and desktop width in light and dark. Every diagram has a scripted drive that exercises its controls and saves evidence of each state.
@@ -31,6 +31,7 @@ Each goal states an outcome and how it is measured. All of them hold on a clean 
 
 - **Tests now.** No test runner yet. Tests are designed once the other layers are in place.
 - **Choosing the linter.** The linter and its base rule set are decided in [RFC 0002](0002-oxlint.md).
+- **Folder layout and import rules.** Decided in [RFC 0003](0003-architecture.md).
 - **Adopting third-party kits.** Published agent plugins and rule sets are sources of patterns, not dependencies.
 - **Unattended agent loops or auto-merge.** Review and commits stay manual.
 - **Spacing tokens.** The spacing pass is deferred. This RFC only stops raw values from growing.
@@ -50,46 +51,7 @@ The rule that follows: solve a problem at the lowest layer that can express it. 
 
 **Why it matters.** Architecture erosion is the gap between intended and actual structure. It builds up through many small, locally reasonable changes, and is mostly noticed through symptoms because few tools detect it [[7]](#sources). Agents speed it up by copying the nearest example [[10]](#sources). The established remedy is a set of fitness functions: structural tests and import rules that fail the build when a boundary is crossed [[12]](#sources) [[10]](#sources). The framework does not provide this. Next.js leaves organisation to each project and asks only for consistency [[19]](#sources).
 
-**How we achieve it.**
-
-```
-src/
-  app/                 Routes only: page, layout, and Next's special files
-    <route>/_parts/    Modules used by that one route and nowhere else
-  tokens/              Design values: colours, type, space, motion
-  ui/                  Design system: generic controls, no app knowledge
-  diagrams/            Diagram kit
-  components/          Page parts shared by two or more routes
-    shell/             TopBar, Brand, Footer, Sidebar parts, PageShell, PageIntro, PageRail
-    lesson/            LessonLayout, LessonHeader, LessonEnd, Pager, Prose, Callout, CodeBlock, Term, Table, ResourceList
-    catalog/           LessonCard, Thumbnail, SectionHead, DiagramCard, DiagramIndex, DiagramSketch
-  content/             Data and the functions that query it
-    lessons/<slug>/    One lesson: its MDX and its diagrams
-  hooks/               Hooks used in two or more places, one per file
-  lib/                 Pure functions: no React, no domain knowledge
-rfc/                   Decisions
-scripts/               Repository scripts: screenshots, generators
-lint/                  Local lint rules
-```
-
-- A module used by one route lives in that route's `_parts/` folder, which Next.js excludes from routing. When a second route imports it, it moves to `components/<area>` in the same change.
-- A hook used by one component stays in that component's file. Animation hooks live in `src/diagrams`. Shared hooks go in `src/hooks` as `useThing.ts`.
-- `PascalCase.tsx` exports one component named after the file. `camelCase.ts` is a module. No `index.ts` barrels, and no files named `utils`, `helpers`, `common`, `misc`, or `shared`, since generic names attract unrelated code.
-- One supported way per task. Links go through `src/ui/Link` or `ButtonLink`. Base UI is imported only in `src/ui`. Icons render through `<Icon>`. Persistent browser state (`localStorage`) is read and written only in `src/hooks`, so each stored value has one writer.
-- New work adds files instead of editing shared ones. A lesson is a folder, and whether it is written is derived from its MDX file existing, not from a flag kept in sync by hand.
-- Generators (`new:primitive`, `new:lesson`, `new:diagram`) create new modules in the right place with the right shape, so the conventional path is also the fastest one [[16]](#sources).
-
-Import direction is enforced by `no-restricted-imports` in a `files` block per folder:
-
-| Folder          | May import                                          |
-| --------------- | --------------------------------------------------- |
-| `tokens`, `lib` | nothing in `src`                                    |
-| `content`       | `lib`                                               |
-| `hooks`         | `content`, `lib`                                    |
-| `ui`            | `tokens`, `lib`, Base UI, Lucide                    |
-| `diagrams`      | `tokens`, `ui`, `lib`, `hooks`                      |
-| `components`    | everything above                                    |
-| `app`           | everything; a route's `_parts` only from that route |
+**How we achieve it.** [RFC 0003](0003-architecture.md) defines the architecture: one home for each kind of module, imports that only point down through a fixed stack of layers, code kept beside its only user until a second one appears, names that say what a module is, one wrapper per common task, and generators for new lessons, primitives and diagrams. Each rule there is enforced by lint or a structural check.
 
 ### 2. Types
 
@@ -213,9 +175,6 @@ Where this RFC goes further than its sources: some published practice keeps a sm
 - **Prose-only conventions in a long `AGENTS.md`.** Cheapest to write and easy to read. Rejected because nothing fails when an agent ignores it, and controlled studies found no success gain at higher cost.
 - **Adopting a published agent plugin or rule set.** Faster to start and maintained elsewhere. Rejected because the available kits target other editors or linters and bring rules for problems this codebase does not have.
 - **Oxlint instead of ESLint.** Evaluated in [RFC 0002](0002-oxlint.md).
-- **`components/<page>/` instead of `_parts/`.** Keeps every component in one tree. Rejected because route-only modules end up far from their route, and the folder name does not express who may import them.
-- **A flat `components/` folder.** Fewer placement decisions. Rejected because it already holds 24 files and will roughly double.
-- **`eslint-plugin-boundaries` or `dependency-cruiser`.** Purpose-built for layer rules. Deferred because `no-restricted-imports` covers seven folders without a new dependency.
 - **One large root `AGENTS.md`.** One file to read. Rejected because large context files degrade adherence and local files load only near the work.
 
 ## Tradeoffs and risks
@@ -224,6 +183,4 @@ Where this RFC goes further than its sources: some published practice keeps a sm
 - **False positives erode trust in checks.** Mature programs disable checks above 10% effective false positives [4]. A rule that misfires gets a narrower selector or a named override in the same change.
 - **Local rules are owned code.** Until testing lands, a broken rule can go unnoticed.
 - **The end-of-turn hook adds latency.** If `verify` becomes slow, the hook runs lint and typecheck only.
-- **Generators can encode outdated patterns.** A rule change updates its generator in the same change.
 - **Claude Code reads `CLAUDE.md`, not `AGENTS.md`.** With `AGENTS.md` only, Claude Code will not load these files by itself; Cursor and Codex do. If this proves a problem, the smallest fix is a root `CLAUDE.md` symlinked to `AGENTS.md`.
-- **Moving files churns history.** Moves wait until in-flight work lands.
