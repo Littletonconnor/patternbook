@@ -7,6 +7,7 @@ import { LessonHeader } from "@/components/LessonHeader";
 import { LessonLayout } from "@/components/LessonLayout";
 import { Pager } from "@/components/Pager";
 import { H2, P, Prose } from "@/components/Prose";
+import { hasLessonSource, lessonHeadings, loadLesson } from "@/content/lessonSource";
 
 export function generateStaticParams() {
   return lessons.map((lesson) => ({ slug: lesson.slug }));
@@ -30,32 +31,42 @@ export async function generateMetadata({
     : {};
 }
 
-export default function LessonPage({ params }: PageProps<"/lessons/[slug]">) {
+export default async function LessonPage({ params }: PageProps<"/lessons/[slug]">) {
+  const { slug } = await params;
+  const written = hasLessonSource(slug);
+  const rail = written ? lessonHeadings(slug) : [{ id: "coming-soon", label: "Coming soon" }];
+
   return (
-    <LessonLayout rail={[{ id: "coming-soon", label: "Coming soon" }]}>
+    <LessonLayout rail={rail}>
       <Suspense>
-        <LessonBody params={params} />
+        <LessonBody slug={slug} />
       </Suspense>
     </LessonLayout>
   );
 }
 
-async function LessonBody({ params }: Pick<PageProps<"/lessons/[slug]">, "params">) {
-  const { slug } = await params;
+async function LessonBody({ slug }: { slug: string }) {
   const lesson = lessonBySlug(slug);
   const topic = lesson && topicOf(lesson);
   if (!lesson || !topic) notFound();
   const { previous, next } = neighbours(lesson);
+  const Body = await loadLesson(slug);
 
   return (
     <>
       <LessonHeader topic={topic.title} lesson={lesson} />
       <Prose>
-        <H2 id="coming-soon">Coming soon</H2>
-        <P>
-          This lesson is planned but not written yet. Use the sidebar or the links below to keep
-          reading.
-        </P>
+        {Body ? (
+          <Body />
+        ) : (
+          <>
+            <H2 id="coming-soon">Coming soon</H2>
+            <P>
+              This lesson is planned but not written yet. Use the sidebar or the links below to keep
+              reading.
+            </P>
+          </>
+        )}
       </Prose>
       {lesson.status === "published" && <LessonEnd slug={slug} />}
       <Pager previous={previous} next={next} />

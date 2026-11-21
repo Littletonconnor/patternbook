@@ -224,7 +224,8 @@ export default function AboutPage() {
         <div {...stylex.props(styles.author)}>
           <span {...stylex.props(type.body, styles.title)}>Connor Littleton</span>
           <p {...stylex.props(type.body, styles.paragraph, styles.soft)}>
-            Software engineer. Patternbook started as my notes on problems I ran into at work.
+            I&rsquo;m a full stack engineer at Wealthfront. Patternbook started as my notes on
+            problems I ran into at work.
           </p>
           <div {...stylex.props(type.ui, styles.links)}>
             <Link variant="external" href="https://github.com/Littletonconnor">

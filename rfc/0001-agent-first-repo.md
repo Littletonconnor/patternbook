@@ -19,7 +19,7 @@ Each goal states an outcome and how it is measured. All of them hold on a clean 
 1. **Every convention is mechanically enforced or explicitly marked as judgment.** Measured by the rule table in the root `AGENTS.md`: each row names its enforcing check, or is labelled "judgment" with the reason no check is possible. No convention exists only in chat, memory, or review comments.
 2. **One command defines done, and it is clean.** `npm run verify` exits 0 with zero errors and zero warnings. A change is not done until it does, and no other command is needed to know.
 3. **Feedback arrives inside the edit that caused it.** The per-file hook reports violations for the edited file in a few seconds. The full `verify` run stays under about 60 seconds without `next build`. If either budget is exceeded, the hook or gate is restructured, not skipped.
-4. **Checks cannot be bypassed from the code.** Zero `eslint-disable` comments, zero `@ts-` directives, and zero non-`const` type assertions in `src`. Every exception is a named override in `eslint.config.mjs`, so the full list of exceptions is reviewable in one file.
+4. **Checks cannot be bypassed from the code.** Zero lint disable directives, zero `@ts-` directives, and zero non-`const` type assertions in `src`. Every exception is a named override in the lint config, so the full list of exceptions is reviewable in one file.
 5. **File placement is deterministic.** Given a file's kind and its importers, the placement table yields exactly one location. Any import that breaks the layer direction fails lint. Once testing lands, any file outside the allowed paths fails the structure check.
 6. **Design values have a single source.** Zero literal colours, font sizes, weights, line heights, letter spacings or font families outside `src/tokens`. The count of raw spacing values never increases, and reaches zero when spacing tokens land.
 7. **Context stays within a budget and carries only instructions.** The root `AGENTS.md` stays under about 80 lines and each local file under about 30. None of them describe what files contain or repeat a rule a check already enforces.
@@ -29,8 +29,8 @@ Each goal states an outcome and how it is measured. All of them hold on a clean 
 
 ## Non-goals
 
-- **Tests now.** No test runner yet. Test work is in the Testing section of `TODO.md`.
-- **Switching linters.** ESLint stays, because the StyleX and Next.js rules depend on it.
+- **Tests now.** No test runner yet. Tests are designed once the other layers are in place.
+- **Choosing the linter.** The linter and its base rule set are decided in [RFC 0002](0002-oxlint.md).
 - **Adopting third-party kits.** Published agent plugins and rule sets are sources of patterns, not dependencies.
 - **Unattended agent loops or auto-merge.** Review and commits stay manual.
 - **Spacing tokens.** The spacing pass is deferred. This RFC only stops raw values from growing.
@@ -69,7 +69,7 @@ src/
   lib/                 Pure functions: no React, no domain knowledge
 rfc/                   Decisions
 scripts/               Repository scripts: screenshots, generators
-eslint/                Local lint rules
+lint/                  Local lint rules
 ```
 
 - A module used by one route lives in that route's `_parts/` folder, which Next.js excludes from routing. When a second route imports it, it moves to `components/<area>` in the same change.
@@ -115,9 +115,9 @@ The rules target four practices that cause harm in an agent-driven codebase:
 - **Code comments.** Comments are not checked against the code they describe, so they drift. Across 1,500 projects, only 13% to 20% of code changes came with a change to the related comments [[5]](#sources), and changes that leave code and comment inconsistent are about 1.5 times more likely to introduce a bug [[6]](#sources). For an agent, a stale comment is a stale instruction in its context, and comments are a common place to justify a workaround instead of fixing its cause [[13]](#sources). Rule: no comments in `src`. Intent is carried by names, types, extracted functions, and checks.
 - **Hand-written design values.** A design token is a named design decision stored once and referenced everywhere, and the W3C community format for tokens reached its first stable version in 2025 [[18]](#sources). A literal such as `fontWeight: 500` is a copy of a decision. Copies drift independently, cannot follow a theme, and are copied again by the next agent. Rule: colours and typography only from `src/tokens`. Meaning colours (signal, fault, sound) only in diagrams, with UI-named aliases such as `accent`, `danger` and `success` for page parts, and `focus` kept for focus rings. Raw spacing values get a ratchet that fails only when a change adds one, until spacing tokens exist.
 - **Effects and timers used as patches.** Effects are an escape hatch for synchronising with external systems, and many common uses are unnecessary and cause extra renders and bugs [[17]](#sources). Timers are a common way to hide an ordering bug instead of fixing it [[13]](#sources). Both are legitimate for animation. Rule: `useEffect`, `setTimeout` and `requestAnimationFrame` only in the diagram kit's animation hooks and a short named list, settled when the diagram kit is built.
-- **Inline escape hatches.** A rule that can be disabled at the call site is optional. Rule: `noInlineConfig` and `reportUnusedDisableDirectives`, `--max-warnings 0`, and every exception as a named override in `eslint.config.mjs`.
+- **Inline escape hatches.** A rule that can be disabled at the call site is optional. Rule: disable directives are rejected (mechanism in [RFC 0002](0002-oxlint.md)), every rule is an error, and every exception is a named override in the lint config.
 
-The full rule list is section D of `TODO.md`: escape hatches (D1), comments (D2), typography and colour (D3, D4), further tokens (D5), placement and imports (D6), StyleX (D7), React, Next.js and TypeScript (D8), copy and accessibility (D9). Rules that selectors cannot express live as local rules in `eslint/`.
+The linter and its base rule set are decided in [RFC 0002](0002-oxlint.md). The repository's own convention rules are designed one at a time. Rules that no existing rule or selector can express live as local rules.
 
 ### 4. Tests
 
@@ -125,7 +125,7 @@ The full rule list is section D of `TODO.md`: escape hatches (D1), comments (D2)
 
 **Why it matters.** Test feedback combined with static analysis let models repair 62% of incorrect programs and 89% of reported vulnerabilities [[3]](#sources). A test that would still pass if every function it calls returned nothing proves nothing, and should be fixed or deleted [[14]](#sources).
 
-**How we achieve it.** Deferred. The Testing section of `TODO.md` holds the plan: Vitest with tests beside their files and no module mocking, catalog and content integrity, `RuleTester` cases for local lint rules, a structure test that fails any file outside the allowed paths, and checks on `AGENTS.md` size and paths. `test` joins `verify` when that section starts.
+**How we achieve it.** Deferred. The intended shape is Vitest with tests beside their files and no module mocking, catalog and content integrity, `RuleTester` cases for local lint rules, a structure test that fails any file outside the allowed paths, and checks on `AGENTS.md` size and paths. `test` joins `verify` once the test runner exists.
 
 ### 5. Runtime verification
 
@@ -152,14 +152,14 @@ The full rule list is section D of `TODO.md`: escape hatches (D1), comments (D2)
 
 The layers above define what is checked. Delivery defines when, and earlier is better [[4]](#sources). Hooks should stay silent on success and be specific on failure [[12]](#sources).
 
-| When                 | What runs                                                                                      |
-| -------------------- | ---------------------------------------------------------------------------------------------- |
-| After each edit      | Agent hook: `eslint --fix` and `prettier --write` on the edited file, then report what remains |
-| End of an agent turn | Agent hook: `npm run verify`; if it fails, the agent continues instead of stopping             |
-| Before a commit      | lint-staged: Prettier and ESLint on staged files                                               |
-| Every push           | CI: `npm ci` and `npm run verify:full`, with branch protection on `main`                       |
+| When                 | What runs                                                                                    |
+| -------------------- | -------------------------------------------------------------------------------------------- |
+| After each edit      | Agent hook: `lint --fix` and `prettier --write` on the edited file, then report what remains |
+| End of an agent turn | Agent hook: `npm run verify`; if it fails, the agent continues instead of stopping           |
+| Before a commit      | lint-staged: Prettier and the linter on staged files                                         |
+| Every push           | CI: `npm ci` and `npm run verify:full`, with branch protection on `main`                     |
 
-Scripts: `verify` runs `format:check`, `lint --max-warnings 0` and `typecheck`, and replaces `check`. `verify:full` adds `next build` for changes to routes, config, or MDX. `lint:fix` runs `eslint --fix` then `prettier --write`.
+Scripts: `verify` runs `format:check`, `lint --max-warnings 0` and `typecheck`, and replaces `check`. `verify:full` adds `next build` for changes to routes, config, or MDX. `lint:fix` runs the linter's autofix then `prettier --write`.
 
 ## The correction loop
 
@@ -206,13 +206,13 @@ Not available: the full text of de Silva and Balasubramaniam's 2012 survey on ar
 6. Context files should be short and instruct rather than describe [8] [10] [20].
 7. Repeated failures should improve the controls, at the most deterministic layer available [12] [14].
 
-Where this RFC goes further than its sources: some published practice keeps a small set of comments that record external constraints, allows inline lint exceptions with a reason and an expiry date, or requires a justification comment before a type assertion. This RFC removes all three. In a single-maintainer repository, a named override in `eslint.config.mjs` gives the same visibility with no unchecked text in the code.
+Where this RFC goes further than its sources: some published practice keeps a small set of comments that record external constraints, allows inline lint exceptions with a reason and an expiry date, or requires a justification comment before a type assertion. This RFC removes all three. In a single-maintainer repository, a named override in the lint config gives the same visibility with no unchecked text in the code.
 
 ## Alternatives considered
 
 - **Prose-only conventions in a long `AGENTS.md`.** Cheapest to write and easy to read. Rejected because nothing fails when an agent ignores it, and controlled studies found no success gain at higher cost.
 - **Adopting a published agent plugin or rule set.** Faster to start and maintained elsewhere. Rejected because the available kits target other editors or linters and bring rules for problems this codebase does not have.
-- **Oxlint with a published config.** Much faster and comes with a curated rule set. Rejected for now because the StyleX and Next.js rules require ESLint, which would mean running two linters.
+- **Oxlint instead of ESLint.** Evaluated in [RFC 0002](0002-oxlint.md).
 - **`components/<page>/` instead of `_parts/`.** Keeps every component in one tree. Rejected because route-only modules end up far from their route, and the folder name does not express who may import them.
 - **A flat `components/` folder.** Fewer placement decisions. Rejected because it already holds 24 files and will roughly double.
 - **`eslint-plugin-boundaries` or `dependency-cruiser`.** Purpose-built for layer rules. Deferred because `no-restricted-imports` covers seven folders without a new dependency.

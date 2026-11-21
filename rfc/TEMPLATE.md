@@ -2,7 +2,7 @@
 
 ## Summary
 
-The decision and the evidence behind it, in one or two short paragraphs. Someone who reads only this section should know what changes and why.
+Why this matters, then the decision and the evidence behind it, in one or two short paragraphs. Open with the objective, not with a tool or an external example. Someone who reads only this section should know what changes and why.
 
 ## Problem
 
@@ -18,7 +18,7 @@ Things that could reasonably be goals but are deliberately left out, and where t
 
 ## Proposal
 
-The design, ordered by priority, with a diagram where structure matters (`assets/NNNN-name.svg`). For each part: the practice, why it holds its place in the order, and how this repository achieves it. Cite with numbered links such as `[[1]](#sources)`.
+The design, ordered by priority, with a diagram where structure matters (`assets/NNNN-name.svg`). For each part: the practice, why it is needed, why it holds its place in the order, and how this repository achieves it. Cite with numbered links such as `[[1]](#sources)`.
 
 ## Research
 
@@ -28,7 +28,7 @@ The design, ordered by priority, with a diagram where structure matters (`assets
 | --- | ------------------------- | --------------------------------------------------------------------- | ----------------- |
 | 1   | [Author year, Title](url) | Peer-reviewed, preprint, industry report, official docs, or secondary | One line, factual |
 
-Note any source that could not be read, and any figure that is self-reported.
+Note any source that could not be read, and any figure that is self-reported. Cite published sources only: an RFC never refers to scratch runs, prototypes, or other working notes.
 
 ### What we learned
 
