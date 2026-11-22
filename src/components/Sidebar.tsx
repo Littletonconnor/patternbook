@@ -24,10 +24,11 @@ import {
   Rocket,
   ShieldCheck,
   SquareTerminal,
-  type LucideIcon,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { useState } from "react";
-import { lessonHref, type Lesson, type Topic } from "@/content/types";
+import { lessonHref } from "@/content/types";
+import type { Lesson, Topic } from "@/content/types";
 import { colors, motion, radius, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
 import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from "@/ui/Collapsible";
@@ -65,34 +66,34 @@ const styles = stylex.create({
     boxSizing: "border-box",
     display: "flex",
     flexDirection: "column",
-    width: "100%",
-    height: "100%",
-    paddingTop: space.s4,
-    paddingBottom: space.s4,
     paddingInlineStart: space.s3,
+    height: "100%",
+    paddingBottom: space.s4,
+    paddingTop: space.s4,
+    width: "100%",
   },
   head: {
-    display: "flex",
     alignItems: "center",
-    justifyContent: "space-between",
+    color: colors.inkMuted,
+    display: "flex",
     flexShrink: 0,
+    justifyContent: "space-between",
+    paddingInlineEnd: space.s3,
+    paddingInlineStart: 10,
     height: 28,
     marginBottom: space.s1,
-    paddingInlineStart: 10,
-    paddingInlineEnd: space.s3,
-    color: colors.inkMuted,
   },
-  actions: { display: "flex", alignItems: "center", gap: 2 },
+  actions: { gap: 2, alignItems: "center", display: "flex" },
   filter: {
-    flexShrink: 0,
-    marginBottom: space.s2,
-    marginInlineEnd: space.s3,
     borderRadius: radius.control,
     backgroundColor: colors.sunken,
+    flexShrink: 0,
+    marginInlineEnd: space.s3,
+    scrollbarColor: `${colors.line} transparent`,
+    scrollbarWidth: "thin",
+    marginBottom: space.s2,
     overflowX: "auto",
     overscrollBehaviorX: "contain",
-    scrollbarWidth: "thin",
-    scrollbarColor: `${colors.line} transparent`,
   },
   empty: {
     margin: 0,
@@ -101,105 +102,105 @@ const styles = stylex.create({
     color: colors.inkMuted,
   },
   collapseAll: {
-    display: "inline-flex",
-    alignItems: "center",
-    justifyContent: "center",
-    width: 24,
-    height: 24,
     padding: 0,
-    borderWidth: 0,
     borderRadius: 6,
-    cursor: "pointer",
-    color: { default: colors.inkMuted, ":hover": { default: null, [HOVER]: colors.ink } },
+    borderWidth: 0,
+    alignItems: "center",
     backgroundColor: {
       default: "transparent",
-      ":hover": { default: null, [HOVER]: colors.sunken },
+      ":hover": { [HOVER]: colors.sunken, default: null },
     },
+    color: { default: colors.inkMuted, ":hover": { [HOVER]: colors.ink, default: null } },
+    cursor: "pointer",
+    display: "inline-flex",
+    justifyContent: "center",
     opacity: { default: 1, ":disabled": 0.4 },
+    outlineColor: colors.focus,
+    outlineOffset: -2,
     outlineStyle: { default: "none", ":focus-visible": "solid" },
     outlineWidth: 2,
-    outlineOffset: -2,
-    outlineColor: colors.focus,
+    height: 24,
+    width: 24,
   },
   topics: {
+    gap: 1,
+    overscrollBehavior: "contain",
+    display: "flex",
+    flexDirection: "column",
     flexGrow: 1,
+    paddingInlineEnd: space.s3,
+    scrollbarColor: `${colors.line} transparent`,
+    scrollbarWidth: "thin",
     minHeight: 0,
     overflowY: "auto",
-    overscrollBehavior: "contain",
-    paddingInlineEnd: space.s3,
-    scrollbarWidth: "thin",
-    scrollbarColor: `${colors.line} transparent`,
-    display: "flex",
-    flexDirection: "column",
-    gap: 1,
   },
   truncate: {
-    flexGrow: 1,
-    minWidth: 0,
     overflow: "hidden",
-    whiteSpace: "nowrap",
+    flexGrow: 1,
     textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
+    minWidth: 0,
   },
   topicIcon: {
+    color: { default: colors.inkMuted, [stylex.when.ancestor(OPEN)]: colors.ink },
     display: "inline-flex",
     flexShrink: 0,
-    color: { default: colors.inkMuted, [stylex.when.ancestor(OPEN)]: colors.ink },
   },
   lessons: {
+    gap: 1,
     display: "flex",
     flexDirection: "column",
-    gap: 1,
-    paddingTop: 1,
-    paddingBottom: space.s2,
     paddingInlineStart: 20,
+    paddingBottom: space.s2,
+    paddingTop: 1,
   },
   row: {
-    display: "flex",
-    alignItems: "center",
-    gap: 10,
-    height: 30,
-    paddingInline: 10,
     borderRadius: 6,
-    textDecorationLine: "none",
-    color: colors.inkSoft,
+    gap: 10,
+    paddingInline: 10,
+    alignItems: "center",
     backgroundColor: "transparent",
+    color: colors.inkSoft,
+    display: "flex",
+    outlineColor: colors.focus,
+    outlineOffset: -2,
     outlineStyle: { default: "none", ":focus-visible": "solid" },
     outlineWidth: 2,
-    outlineOffset: -2,
-    outlineColor: colors.focus,
-    transitionProperty: "background-color, color",
+    textDecorationLine: "none",
     transitionDuration: motion.press,
+    transitionProperty: "background-color, color",
+    height: 30,
   },
   rowLink: {
-    color: { default: colors.inkSoft, ":hover": { default: null, [HOVER]: colors.ink } },
     backgroundColor: {
       default: "transparent",
-      ":hover": { default: null, [HOVER]: colors.sunken },
+      ":hover": { [HOVER]: colors.sunken, default: null },
     },
+    color: { default: colors.inkSoft, ":hover": { [HOVER]: colors.ink, default: null } },
   },
   current: {
-    color: { default: colors.ink, ":hover": colors.ink },
     backgroundColor: { default: colors.line, ":hover": colors.line },
+    color: { default: colors.ink, ":hover": colors.ink },
     fontWeight: 500,
   },
   planned: { color: colors.inkMuted },
-  lessonIcon: { display: "inline-flex", flexShrink: 0, color: colors.inkMuted },
+  lessonIcon: { color: colors.inkMuted, display: "inline-flex", flexShrink: 0 },
   lessonIconCurrent: { color: colors.ink },
   lessonIconRead: { color: colors.sound },
   count: {
-    flexShrink: 0,
     margin: 0,
-    marginTop: space.s3,
-    marginInlineEnd: space.s3,
-    paddingTop: space.s3,
+    overflow: "hidden",
     paddingInline: 10,
     color: colors.inkMuted,
-    whiteSpace: "nowrap",
-    overflow: "hidden",
+    flexShrink: 0,
+    marginInlineEnd: space.s3,
     textOverflow: "ellipsis",
-    borderTopWidth: 1,
-    borderTopStyle: "solid",
+    whiteSpace: "nowrap",
     borderTopColor: colors.line,
+    borderTopStyle: "solid",
+    borderTopWidth: 1,
+    marginTop: space.s3,
+    paddingTop: space.s3,
   },
 });
 
@@ -222,7 +223,9 @@ export function Sidebar({ topics, currentSlug: slugProp, closable = false }: Sid
   const [openedFor, setOpenedFor] = useState(topicOfCurrent);
   if (topicOfCurrent !== openedFor) {
     setOpenedFor(topicOfCurrent);
-    if (topicOfCurrent && !open.has(topicOfCurrent)) setOpen(new Set([...open, topicOfCurrent]));
+    if (topicOfCurrent && !open.has(topicOfCurrent)) {
+      setOpen(new Set([...open, topicOfCurrent]));
+    }
   }
 
   const visible = topics
@@ -241,8 +244,11 @@ export function Sidebar({ topics, currentSlug: slugProp, closable = false }: Sid
   function toggle(slug: string, isOpen: boolean) {
     setOpen((prev) => {
       const next = new Set(prev);
-      if (isOpen) next.add(slug);
-      else next.delete(slug);
+      if (isOpen) {
+        next.add(slug);
+      } else {
+        next.delete(slug);
+      }
       return next;
     });
   }

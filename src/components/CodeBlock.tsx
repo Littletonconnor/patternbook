@@ -1,5 +1,6 @@
 import * as stylex from "@stylexjs/stylex";
-import { codeToTokens, type BundledLanguage, type ThemedToken } from "shiki";
+import { codeToTokens } from "shiki";
+import type { BundledLanguage, ThemedToken } from "shiki";
 import { colors, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
 import { CodeTabs } from "./CodeTabs";
@@ -14,21 +15,26 @@ const syntax = stylex.create({
 const styles = stylex.create({
   pre: { margin: 0, paddingBlock: space.s3, overflowX: "auto" },
   code: { display: "block", minWidth: "max-content" },
-  line: { display: "block", minHeight: "1lh", paddingInline: space.s3 },
+  line: { paddingInline: space.s3, display: "block", minHeight: "1lh" },
   held: { backgroundColor: colors.focusWash, boxShadow: `inset 3px 0 0 ${colors.focus}` },
 });
 
 function kindOf(token: ThemedToken): keyof typeof syntax {
   const scopes = (token.explanation ?? []).flatMap((part) => part.scopes.map((s) => s.scopeName));
-  if (scopes.some((s) => s.startsWith("comment"))) return "comment";
-  if (scopes.some((s) => s.startsWith("string") || s.startsWith("constant"))) return "literal";
+  if (scopes.some((s) => s.startsWith("comment"))) {
+    return "comment";
+  }
+  if (scopes.some((s) => s.startsWith("string") || s.startsWith("constant"))) {
+    return "literal";
+  }
   if (
     scopes.some(
       (s) =>
         (s.startsWith("keyword") && !s.startsWith("keyword.operator")) || s.startsWith("storage"),
     )
-  )
+  ) {
     return "keyword";
+  }
   return "plain";
 }
 

@@ -12,17 +12,17 @@ export const metadata: Metadata = { title: "Foundations · Patternbook" };
 
 const styles = stylex.create({
   page: {
+    padding: { default: space.s6, "@media (min-width: 768px)": space.s16 },
+    gap: space.s16,
+    marginInline: "auto",
     display: "flex",
     flexDirection: "column",
-    gap: space.s16,
     maxWidth: 1440,
-    marginInline: "auto",
-    padding: { default: space.s6, "@media (min-width: 768px)": space.s16 },
   },
-  header: { display: "flex", flexDirection: "column", gap: space.s3 },
+  header: { gap: space.s3, display: "flex", flexDirection: "column" },
   eyebrow: { color: colors.inkMuted },
   title: { margin: 0 },
-  lede: { margin: 0, maxWidth: measure.prose, color: colors.inkSoft },
+  lede: { margin: 0, color: colors.inkSoft, maxWidth: measure.prose },
 });
 
 export default function Foundations() {

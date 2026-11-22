@@ -1,7 +1,8 @@
 import NextLink from "next/link";
 import * as stylex from "@stylexjs/stylex";
 import { formatMinutes, lessons, lessonsByLevel, totals } from "@/content/catalog";
-import { lessonHref, type Level } from "@/content/types";
+import { lessonHref } from "@/content/types";
+import type { Level } from "@/content/types";
 import { colors, motion, radius, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
 import { Badge } from "@/ui/Badge";
@@ -19,36 +20,36 @@ const levels: { level: Level; blurb: string }[] = [
 
 const styles = stylex.create({
   grid: {
+    gap: space.s4,
     display: "grid",
     gridTemplateColumns: "repeat(auto-fit, minmax(min(280px, 100%), 1fr))",
-    gap: space.s4,
   },
   card: {
-    display: "flex",
-    flexDirection: "column",
-    gap: 14,
     padding: 20,
-    color: colors.ink,
-    textDecorationLine: "none",
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderStyle: "solid",
     borderColor: {
       default: colors.line,
-      ":hover": { default: null, [HOVER]: colors.lineStrong },
+      ":hover": { [HOVER]: colors.lineStrong, default: null },
     },
     borderRadius: radius.frame,
-    transitionProperty: "border-color",
-    transitionDuration: motion.press,
+    borderStyle: "solid",
+    borderWidth: 1,
+    gap: 14,
+    backgroundColor: colors.surface,
+    color: colors.ink,
+    display: "flex",
+    flexDirection: "column",
+    outlineColor: colors.focus,
+    outlineOffset: 2,
     outlineStyle: { default: "none", ":focus-visible": "solid" },
     outlineWidth: 2,
-    outlineOffset: 2,
-    outlineColor: colors.focus,
+    textDecorationLine: "none",
+    transitionDuration: motion.press,
+    transitionProperty: "border-color",
   },
-  top: { display: "flex", alignItems: "center", justifyContent: "space-between", gap: space.s3 },
+  top: { gap: space.s3, alignItems: "center", display: "flex", justifyContent: "space-between" },
   meta: { color: colors.inkMuted },
   blurb: { color: colors.inkSoft },
-  bar: { display: "flex", gap: 3, height: 6 },
+  bar: { gap: 3, display: "flex", height: 6 },
   segment: { borderRadius: 3, backgroundColor: colors.line },
   active: { backgroundColor: colors.ink },
 });

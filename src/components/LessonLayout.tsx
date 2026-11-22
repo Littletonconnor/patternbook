@@ -3,7 +3,8 @@ import type { ReactNode } from "react";
 import { topics } from "@/content/catalog";
 import { measure, space } from "@/tokens/tokens.stylex";
 import { Footer } from "./Footer";
-import { PageRail, type RailItem } from "./PageRail";
+import { PageRail } from "./PageRail";
+import type { RailItem } from "./PageRail";
 import { Sidebar } from "./Sidebar";
 import { SidebarColumns } from "./SidebarColumns";
 import { SidebarToggle } from "./SidebarToggle";
@@ -14,36 +15,36 @@ const RAIL = "@media (min-width: 1180px)";
 
 const styles = stylex.create({
   page: { display: "flex", flexDirection: "column", minHeight: "100dvh" },
-  topBar: { position: "sticky", top: 0, zIndex: 10 },
+  topBar: { position: "sticky", zIndex: 10, top: 0 },
   main: {
+    paddingInline: { [WIDE]: space.s12, default: space.s4 },
+    columnGap: space.s16,
     display: "grid",
     gridTemplateColumns: {
-      default: "minmax(0, 1fr)",
       [RAIL]: `minmax(0, ${measure.lesson}) ${measure.rail}`,
+      default: "minmax(0, 1fr)",
     },
     justifyContent: "center",
-    columnGap: space.s16,
     minWidth: 0,
-    paddingTop: space.s12,
     paddingBottom: space.s8,
-    paddingInline: { default: space.s4, [WIDE]: space.s12 },
+    paddingTop: space.s12,
   },
   container: {
+    gap: space.s12,
+    marginInline: "auto",
+    containerType: "inline-size",
     display: "flex",
     flexDirection: "column",
-    gap: space.s12,
-    width: "100%",
     maxWidth: measure.lesson,
-    containerType: "inline-size",
-    marginInline: "auto",
+    width: "100%",
   },
   content: {
-    flexGrow: 1,
+    gap: space.s12,
     display: "flex",
     flexDirection: "column",
-    gap: space.s12,
+    flexGrow: 1,
   },
-  rail: { display: { default: "none", [RAIL]: "block" } },
+  rail: { display: { [RAIL]: "block", default: "none" } },
 });
 
 type LessonLayoutProps = {

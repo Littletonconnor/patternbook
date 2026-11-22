@@ -10,18 +10,18 @@ import { ToggleGroup } from "@/ui/ToggleGroup";
 import { DiagramCard } from "./DiagramCard";
 
 const styles = stylex.create({
-  root: { display: "flex", flexDirection: "column", gap: space.s6 },
+  root: { gap: space.s6, display: "flex", flexDirection: "column" },
   filter: {
-    overflowX: "auto",
     marginInline: `calc(-1 * ${space.s4})`,
     paddingInline: space.s4,
     scrollbarWidth: "none",
+    overflowX: "auto",
   },
-  count: { marginInlineStart: space.s2, color: colors.inkMuted },
+  count: { color: colors.inkMuted, marginInlineStart: space.s2 },
   grid: {
+    gap: space.s4,
     display: "grid",
     gridTemplateColumns: "repeat(auto-fill, minmax(min(320px, 100%), 1fr))",
-    gap: space.s4,
   },
 });
 
@@ -29,12 +29,16 @@ type Entry = { diagram: Diagram; lesson: Pick<Lesson, "number" | "slug" | "title
 
 type Filter = "all" | DiagramKind;
 
+function isDiagramKind(key: string): key is DiagramKind {
+  return Object.hasOwn(diagramKinds, key);
+}
+
 export function DiagramIndex({ entries }: { entries: readonly Entry[] }) {
   const [filter, setFilter] = useState<Filter>("all");
 
-  const kinds = (Object.keys(diagramKinds) as DiagramKind[]).filter((kind) =>
-    entries.some((entry) => entry.diagram.kind === kind),
-  );
+  const kinds = Object.keys(diagramKinds)
+    .filter(isDiagramKind)
+    .filter((kind) => entries.some((entry) => entry.diagram.kind === kind));
   const options = [
     { value: "all" as const, label: "All", count: entries.length },
     ...kinds.map((kind) => ({

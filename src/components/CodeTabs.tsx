@@ -2,29 +2,30 @@
 
 import * as stylex from "@stylexjs/stylex";
 import { Check, Copy } from "lucide-react";
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useState } from "react";
+import type { ReactNode } from "react";
 import { colors, radius, space } from "@/tokens/tokens.stylex";
 import { IconButton } from "@/ui/IconButton";
 import { Tab, Tabs, TabsList, TabsPanel } from "@/ui/Tabs";
 
 const styles = stylex.create({
   box: {
-    overflow: "hidden",
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderStyle: "solid",
     borderColor: colors.line,
     borderRadius: radius.control,
+    borderStyle: "solid",
+    borderWidth: 1,
+    overflow: "hidden",
+    backgroundColor: colors.surface,
   },
   header: {
-    display: "flex",
-    alignItems: "flex-end",
     gap: space.s3,
-    paddingTop: space.s2,
     paddingInline: space.s3,
-    borderBottomWidth: 1,
-    borderBottomStyle: "solid",
+    alignItems: "flex-end",
+    display: "flex",
     borderBottomColor: colors.line,
+    borderBottomStyle: "solid",
+    borderBottomWidth: 1,
+    paddingTop: space.s2,
   },
   tabs: { flexGrow: 1, marginBottom: -1 },
   copy: { paddingBottom: space.s1 },
@@ -37,7 +38,9 @@ export function CodeTabs({ tabs }: { tabs: readonly CodeTab[] }) {
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    if (!copied) return;
+    if (!copied) {
+      return;
+    }
     const timer = setTimeout(() => setCopied(false), 1500);
     return () => clearTimeout(timer);
   }, [copied]);

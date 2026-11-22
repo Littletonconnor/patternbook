@@ -7,51 +7,51 @@ import { type } from "@/tokens/typography";
 const HOVER = "@media (hover: hover)";
 
 const styles = stylex.create({
-  root: { display: "flex", flexDirection: "column", gap: space.s1, width: "100%" },
+  root: { gap: space.s1, display: "flex", flexDirection: "column", width: "100%" },
   header: {
+    gap: space.s3,
+    alignItems: "baseline",
     display: "flex",
     justifyContent: "space-between",
-    alignItems: "baseline",
-    gap: space.s3,
   },
   label: { color: colors.inkSoft },
   value: { color: colors.ink },
   control: {
-    display: "flex",
     alignItems: "center",
-    height: 20,
     cursor: "pointer",
+    display: "flex",
     touchAction: "none",
     userSelect: "none",
+    height: 20,
   },
   track: {
-    position: "relative",
-    width: "100%",
-    height: 2,
     borderRadius: 1,
     backgroundColor: colors.line,
+    position: "relative",
+    height: 2,
+    width: "100%",
   },
-  indicator: { height: "100%", borderRadius: 1, backgroundColor: colors.ink },
+  indicator: { borderRadius: 1, backgroundColor: colors.ink, height: "100%" },
   thumb: {
-    width: 14,
-    height: 14,
-    borderRadius: "50%",
-    backgroundColor: colors.surface,
-    borderWidth: 1.5,
-    borderStyle: "solid",
     borderColor: colors.ink,
-    transform: {
-      default: null,
-      ":hover": { default: null, [HOVER]: "scale(1.15)" },
-      ":is([data-dragging])": "scale(1.15)",
-    },
-    transitionProperty: "transform",
-    transitionDuration: motion.press,
-    transitionTimingFunction: motion.easeOut,
+    borderRadius: "50%",
+    borderStyle: "solid",
+    borderWidth: 1.5,
+    backgroundColor: colors.surface,
+    outlineColor: colors.focus,
+    outlineOffset: 2,
     outlineStyle: { default: "none", ":has(:focus-visible)": "solid" },
     outlineWidth: 2,
-    outlineOffset: 2,
-    outlineColor: colors.focus,
+    transform: {
+      default: null,
+      ":is([data-dragging])": "scale(1.15)",
+      ":hover": { [HOVER]: "scale(1.15)", default: null },
+    },
+    transitionDuration: motion.press,
+    transitionProperty: "transform",
+    transitionTimingFunction: motion.easeOut,
+    height: 14,
+    width: 14,
   },
 });
 
@@ -65,15 +65,28 @@ type SliderProps = Omit<
   renderValue?: (value: number) => ReactNode;
 };
 
+function formatValue(
+  formatted: string | undefined,
+  value: number | undefined,
+  unit: string | undefined,
+  renderValue: ((value: number) => ReactNode) | undefined,
+): ReactNode {
+  if (renderValue && value !== undefined) {
+    return renderValue(value);
+  }
+  if (unit) {
+    return `${formatted} ${unit}`;
+  }
+  return formatted;
+}
+
 export function Slider({ label, unit, renderValue, ...props }: SliderProps) {
   return (
     <BaseSlider.Root {...props} {...stylex.props(styles.root)}>
       <div {...stylex.props(styles.header)}>
         <BaseSlider.Label {...stylex.props(type.ui, styles.label)}>{label}</BaseSlider.Label>
         <BaseSlider.Value {...stylex.props(type.value, styles.value)}>
-          {(formatted, values) =>
-            renderValue ? renderValue(values[0]) : unit ? `${formatted[0]} ${unit}` : formatted[0]
-          }
+          {(formatted, values) => formatValue(formatted[0], values[0], unit, renderValue)}
         </BaseSlider.Value>
       </div>
       <BaseSlider.Control {...stylex.props(styles.control)}>

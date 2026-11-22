@@ -6,8 +6,8 @@ import type { LucideIcon } from "lucide-react";
 import { Icon } from "./Icon";
 
 const styles = stylex.create({
-  square: { width: 36, paddingInline: 0 },
-  squareSmall: { width: 32, paddingInline: 0 },
+  square: { paddingInline: 0, width: 36 },
+  squareSmall: { paddingInline: 0, width: 32 },
 });
 
 type IconButtonProps = Omit<

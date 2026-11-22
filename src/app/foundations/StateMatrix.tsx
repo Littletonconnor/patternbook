@@ -1,4 +1,5 @@
-import { Fragment, type ReactNode } from "react";
+import { Fragment } from "react";
+import type { ReactNode } from "react";
 import * as stylex from "@stylexjs/stylex";
 import { colors, radius, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
@@ -8,30 +9,34 @@ export const previewStates = ["rest", "hover", "pressed", "focus", "disabled"] a
 export type PreviewState = (typeof previewStates)[number];
 
 export function previewProps(state: PreviewState) {
-  if (state === "rest") return {};
-  if (state === "disabled") return { disabled: true };
+  if (state === "rest") {
+    return {};
+  }
+  if (state === "disabled") {
+    return { disabled: true };
+  }
   return { "data-preview": state };
 }
 
 const styles = stylex.create({
   panel: {
-    display: "grid",
-    alignItems: "center",
-    gap: `${space.s4} ${space.s3}`,
     padding: space.s6,
-    overflowX: "auto",
-    backgroundColor: colors.paper,
-    borderWidth: 1,
-    borderStyle: "solid",
     borderColor: colors.line,
     borderRadius: radius.control,
+    borderStyle: "solid",
+    borderWidth: 1,
+    gap: `${space.s4} ${space.s3}`,
+    alignItems: "center",
+    backgroundColor: colors.paper,
+    display: "grid",
+    overflowX: "auto",
   },
   columns: (count: number) => ({
     gridTemplateColumns: `160px repeat(${count}, minmax(0, 1fr))`,
   }),
   muted: { color: colors.inkMuted },
   rowLabel: { display: "flex", flexDirection: "column" },
-  example: { display: "flex", flexWrap: "wrap", alignItems: "center", gap: space.s3 },
+  example: { gap: space.s3, alignItems: "center", display: "flex", flexWrap: "wrap" },
   preview: { display: "block" },
 });
 

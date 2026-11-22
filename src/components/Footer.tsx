@@ -7,25 +7,25 @@ const HOVER = "@media (hover: hover)";
 
 const styles = stylex.create({
   footer: {
+    gap: space.s4,
+    color: colors.inkMuted,
     display: "flex",
     flexWrap: "wrap",
     justifyContent: "space-between",
-    gap: space.s4,
-    paddingTop: space.s6,
-    color: colors.inkMuted,
-    borderTopWidth: 1,
-    borderTopStyle: "solid",
     borderTopColor: colors.line,
+    borderTopStyle: "solid",
+    borderTopWidth: 1,
+    paddingTop: space.s6,
   },
-  links: { display: "flex", flexWrap: "wrap", gap: space.s4 },
+  links: { gap: space.s4, display: "flex", flexWrap: "wrap" },
   link: {
-    color: { default: colors.inkMuted, ":hover": { default: null, [HOVER]: colors.ink } },
-    textDecorationLine: "none",
     borderRadius: radius.mark,
+    color: { default: colors.inkMuted, ":hover": { [HOVER]: colors.ink, default: null } },
+    outlineColor: colors.focus,
+    outlineOffset: 2,
     outlineStyle: { default: "none", ":focus-visible": "solid" },
     outlineWidth: 2,
-    outlineOffset: 2,
-    outlineColor: colors.focus,
+    textDecorationLine: "none",
   },
 });
 

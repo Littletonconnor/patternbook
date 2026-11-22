@@ -897,7 +897,9 @@ export function totals(list: readonly Lesson[] = lessons) {
 }
 
 export function formatMinutes(minutes: number) {
-  if (minutes < 60) return `${minutes} min`;
+  if (minutes < 60) {
+    return `${minutes} min`;
+  }
   const h = Math.floor(minutes / 60);
   const m = minutes % 60;
   return `${h}h ${String(m).padStart(2, "0")}m`;

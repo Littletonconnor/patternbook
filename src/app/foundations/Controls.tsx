@@ -12,12 +12,12 @@ import { Card, Specs } from "./Section";
 import { ExampleRows } from "./StateMatrix";
 
 const styles = stylex.create({
-  wide: { width: "100%", maxWidth: 320 },
+  wide: { maxWidth: 320, width: "100%" },
   muted: { margin: 0, color: colors.inkMuted },
   code: {
     margin: 0,
-    paddingTop: space.s3,
     color: colors.inkSoft,
+    paddingTop: space.s3,
   },
 });
 

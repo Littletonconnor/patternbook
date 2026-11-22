@@ -6,20 +6,34 @@ export { SIDEBAR };
 
 type Stored = { width: number; collapsed: boolean };
 
-function read(): Stored {
-  try {
-    const raw = JSON.parse(localStorage.getItem(KEY) ?? "null");
-    if (raw && typeof raw.width === "number") {
-      return { width: clampWidth(raw.width), collapsed: raw.collapsed === true };
-    }
-  } catch {}
-  return { width: SIDEBAR.initial, collapsed: false };
+const fallback: Stored = { width: SIDEBAR.initial, collapsed: false };
+
+function parse(raw: unknown): Stored {
+  if (typeof raw !== "object" || raw === null || !("width" in raw)) {
+    return fallback;
+  }
+  if (typeof raw.width !== "number") {
+    return fallback;
+  }
+  return { width: clampWidth(raw.width), collapsed: "collapsed" in raw && raw.collapsed === true };
 }
 
-function write(state: Stored) {
+function read(): Stored {
+  try {
+    const raw: unknown = JSON.parse(localStorage.getItem(KEY) ?? "null");
+    return parse(raw);
+  } catch {
+    return fallback;
+  }
+}
+
+function write(state: Stored): boolean {
   try {
     localStorage.setItem(KEY, JSON.stringify(state));
-  } catch {}
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 export function clampWidth(width: number) {
@@ -29,7 +43,9 @@ export function clampWidth(width: number) {
 export function previewWidth(width: number) {
   const root = document.documentElement;
   root.style.setProperty("--sidebar-track", `${width}px`);
-  if (width > 0) root.style.setProperty("--sidebar-width", `${width}px`);
+  if (width > 0) {
+    root.style.setProperty("--sidebar-width", `${width}px`);
+  }
 }
 
 function apply(state: Stored) {

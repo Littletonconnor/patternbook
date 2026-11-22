@@ -3,7 +3,8 @@
 import { ToggleGroup as BaseToggleGroup } from "@base-ui/react/toggle-group";
 import { Toggle } from "@base-ui/react/toggle";
 import * as stylex from "@stylexjs/stylex";
-import { useState, type ReactNode } from "react";
+import { useState } from "react";
+import type { ReactNode } from "react";
 import { colors, radius } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
 
@@ -12,39 +13,39 @@ const PRESSED = ":is([data-pressed])";
 
 const styles = stylex.create({
   track: {
-    display: "inline-flex",
-    gap: 2,
     padding: 2,
-    backgroundColor: colors.sunken,
     borderRadius: radius.control,
+    gap: 2,
+    backgroundColor: colors.sunken,
+    display: "inline-flex",
   },
-  trackSmall: { display: "flex", width: "max-content", minWidth: "100%" },
+  trackSmall: { display: "flex", minWidth: "100%", width: "max-content" },
   item: {
+    borderColor: { [PRESSED]: colors.line, default: "transparent" },
+    borderRadius: 6,
+    borderStyle: "solid",
+    borderWidth: 1,
     paddingBlock: 5,
     paddingInline: 12,
-    borderRadius: 6,
-    borderWidth: 1,
-    borderStyle: "solid",
-    whiteSpace: "nowrap",
-    cursor: "pointer",
-    backgroundColor: { default: "transparent", [PRESSED]: colors.surface },
-    borderColor: { default: "transparent", [PRESSED]: colors.line },
+    backgroundColor: { [PRESSED]: colors.surface, default: "transparent" },
     color: {
-      default: colors.inkSoft,
-      ":hover": { default: null, [HOVER]: colors.ink },
       [PRESSED]: colors.ink,
+      default: colors.inkSoft,
+      ":hover": { [HOVER]: colors.ink, default: null },
     },
-    fontWeight: { default: 400, [PRESSED]: 500 },
+    cursor: "pointer",
+    fontWeight: { [PRESSED]: 500, default: 400 },
+    outlineColor: colors.focus,
+    outlineOffset: 1,
     outlineStyle: { default: "none", ":focus-visible": "solid" },
     outlineWidth: 2,
-    outlineOffset: 1,
-    outlineColor: colors.focus,
+    whiteSpace: "nowrap",
   },
   itemSmall: {
-    flexGrow: 1,
-    flexBasis: "auto",
     paddingBlock: 6,
     paddingInline: 8,
+    flexBasis: "auto",
+    flexGrow: 1,
     outlineOffset: -2,
   },
 });
@@ -77,8 +78,10 @@ export function ToggleGroup<T extends string>({
       aria-label={ariaLabel}
       value={current ? [current] : []}
       onValueChange={(next) => {
-        const picked = next[0] as T | undefined;
-        if (!picked) return;
+        const picked = options.find((option) => option.value === next[0])?.value;
+        if (!picked) {
+          return;
+        }
         setUncontrolled(picked);
         onValueChange?.(picked);
       }}

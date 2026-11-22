@@ -3,7 +3,8 @@
 import NextLink from "next/link";
 import * as stylex from "@stylexjs/stylex";
 import type { ReactNode } from "react";
-import { lessonHref, type Lesson } from "@/content/types";
+import { lessonHref } from "@/content/types";
+import type { Lesson } from "@/content/types";
 import { colors, motion, radius, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
 import { Badge } from "@/ui/Badge";
@@ -13,51 +14,51 @@ const HOVER = "@media (hover: hover)";
 
 const styles = stylex.create({
   card: {
-    display: "flex",
-    flexDirection: "column",
-    gap: space.s3,
     padding: space.s3,
-    color: colors.ink,
-    textDecorationLine: "none",
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderStyle: "solid",
     borderColor: {
       default: colors.line,
-      ":hover": { default: null, [HOVER]: colors.lineStrong },
+      ":hover": { [HOVER]: colors.lineStrong, default: null },
     },
     borderRadius: radius.frame,
-    transitionProperty: "border-color",
-    transitionDuration: motion.press,
+    borderStyle: "solid",
+    borderWidth: 1,
+    gap: space.s3,
+    backgroundColor: colors.surface,
+    color: colors.ink,
+    display: "flex",
+    flexDirection: "column",
+    outlineColor: colors.focus,
+    outlineOffset: 2,
     outlineStyle: { default: "none", ":focus-visible": "solid" },
     outlineWidth: 2,
-    outlineOffset: 2,
-    outlineColor: colors.focus,
+    textDecorationLine: "none",
+    transitionDuration: motion.press,
+    transitionProperty: "border-color",
   },
   thumb: {
-    position: "relative",
-    height: 140,
+    borderRadius: radius.control,
     overflow: "hidden",
     backgroundColor: colors.sunken,
     backgroundImage: `radial-gradient(${colors.lineStrong} 1px, transparent 1.2px)`,
     backgroundSize: "16px 16px",
-    borderRadius: radius.control,
+    position: "relative",
+    height: 140,
   },
-  meta: { position: "absolute", top: space.s2, left: space.s3, color: colors.inkMuted },
-  read: { position: "absolute", right: space.s2, bottom: space.s2 },
-  diagram: { position: "absolute", inset: 0, display: "grid", placeItems: "center" },
+  meta: { color: colors.inkMuted, position: "absolute", left: space.s3, top: space.s2 },
+  read: { position: "absolute", bottom: space.s2, right: space.s2 },
+  diagram: { inset: 0, placeItems: "center", display: "grid", position: "absolute" },
   text: {
-    display: "flex",
-    flexDirection: "column",
     gap: space.s1,
     paddingInline: space.s1,
+    display: "flex",
+    flexDirection: "column",
     paddingBottom: space.s1,
   },
   heading: {
+    gap: space.s2,
+    alignItems: "flex-start",
     display: "flex",
     flexDirection: "column",
-    alignItems: "flex-start",
-    gap: space.s2,
   },
   title: {
     fontWeight: 500,
@@ -100,9 +101,9 @@ export function LessonCard({ lesson, thumbnail }: LessonCardProps) {
 
 const grid = stylex.create({
   grid: {
+    gap: space.s4,
     display: "grid",
     gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
-    gap: space.s4,
   },
 });
 

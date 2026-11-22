@@ -1,6 +1,7 @@
 import * as stylex from "@stylexjs/stylex";
 import type { ReactNode } from "react";
-import { glossary, type GlossaryId } from "@/content/glossary";
+import { glossary } from "@/content/glossary";
+import type { GlossaryId } from "@/content/glossary";
 import { colors, motion, radius } from "@/tokens/tokens.stylex";
 import { Tooltip } from "@/ui/Tooltip";
 
@@ -8,28 +9,28 @@ const HOVER = "@media (hover: hover)";
 
 const styles = stylex.create({
   term: {
+    font: "inherit",
     padding: 0,
+    borderRadius: radius.mark,
     borderWidth: 0,
     backgroundColor: "transparent",
     color: "inherit",
-    font: "inherit",
     cursor: "help",
+    outlineColor: colors.focus,
+    outlineOffset: 2,
+    outlineStyle: { default: "none", ":focus-visible": "solid" },
+    outlineWidth: 2,
+    textDecorationColor: {
+      default: colors.inkMuted,
+      ":focus-visible": colors.ink,
+      ":hover": { [HOVER]: colors.ink, default: null },
+    },
     textDecorationLine: "underline",
     textDecorationStyle: "dotted",
     textDecorationThickness: 1.5,
     textUnderlineOffset: 3,
-    textDecorationColor: {
-      default: colors.inkMuted,
-      ":hover": { default: null, [HOVER]: colors.ink },
-      ":focus-visible": colors.ink,
-    },
-    transitionProperty: "text-decoration-color",
     transitionDuration: motion.press,
-    borderRadius: radius.mark,
-    outlineStyle: { default: "none", ":focus-visible": "solid" },
-    outlineWidth: 2,
-    outlineOffset: 2,
-    outlineColor: colors.focus,
+    transitionProperty: "text-decoration-color",
   },
 });
 

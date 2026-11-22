@@ -9,12 +9,14 @@ import { toggleSidebar, useSidebarCollapsed } from "./sidebarState";
 const WIDE = "@media (min-width: 768px)";
 
 const styles = stylex.create({
-  wrap: { display: { default: "none", [WIDE]: "inline-flex" } },
+  wrap: { display: { [WIDE]: "inline-flex", default: "none" } },
 });
 
 export function SidebarToggle() {
   const collapsed = useSidebarCollapsed();
-  if (!collapsed) return null;
+  if (!collapsed) {
+    return null;
+  }
 
   const label = "Show sidebar";
   return (

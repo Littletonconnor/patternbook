@@ -1,14 +1,8 @@
 "use client";
 
 import * as stylex from "@stylexjs/stylex";
-import {
-  useEffect,
-  useRef,
-  useState,
-  type KeyboardEvent,
-  type PointerEvent,
-  type ReactNode,
-} from "react";
+import { useEffect, useRef, useState } from "react";
+import type { KeyboardEvent, PointerEvent, ReactNode } from "react";
 import { colors, motion } from "@/tokens/tokens.stylex";
 import {
   SIDEBAR,
@@ -30,101 +24,130 @@ const KEY_STEP = 16;
 
 const styles = stylex.create({
   columns: {
-    flexGrow: 1,
     display: "grid",
+    flexGrow: 1,
     gridTemplateColumns: {
-      default: "minmax(0, 1fr)",
       [WIDE]: `${TRACK} minmax(0, 1fr)`,
+      default: "minmax(0, 1fr)",
     },
+    transitionDuration: { [REDUCED]: "0s", default: motion.move },
     transitionProperty: "grid-template-columns",
-    transitionDuration: { default: motion.move, [REDUCED]: "0s" },
     transitionTimingFunction: motion.easeOut,
   },
-  dragging: { transitionDuration: "0s", cursor: "col-resize", userSelect: "none" },
+  dragging: { cursor: "col-resize", transitionDuration: "0s", userSelect: "none" },
   column: {
-    display: { default: "none", [WIDE]: "block" },
+    display: { [WIDE]: "block", default: "none" },
     position: "relative",
     zIndex: 1,
     minWidth: 0,
   },
   sticky: {
     position: "sticky",
-    top: TOP_BAR,
     height: `calc(100dvh - ${TOP_BAR})`,
+    top: TOP_BAR,
   },
   clip: {
-    height: "100%",
     overflow: "hidden",
-    borderRightWidth: 1,
-    borderRightStyle: "solid",
     borderRightColor: colors.line,
+    borderRightStyle: "solid",
+    borderRightWidth: 1,
+    height: "100%",
   },
   clipClosed: { borderRightColor: "transparent" },
   panel: {
-    width: `var(--sidebar-width, ${INITIAL})`,
-    height: "100%",
     opacity: 1,
+    transitionDuration: { [REDUCED]: "0s", default: motion.move },
     transitionProperty: "opacity",
-    transitionDuration: { default: motion.move, [REDUCED]: "0s" },
     transitionTimingFunction: motion.easeOut,
+    height: "100%",
+    width: `var(--sidebar-width, ${INITIAL})`,
   },
   panelClosed: { opacity: 0 },
   handle: {
+    cursor: "col-resize",
+    outlineStyle: "none",
     position: "absolute",
-    top: 0,
+    touchAction: "none",
     bottom: 0,
     right: -6,
-    width: 12,
-    cursor: "col-resize",
-    touchAction: "none",
-    outlineStyle: "none",
-  },
-  handleClosed: { right: -12, cursor: "e-resize" },
-  line: {
-    position: "absolute",
     top: 0,
-    bottom: 0,
-    left: 5,
-    width: 2,
+    width: 12,
+  },
+  handleClosed: { cursor: "e-resize", right: -12 },
+  line: {
     backgroundColor: {
       default: "transparent",
-      [stylex.when.ancestor(":hover")]: colors.lineStrong,
       [stylex.when.ancestor(":focus-visible")]: colors.focus,
+      [stylex.when.ancestor(":hover")]: colors.lineStrong,
     },
-    transitionProperty: "background-color",
+    position: "absolute",
     transitionDuration: motion.press,
+    transitionProperty: "background-color",
+    bottom: 0,
+    left: 5,
+    top: 0,
+    width: 2,
   },
   lineActive: { backgroundColor: colors.lineStrong },
   grip: {
-    position: "absolute",
-    top: "50%",
-    left: 3,
-    width: 6,
-    height: 36,
-    marginTop: -18,
     borderRadius: 3,
     backgroundColor: colors.inkMuted,
     opacity: {
       default: 0,
-      [stylex.when.ancestor(":hover")]: 1,
       [stylex.when.ancestor(":focus-visible")]: 1,
+      [stylex.when.ancestor(":hover")]: 1,
     },
+    position: "absolute",
     transform: {
       default: "scaleY(0.6)",
-      [stylex.when.ancestor(":hover")]: "scaleY(1)",
       [stylex.when.ancestor(":focus-visible")]: "scaleY(1)",
+      [stylex.when.ancestor(":hover")]: "scaleY(1)",
     },
-    transitionProperty: "opacity, transform",
     transitionDuration: motion.press,
+    transitionProperty: "opacity, transform",
     transitionTimingFunction: motion.easeOut,
+    height: 36,
+    left: 3,
+    marginTop: -18,
+    top: "50%",
+    width: 6,
   },
-  gripActive: { opacity: 1, transform: "scaleY(1)", backgroundColor: colors.ink },
+  gripActive: { backgroundColor: colors.ink, opacity: 1, transform: "scaleY(1)" },
 });
 
 type SidebarColumnsProps = {
   sidebar: ReactNode;
   children: ReactNode;
 };
+
+function keyedWidth(key: string, width: number, step: number): number | null {
+  switch (key) {
+    case "ArrowLeft":
+      return width - step;
+    case "ArrowRight":
+      return width + step;
+    case "Home":
+      return SIDEBAR.min;
+    case "End":
+      return SIDEBAR.max;
+    default:
+      return null;
+  }
+}
+
+function onKeyDown(event: KeyboardEvent<HTMLDivElement>) {
+  if (event.key === "Enter" || event.key === " ") {
+    event.preventDefault();
+    toggleSidebar();
+    return;
+  }
+  const step = event.shiftKey ? KEY_STEP * 4 : KEY_STEP;
+  const next = keyedWidth(event.key, getSidebarWidth(), step);
+  if (next !== null) {
+    event.preventDefault();
+    commitSidebar({ collapsed: false, width: next });
+  }
+}
 
 export function SidebarColumns({ sidebar, children }: SidebarColumnsProps) {
   const collapsed = useSidebarCollapsed();
@@ -144,7 +167,9 @@ export function SidebarColumns({ sidebar, children }: SidebarColumnsProps) {
   }, []);
 
   function onPointerDown(event: PointerEvent<HTMLDivElement>) {
-    if (event.button !== 0) return;
+    if (event.button !== 0) {
+      return;
+    }
     event.preventDefault();
     event.currentTarget.setPointerCapture(event.pointerId);
     const from = collapsed ? 0 : getSidebarWidth();
@@ -154,9 +179,13 @@ export function SidebarColumns({ sidebar, children }: SidebarColumnsProps) {
 
   function onPointerMove(event: PointerEvent<HTMLDivElement>) {
     const state = drag.current;
-    if (!state) return;
+    if (!state) {
+      return;
+    }
     const raw = state.from + event.clientX - state.x;
-    if (Math.abs(event.clientX - state.x) > 3) state.moved = true;
+    if (Math.abs(event.clientX - state.x) > 3) {
+      state.moved = true;
+    }
     state.to = raw;
     previewWidth(raw < SIDEBAR.snap ? 0 : clampWidth(raw));
   }
@@ -165,35 +194,15 @@ export function SidebarColumns({ sidebar, children }: SidebarColumnsProps) {
     const state = drag.current;
     drag.current = null;
     setDragging(false);
-    if (!state) return;
+    if (!state) {
+      return;
+    }
     if (!state.moved) {
       toggleSidebar();
     } else if (state.to < SIDEBAR.snap) {
       commitSidebar({ collapsed: true });
     } else {
       commitSidebar({ collapsed: false, width: state.to });
-    }
-  }
-
-  function onKeyDown(event: KeyboardEvent<HTMLDivElement>) {
-    const width = getSidebarWidth();
-    const step = event.shiftKey ? KEY_STEP * 4 : KEY_STEP;
-    const next =
-      event.key === "ArrowLeft"
-        ? width - step
-        : event.key === "ArrowRight"
-          ? width + step
-          : event.key === "Home"
-            ? SIDEBAR.min
-            : event.key === "End"
-              ? SIDEBAR.max
-              : null;
-    if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault();
-      toggleSidebar();
-    } else if (next != null) {
-      event.preventDefault();
-      commitSidebar({ collapsed: false, width: next });
     }
   }
 

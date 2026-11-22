@@ -21,9 +21,9 @@ import { Card, Section, Specs } from "./Section";
 import { Preview } from "./StateMatrix";
 
 const styles = stylex.create({
-  grid: { display: "flex", flexDirection: "column", gap: space.s4 },
-  bleed: { marginInline: `calc(-1 * ${space.s6})`, marginBlock: `calc(-1 * ${space.s6})` },
-  stack: { display: "flex", flexDirection: "column", gap: space.s3 },
+  grid: { gap: space.s4, display: "flex", flexDirection: "column" },
+  bleed: { marginBlock: `calc(-1 * ${space.s6})`, marginInline: `calc(-1 * ${space.s6})` },
+  stack: { gap: space.s3, display: "flex", flexDirection: "column" },
   sidebar: { width: 268 },
 });
 

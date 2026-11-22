@@ -3,11 +3,12 @@ import { colors, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
 import { Link } from "@/ui/Link";
 import { Card, Specs } from "./Section";
-import { StateMatrix, type PreviewState } from "./StateMatrix";
+import { StateMatrix } from "./StateMatrix";
+import type { PreviewState } from "./StateMatrix";
 
 const styles = stylex.create({
   prose: { margin: 0, color: colors.inkSoft },
-  nav: { display: "flex", gap: space.s4 },
+  nav: { gap: space.s4, display: "flex" },
   note: { margin: 0, color: colors.inkSoft },
 });
 

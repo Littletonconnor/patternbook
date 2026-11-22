@@ -1,6 +1,8 @@
 import type { MDXComponents } from "mdx/types";
-import { isValidElement, type ComponentProps, type ReactNode } from "react";
-import { bundledLanguages, type BundledLanguage } from "shiki";
+import { isValidElement } from "react";
+import type { ComponentProps, ReactNode } from "react";
+import { bundledLanguages } from "shiki";
+import type { BundledLanguage } from "shiki";
 import { headingId } from "@/content/headingId";
 import { Callout } from "@/components/Callout";
 import { CodeBlock } from "@/components/CodeBlock";
@@ -10,9 +12,15 @@ import { Term } from "@/components/Term";
 import { Link } from "@/ui/Link";
 
 function textOf(node: ReactNode): string {
-  if (typeof node === "string" || typeof node === "number") return String(node);
-  if (Array.isArray(node)) return node.map(textOf).join("");
-  if (isValidElement<{ children?: ReactNode }>(node)) return textOf(node.props.children);
+  if (typeof node === "string" || typeof node === "number") {
+    return String(node);
+  }
+  if (Array.isArray(node)) {
+    return node.map(textOf).join("");
+  }
+  if (isValidElement<{ children?: ReactNode }>(node)) {
+    return textOf(node.props.children);
+  }
   return "";
 }
 
@@ -43,8 +51,12 @@ function Fence({ children }: { children?: ReactNode }) {
 
 const components = {
   h1: unsupported("# (h1)", "The lesson title comes from the catalog. Start sections at ##."),
-  h2: ({ children }) => <H2 id={headingId(textOf(children))}>{children}</H2>,
-  h3: ({ children }) => <H3 id={headingId(textOf(children))}>{children}</H3>,
+  h2: ({ children }: { children?: ReactNode }) => (
+    <H2 id={headingId(textOf(children))}>{children}</H2>
+  ),
+  h3: ({ children }: { children?: ReactNode }) => (
+    <H3 id={headingId(textOf(children))}>{children}</H3>
+  ),
   h4: unsupported("#### (h4)", "Use ## or ### only."),
   h5: unsupported("##### (h5)", "Use ## or ### only."),
   h6: unsupported("###### (h6)", "Use ## or ### only."),
@@ -55,7 +67,7 @@ const components = {
   strong: ({ children }) => <Strong>{children}</Strong>,
   code: ({ children }) => <Code>{children}</Code>,
   pre: Fence,
-  a: ({ href = "", children }) => (
+  a: ({ href = "", children }: ComponentProps<"a">) => (
     <Link variant={/^https?:\/\//.test(href) ? "external" : "inline"} href={href}>
       {children}
     </Link>

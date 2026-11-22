@@ -12,57 +12,57 @@ export const BUTTON_PREVIEW_FOCUS = ":is([data-preview=focus])";
 
 export const buttonStyles = stylex.create({
   base: {
-    display: "inline-flex",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: space.s2,
-    height: 36,
-    paddingInline: 14,
     borderRadius: radius.control,
-    borderWidth: 1,
     borderStyle: "solid",
-    whiteSpace: "nowrap",
+    borderWidth: 1,
+    gap: space.s2,
+    paddingInline: 14,
+    alignItems: "center",
     cursor: "pointer",
-    transitionProperty: "background-color, transform",
-    transitionDuration: motion.press,
-    transitionTimingFunction: motion.easeOut,
-    transform: { default: null, ":active": "scale(0.97)", [BUTTON_PREVIEW_PRESSED]: "scale(0.97)" },
-    outlineStyle: { default: "none", ":focus-visible": "solid", [BUTTON_PREVIEW_FOCUS]: "solid" },
-    outlineWidth: 2,
-    outlineOffset: 2,
+    display: "inline-flex",
+    justifyContent: "center",
     outlineColor: colors.focus,
+    outlineOffset: 2,
+    outlineStyle: { [BUTTON_PREVIEW_FOCUS]: "solid", default: "none", ":focus-visible": "solid" },
+    outlineWidth: 2,
+    transform: { [BUTTON_PREVIEW_PRESSED]: "scale(0.97)", default: null, ":active": "scale(0.97)" },
+    transitionDuration: motion.press,
+    transitionProperty: "background-color, transform",
+    transitionTimingFunction: motion.easeOut,
+    whiteSpace: "nowrap",
+    height: 36,
   },
-  small: { height: 32, paddingInline: 10, gap: space.s1 },
-  large: { height: 44, paddingInline: 18 },
-  disabled: { opacity: 0.5, cursor: "not-allowed", transform: null },
+  small: { gap: space.s1, paddingInline: 10, height: 32 },
+  large: { paddingInline: 18, height: 44 },
+  disabled: { cursor: "not-allowed", opacity: 0.5, transform: null },
 });
 
 export const buttonVariants = stylex.create({
-  primary: { backgroundColor: colors.ink, borderColor: colors.ink, color: colors.paper },
-  secondary: { backgroundColor: colors.surface, borderColor: colors.lineStrong, color: colors.ink },
-  ghost: { backgroundColor: "transparent", borderColor: "transparent", color: colors.inkSoft },
+  primary: { borderColor: colors.ink, backgroundColor: colors.ink, color: colors.paper },
+  secondary: { borderColor: colors.lineStrong, backgroundColor: colors.surface, color: colors.ink },
+  ghost: { borderColor: "transparent", backgroundColor: "transparent", color: colors.inkSoft },
 });
 
 export const buttonHovers = stylex.create({
   primary: {
     backgroundColor: {
-      default: colors.ink,
-      ":hover": { default: null, [HOVER]: colors.inkSoft },
       [BUTTON_PREVIEW_HOVER]: colors.inkSoft,
+      default: colors.ink,
+      ":hover": { [HOVER]: colors.inkSoft, default: null },
     },
   },
   secondary: {
     backgroundColor: {
-      default: colors.surface,
-      ":hover": { default: null, [HOVER]: colors.sunken },
       [BUTTON_PREVIEW_HOVER]: colors.sunken,
+      default: colors.surface,
+      ":hover": { [HOVER]: colors.sunken, default: null },
     },
   },
   ghost: {
     backgroundColor: {
-      default: "transparent",
-      ":hover": { default: null, [HOVER]: colors.sunken },
       [BUTTON_PREVIEW_HOVER]: colors.sunken,
+      default: "transparent",
+      ":hover": { [HOVER]: colors.sunken, default: null },
     },
   },
 });

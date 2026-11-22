@@ -48,7 +48,9 @@ export default async function LessonPage({ params }: PageProps<"/lessons/[slug]"
 async function LessonBody({ slug }: { slug: string }) {
   const lesson = lessonBySlug(slug);
   const topic = lesson && topicOf(lesson);
-  if (!lesson || !topic) notFound();
+  if (!lesson || !topic) {
+    notFound();
+  }
   const { previous, next } = neighbours(lesson);
   const Body = await loadLesson(slug);
 

@@ -2,7 +2,8 @@ import NextLink from "next/link";
 import * as stylex from "@stylexjs/stylex";
 import { ArrowRight } from "lucide-react";
 import { diagramKinds } from "@/content/diagrams";
-import { lessonHref, type Diagram, type Lesson } from "@/content/types";
+import { lessonHref } from "@/content/types";
+import type { Diagram, Lesson } from "@/content/types";
 import { colors, motion, radius, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
 import { Badge } from "@/ui/Badge";
@@ -13,48 +14,48 @@ const HOVER = "@media (hover: hover)";
 
 const styles = stylex.create({
   card: {
-    display: "flex",
-    flexDirection: "column",
-    overflow: "hidden",
-    color: colors.ink,
-    textDecorationLine: "none",
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderStyle: "solid",
     borderColor: {
       default: colors.line,
-      ":hover": { default: null, [HOVER]: colors.lineStrong },
+      ":hover": { [HOVER]: colors.lineStrong, default: null },
     },
     borderRadius: radius.frame,
-    transitionProperty: "border-color",
-    transitionDuration: motion.press,
+    borderStyle: "solid",
+    borderWidth: 1,
+    overflow: "hidden",
+    backgroundColor: colors.surface,
+    color: colors.ink,
+    display: "flex",
+    flexDirection: "column",
+    outlineColor: colors.focus,
+    outlineOffset: 2,
     outlineStyle: { default: "none", ":focus-visible": "solid" },
     outlineWidth: 2,
-    outlineOffset: 2,
-    outlineColor: colors.focus,
+    textDecorationLine: "none",
+    transitionDuration: motion.press,
+    transitionProperty: "border-color",
   },
   stage: {
-    position: "relative",
-    height: 160,
-    display: "grid",
     placeItems: "center",
-    paddingTop: space.s3,
     backgroundColor: colors.sunken,
     backgroundImage: `radial-gradient(${colors.lineStrong} 1px, transparent 1.2px)`,
     backgroundSize: "16px 16px",
+    display: "grid",
+    position: "relative",
+    height: 160,
+    paddingTop: space.s3,
   },
-  number: { position: "absolute", top: 10, left: space.s3, color: colors.inkMuted },
-  kind: { position: "absolute", top: space.s2, right: space.s3 },
+  number: { color: colors.inkMuted, position: "absolute", left: space.s3, top: 10 },
+  kind: { position: "absolute", right: space.s3, top: space.s2 },
   text: {
+    gap: 6,
+    paddingInline: 18,
     display: "flex",
     flexDirection: "column",
-    gap: 6,
-    paddingTop: space.s4,
-    paddingInline: 18,
-    paddingBottom: 18,
-    borderTopWidth: 1,
-    borderTopStyle: "solid",
     borderTopColor: colors.line,
+    borderTopStyle: "solid",
+    borderTopWidth: 1,
+    paddingBottom: 18,
+    paddingTop: space.s4,
   },
   title: {
     fontWeight: 500,
@@ -62,11 +63,11 @@ const styles = stylex.create({
     textUnderlineOffset: 3,
   },
   lesson: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
     gap: space.s3,
+    alignItems: "center",
     color: colors.inkSoft,
+    display: "flex",
+    justifyContent: "space-between",
   },
   lessonNumber: { color: colors.inkMuted, marginInlineEnd: space.s2 },
 });

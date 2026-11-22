@@ -15,22 +15,22 @@ const HOVER = "@media (hover: hover)";
 
 const styles = stylex.create({
   end: {
+    gap: space.s4,
+    alignItems: "center",
     display: "flex",
     flexWrap: "wrap",
-    alignItems: "center",
     justifyContent: "space-between",
-    gap: space.s4,
   },
   read: {
+    borderColor: { [PRESSED]: colors.sound, default: colors.lineStrong },
     backgroundColor: {
-      default: colors.surface,
-      ":hover": { default: null, [HOVER]: colors.sunken },
       [PRESSED]: colors.soundWash,
+      default: colors.surface,
+      ":hover": { [HOVER]: colors.sunken, default: null },
     },
-    borderColor: { default: colors.lineStrong, [PRESSED]: colors.sound },
-    color: { default: colors.ink, [PRESSED]: colors.soundInk },
+    color: { [PRESSED]: colors.soundInk, default: colors.ink },
   },
-  feedback: { display: "flex", flexWrap: "wrap", alignItems: "center", gap: space.s3 },
+  feedback: { gap: space.s3, alignItems: "center", display: "flex", flexWrap: "wrap" },
   prompt: { color: colors.inkSoft },
   thanks: { color: colors.inkMuted },
 });

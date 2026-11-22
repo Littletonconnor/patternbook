@@ -4,7 +4,7 @@ import { colors, measure, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
 
 const styles = stylex.create({
-  header: { display: "flex", flexDirection: "column", gap: space.s4, maxWidth: measure.prose },
+  header: { gap: space.s4, display: "flex", flexDirection: "column", maxWidth: measure.prose },
   eyebrow: { color: colors.inkMuted },
   title: { margin: 0, textWrap: "balance" },
   lede: { margin: 0, color: colors.inkSoft, textWrap: "pretty" },

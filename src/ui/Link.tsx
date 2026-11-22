@@ -13,51 +13,51 @@ const PREVIEW_FOCUS = ":is([data-preview=focus])";
 const styles = stylex.create({
   base: {
     borderRadius: radius.mark,
-    outlineStyle: { default: "none", ":focus-visible": "solid", [PREVIEW_FOCUS]: "solid" },
-    outlineWidth: 2,
-    outlineOffset: 2,
     outlineColor: colors.focus,
-    transitionProperty: "color, text-decoration-color",
+    outlineOffset: 2,
+    outlineStyle: { [PREVIEW_FOCUS]: "solid", default: "none", ":focus-visible": "solid" },
+    outlineWidth: 2,
     transitionDuration: motion.press,
+    transitionProperty: "color, text-decoration-color",
     transitionTimingFunction: motion.easeOut,
   },
   underlined: {
     color: colors.ink,
+    textDecorationColor: {
+      [PREVIEW_HOVER]: colors.ink,
+      default: colors.lineStrong,
+      ":hover": { [HOVER]: colors.ink, default: null },
+    },
     textDecorationLine: "underline",
     textDecorationThickness: 1,
     textUnderlineOffset: 3,
-    textDecorationColor: {
-      default: colors.lineStrong,
-      ":hover": { default: null, [HOVER]: colors.ink },
-      [PREVIEW_HOVER]: colors.ink,
-    },
   },
   nav: {
-    textDecorationLine: "none",
     color: {
-      default: colors.inkSoft,
-      ":hover": { default: null, [HOVER]: colors.ink },
       [PREVIEW_HOVER]: colors.ink,
+      default: colors.inkSoft,
+      ":hover": { [HOVER]: colors.ink, default: null },
     },
+    textDecorationLine: "none",
   },
   current: { color: colors.ink, fontWeight: 500 },
   arrow: {
-    display: "inline-flex",
-    marginInlineStart: 2,
-    verticalAlign: "-2px",
     color: {
       default: colors.inkMuted,
       [stylex.when.ancestor(":hover")]: colors.signal,
       [stylex.when.ancestor(PREVIEW_HOVER)]: colors.signal,
     },
+    display: "inline-flex",
+    marginInlineStart: 2,
     transform: {
       default: null,
       [stylex.when.ancestor(":hover")]: "translate(2px, -2px)",
       [stylex.when.ancestor(PREVIEW_HOVER)]: "translate(2px, -2px)",
     },
-    transitionProperty: "color, transform",
     transitionDuration: motion.press,
+    transitionProperty: "color, transform",
     transitionTimingFunction: motion.easeOut,
+    verticalAlign: "-2px",
   },
 });
 

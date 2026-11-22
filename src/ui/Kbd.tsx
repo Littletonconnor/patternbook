@@ -5,18 +5,18 @@ import { type } from "@/tokens/typography";
 
 const styles = stylex.create({
   kbd: {
-    display: "inline-block",
-    minWidth: 20,
-    paddingBlock: 1,
-    paddingInline: 5,
-    textAlign: "center",
-    color: colors.inkSoft,
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderBottomWidth: 2,
-    borderStyle: "solid",
     borderColor: colors.line,
     borderRadius: radius.mark,
+    borderStyle: "solid",
+    borderWidth: 1,
+    paddingBlock: 1,
+    paddingInline: 5,
+    backgroundColor: colors.surface,
+    color: colors.inkSoft,
+    display: "inline-block",
+    textAlign: "center",
+    borderBottomWidth: 2,
+    minWidth: 20,
   },
 });
 

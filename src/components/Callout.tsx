@@ -5,13 +5,13 @@ import { type } from "@/tokens/typography";
 
 const styles = stylex.create({
   box: {
-    display: "flex",
-    flexDirection: "column",
+    borderRadius: radius.control,
     gap: space.s1,
     paddingBlock: 14,
     paddingInline: space.s4,
-    borderRadius: radius.control,
     color: colors.ink,
+    display: "flex",
+    flexDirection: "column",
   },
   body: { margin: 0 },
 });

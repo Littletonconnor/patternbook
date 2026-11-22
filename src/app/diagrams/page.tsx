@@ -3,7 +3,8 @@ import NextLink from "next/link";
 import * as stylex from "@stylexjs/stylex";
 import { lessonBySlug } from "@/content/catalog";
 import { diagramLesson, diagrams } from "@/content/diagrams";
-import { lessonHref, type Lesson } from "@/content/types";
+import { lessonHref } from "@/content/types";
+import type { Lesson } from "@/content/types";
 import { DiagramIndex } from "@/components/DiagramIndex";
 import { PageIntro } from "@/components/PageIntro";
 import { PageShell } from "@/components/PageShell";
@@ -26,51 +27,60 @@ const craftSlugs = [
 
 const styles = stylex.create({
   behind: {
+    gap: `${space.s6} ${space.s16}`,
     display: "flex",
     flexWrap: "wrap",
-    gap: `${space.s6} ${space.s16}`,
-    paddingTop: space.s12,
-    borderTopWidth: 1,
-    borderTopStyle: "solid",
     borderTopColor: colors.line,
+    borderTopStyle: "solid",
+    borderTopWidth: 1,
+    paddingTop: space.s12,
   },
-  behindText: { flex: "1 1 280px", display: "flex", flexDirection: "column", gap: space.s2 },
+  behindText: {
+    gap: space.s2,
+    display: "flex",
+    flexBasis: "280px",
+    flexDirection: "column",
+    flexGrow: "1",
+    flexShrink: "1",
+  },
   eyebrow: { color: colors.inkMuted },
   heading: { margin: 0 },
   blurb: { margin: 0, color: colors.inkSoft },
   list: {
-    flex: "2 1 420px",
     margin: 0,
     padding: 0,
+    borderColor: colors.line,
+    borderRadius: radius.frame,
+    borderStyle: "solid",
+    borderWidth: 1,
     listStyle: "none",
     overflow: "hidden",
     backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderStyle: "solid",
-    borderColor: colors.line,
-    borderRadius: radius.frame,
+    flexBasis: "420px",
+    flexGrow: "2",
+    flexShrink: "1",
   },
   item: {
-    borderTopWidth: { default: 1, ":first-child": 0 },
-    borderTopStyle: "solid",
     borderTopColor: colors.line,
+    borderTopStyle: "solid",
+    borderTopWidth: { default: 1, ":first-child": 0 },
   },
   row: {
-    display: "flex",
-    alignItems: "baseline",
     gap: space.s4,
     paddingBlock: 14,
     paddingInline: 18,
-    color: colors.ink,
-    textDecorationLine: "none",
+    alignItems: "baseline",
     backgroundColor: {
       default: "transparent",
-      ":hover": { default: null, [HOVER]: colors.sunken },
+      ":hover": { [HOVER]: colors.sunken, default: null },
     },
+    color: colors.ink,
+    display: "flex",
+    outlineColor: colors.focus,
+    outlineOffset: -2,
     outlineStyle: { default: "none", ":focus-visible": "solid" },
     outlineWidth: 2,
-    outlineOffset: -2,
-    outlineColor: colors.focus,
+    textDecorationLine: "none",
   },
   number: { color: colors.inkMuted },
   title: { flexGrow: 1, fontWeight: 500 },

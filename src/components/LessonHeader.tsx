@@ -6,20 +6,20 @@ import { Badge } from "@/ui/Badge";
 
 const styles = stylex.create({
   header: {
+    gap: space.s4,
     display: "flex",
     flexDirection: "column",
-    gap: space.s4,
     maxWidth: measure.prose,
   },
   eyebrow: { color: colors.inkMuted },
   title: { margin: 0, textWrap: "balance" },
   lede: { margin: 0, color: colors.inkSoft },
   meta: {
+    gap: `${space.s2} ${space.s4}`,
+    alignItems: "center",
+    color: colors.inkMuted,
     display: "flex",
     flexWrap: "wrap",
-    alignItems: "center",
-    gap: `${space.s2} ${space.s4}`,
-    color: colors.inkMuted,
   },
 });
 

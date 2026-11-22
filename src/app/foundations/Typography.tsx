@@ -6,11 +6,11 @@ import { Card, Section, Token } from "./Section";
 
 const styles = stylex.create({
   grid: {
+    gap: space.s4,
     display: "grid",
     gridTemplateColumns: "repeat(auto-fit, minmax(360px, 1fr))",
-    gap: space.s4,
   },
-  row: { display: "flex", flexDirection: "column", gap: space.s1 },
+  row: { gap: space.s1, display: "flex", flexDirection: "column" },
   soft: { color: colors.inkSoft },
   rule: { margin: 0, color: colors.inkSoft },
 });

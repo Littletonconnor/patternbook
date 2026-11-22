@@ -4,17 +4,17 @@ import { colors, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
 
 const styles = stylex.create({
-  root: { display: "flex", flexDirection: "column", gap: space.s2 },
+  root: { gap: space.s2, display: "flex", flexDirection: "column" },
   head: {
+    gap: `${space.s1} ${space.s4}`,
+    alignItems: "baseline",
     display: "flex",
     flexWrap: "wrap",
-    alignItems: "baseline",
     justifyContent: "space-between",
-    gap: `${space.s1} ${space.s4}`,
   },
   title: { margin: 0, textWrap: "balance" },
   meta: { color: colors.inkMuted },
-  description: { margin: 0, maxWidth: 680, color: colors.inkSoft, textWrap: "pretty" },
+  description: { margin: 0, color: colors.inkSoft, textWrap: "pretty", maxWidth: 680 },
 });
 
 export function SectionHead({

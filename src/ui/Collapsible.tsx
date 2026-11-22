@@ -13,44 +13,44 @@ const HIDDEN = ":is([data-starting-style], [data-ending-style])";
 
 const styles = stylex.create({
   trigger: {
-    display: "flex",
-    alignItems: "center",
+    borderRadius: 6,
+    borderWidth: 0,
     gap: 8,
-    width: "100%",
-    minWidth: 0,
-    height: 30,
     paddingBlock: 0,
     paddingInline: 10,
-    borderWidth: 0,
-    borderRadius: 6,
-    textAlign: "start",
-    cursor: "pointer",
-    color: { default: colors.inkSoft, [OPEN]: colors.ink },
-    fontWeight: { default: 400, [OPEN]: 500 },
+    alignItems: "center",
     backgroundColor: {
       default: "transparent",
-      ":hover": { default: null, [HOVER]: colors.sunken },
+      ":hover": { [HOVER]: colors.sunken, default: null },
     },
+    color: { [OPEN]: colors.ink, default: colors.inkSoft },
+    cursor: "pointer",
+    display: "flex",
+    fontWeight: { [OPEN]: 500, default: 400 },
+    outlineColor: colors.focus,
+    outlineOffset: -2,
     outlineStyle: { default: "none", ":focus-visible": "solid" },
     outlineWidth: 2,
-    outlineOffset: -2,
-    outlineColor: colors.focus,
+    textAlign: "start",
+    height: 30,
+    minWidth: 0,
+    width: "100%",
   },
   chevron: {
-    display: "inline-flex",
     color: colors.inkMuted,
+    display: "inline-flex",
     transform: { default: null, [stylex.when.ancestor(OPEN)]: "rotate(90deg)" },
+    transitionDuration: { [REDUCED]: "0s", default: motion.move },
     transitionProperty: "transform",
-    transitionDuration: { default: motion.move, [REDUCED]: "0s" },
     transitionTimingFunction: motion.easeOut,
   },
-  meta: { marginInlineStart: "auto", fontWeight: 400, color: colors.inkMuted },
+  meta: { color: colors.inkMuted, fontWeight: 400, marginInlineStart: "auto" },
   panel: {
     overflow: "hidden",
-    height: { default: "var(--collapsible-panel-height)", [HIDDEN]: 0 },
+    transitionDuration: { [REDUCED]: "0s", default: motion.move },
     transitionProperty: "height",
-    transitionDuration: { default: motion.move, [REDUCED]: "0s" },
     transitionTimingFunction: motion.easeOut,
+    height: { [HIDDEN]: 0, default: "var(--collapsible-panel-height)" },
   },
 });
 
@@ -74,7 +74,9 @@ export function CollapsibleTrigger({ children, meta, ...props }: TriggerProps) {
         <Icon icon={ChevronRight} size={12} />
       </span>
       {children}
-      {meta != null && <span {...stylex.props(type.number, styles.meta)}>{meta}</span>}
+      {meta !== undefined && meta !== null && (
+        <span {...stylex.props(type.number, styles.meta)}>{meta}</span>
+      )}
     </BaseCollapsible.Trigger>
   );
 }

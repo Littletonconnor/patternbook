@@ -16,6 +16,10 @@ const KEY = "patternbook:level";
 const EVENT = "patternbook:level-change";
 const values = new Set<string>(levelFilterOptions.map((o) => o.value));
 
+function isLevelFilter(value: string | null): value is LevelFilter {
+  return value !== null && values.has(value);
+}
+
 function subscribe(onChange: () => void) {
   window.addEventListener("storage", onChange);
   window.addEventListener(EVENT, onChange);
@@ -28,19 +32,27 @@ function subscribe(onChange: () => void) {
 function getSnapshot(): LevelFilter {
   try {
     const raw = window.localStorage.getItem(KEY);
-    if (raw && values.has(raw)) return raw as LevelFilter;
-  } catch {}
-  return "all";
+    return isLevelFilter(raw) ? raw : "all";
+  } catch {
+    return "all";
+  }
 }
 
 function getServerSnapshot(): LevelFilter {
   return "all";
 }
 
-export function setLevelFilter(level: LevelFilter) {
+function save(level: LevelFilter): boolean {
   try {
     window.localStorage.setItem(KEY, level);
-  } catch {}
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export function setLevelFilter(level: LevelFilter) {
+  save(level);
   window.dispatchEvent(new Event(EVENT));
 }
 

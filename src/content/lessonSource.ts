@@ -22,9 +22,13 @@ export function lessonHeadings(slug: string) {
   const headings: { id: string; label: string }[] = [];
   let inFence = false;
   for (const line of readFileSync(sourcePath(slug), "utf8").split("\n")) {
-    if (line.startsWith("```")) inFence = !inFence;
-    if (inFence || !line.startsWith("## ")) continue;
-    const label = line.slice(3).replace(/`/g, "").trim();
+    if (line.startsWith("```")) {
+      inFence = !inFence;
+    }
+    if (inFence || !line.startsWith("## ")) {
+      continue;
+    }
+    const label = line.slice(3).replaceAll("`", "").trim();
     headings.push({ id: headingId(label), label });
   }
   return headings;

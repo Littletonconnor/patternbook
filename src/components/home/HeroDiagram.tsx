@@ -16,54 +16,56 @@ const easeInOut = (p: number) => (p < 0.5 ? 4 * p * p * p : 1 - (-2 * p + 2) ** 
 
 const styles = stylex.create({
   diagram: {
-    flex: "1 1 420px",
-    minWidth: 0,
-    maxWidth: 520,
     margin: 0,
-    display: "flex",
-    flexDirection: "column",
     gap: space.s3,
+    display: "flex",
+    flexBasis: "420px",
+    flexDirection: "column",
+    flexGrow: "1",
+    flexShrink: "1",
+    maxWidth: 520,
+    minWidth: 0,
   },
   frame: {
-    display: "flex",
-    flexDirection: "column",
-    overflow: "hidden",
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderStyle: "solid",
     borderColor: colors.line,
     borderRadius: radius.frame,
+    borderStyle: "solid",
+    borderWidth: 1,
+    overflow: "hidden",
+    backgroundColor: colors.surface,
+    display: "flex",
+    flexDirection: "column",
   },
   titleBar: {
-    display: "flex",
-    alignItems: "center",
     gap: space.s3,
-    boxSizing: "border-box",
-    height: 46,
     paddingInline: space.s4,
-    borderBottomWidth: 1,
-    borderBottomStyle: "solid",
+    alignItems: "center",
+    boxSizing: "border-box",
+    display: "flex",
     borderBottomColor: colors.line,
+    borderBottomStyle: "solid",
+    borderBottomWidth: 1,
+    height: 46,
   },
   diagramLabel: { color: colors.inkMuted },
   stage: {
-    position: "relative",
-    display: "grid",
-    placeItems: "center",
-    height: 220,
     paddingInline: space.s4,
+    placeItems: "center",
     backgroundColor: colors.sunken,
     backgroundImage: `radial-gradient(${colors.lineStrong} 1px, transparent 1px)`,
     backgroundSize: "16px 16px",
+    display: "grid",
+    position: "relative",
+    height: 220,
   },
   readout: {
-    position: "absolute",
-    top: space.s3,
-    right: space.s4,
     color: colors.inkMuted,
     fontVariantNumeric: "tabular-nums",
+    position: "absolute",
+    right: space.s4,
+    top: space.s3,
   },
-  svg: { display: "block", width: "100%", maxWidth: 440, height: "auto", overflow: "visible" },
+  svg: { overflow: "visible", display: "block", height: "auto", maxWidth: 440, width: "100%" },
   wire: { stroke: colors.ink, strokeWidth: 1.5 },
   node: { fill: colors.surface, stroke: colors.ink, strokeWidth: 1.5 },
   name: { fill: colors.ink, fontWeight: 500 },
@@ -71,18 +73,18 @@ const styles = stylex.create({
   halo: { fill: colors.signal, opacity: 0.18 },
   dot: { fill: colors.signal },
   controls: {
-    display: "flex",
-    flexWrap: "wrap",
-    alignItems: "center",
-    justifyContent: "space-between",
     gap: `${space.s3} ${space.s6}`,
     paddingBlock: space.s3,
     paddingInline: space.s4,
-    borderTopWidth: 1,
-    borderTopStyle: "solid",
+    alignItems: "center",
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
     borderTopColor: colors.line,
+    borderTopStyle: "solid",
+    borderTopWidth: 1,
   },
-  speed: { flex: "1 1 160px", maxWidth: 220 },
+  speed: { flexBasis: "160px", flexGrow: "1", flexShrink: "1", maxWidth: 220 },
   caption: { margin: 0, color: colors.inkSoft, textWrap: "pretty" },
   disclosure: { color: colors.inkMuted, marginInlineEnd: space.s2 },
 });
@@ -92,6 +94,13 @@ const nodes = [
   { x: 172, name: "API", sub: "GET /posts" },
   { x: 344, name: "Database", sub: "posts" },
 ];
+
+function controlLabel(playing: boolean, started: boolean) {
+  if (playing) {
+    return "Pause";
+  }
+  return started ? "Resume" : "Send a request";
+}
 
 export function HeroDiagram() {
   const [playing, setPlaying] = useState(false);
@@ -108,7 +117,9 @@ export function HeroDiagram() {
   }, [slowdown]);
 
   useEffect(() => {
-    if (!playing) return;
+    if (!playing) {
+      return;
+    }
     let frame = 0;
     let last = performance.now();
 
@@ -198,7 +209,7 @@ export function HeroDiagram() {
         </div>
         <div {...stylex.props(styles.controls)}>
           <Button variant="primary" onClick={toggle}>
-            {playing ? "Pause" : started ? "Resume" : "Send a request"}
+            {controlLabel(playing, started)}
           </Button>
           <div {...stylex.props(styles.speed)}>
             <Slider

@@ -5,25 +5,25 @@ import { type } from "@/tokens/typography";
 
 const styles = stylex.create({
   scroll: { overflowX: "auto" },
-  table: { width: "100%", minWidth: 520, borderCollapse: "collapse" },
+  table: { borderCollapse: "collapse", minWidth: 520, width: "100%" },
   cell: {
     paddingBlock: 10,
     paddingInline: 16,
     textAlign: "start",
     verticalAlign: "top",
-    borderBottomWidth: 1,
-    borderBottomStyle: "solid",
     borderBottomColor: colors.line,
+    borderBottomStyle: "solid",
+    borderBottomWidth: 1,
   },
   head: { color: colors.inkMuted },
   first: { color: colors.inkSoft, fontWeight: 400 },
   hidden: {
-    position: "absolute",
-    width: 1,
-    height: 1,
     overflow: "hidden",
     clipPath: "inset(50%)",
+    position: "absolute",
     whiteSpace: "nowrap",
+    height: 1,
+    width: 1,
   },
   last: { borderBottomWidth: 0 },
 });

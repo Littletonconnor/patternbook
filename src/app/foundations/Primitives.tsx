@@ -10,9 +10,9 @@ import { CollapsibleExample, DrawerExample, TooltipExample } from "./Overlays";
 
 const styles = stylex.create({
   grid: {
+    gap: space.s4,
     display: "flex",
     flexDirection: "column",
-    gap: space.s4,
   },
 });
 

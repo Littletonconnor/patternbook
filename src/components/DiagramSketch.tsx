@@ -4,11 +4,11 @@ import type { DiagramKind } from "@/content/types";
 import { colors } from "@/tokens/tokens.stylex";
 
 const styles = stylex.create({
-  svg: { display: "block", overflow: "visible" },
+  svg: { overflow: "visible", display: "block" },
   plain: { fill: colors.surface, stroke: colors.ink, strokeWidth: 1.5 },
-  ghost: { fill: "none", stroke: colors.inkMuted, strokeWidth: 1.5, strokeDasharray: "4 3" },
+  ghost: { fill: "none", stroke: colors.inkMuted, strokeDasharray: "4 3", strokeWidth: 1.5 },
   wire: { stroke: colors.ink, strokeWidth: 1.5 },
-  divider: { stroke: colors.lineStrong, strokeWidth: 1.5, strokeDasharray: "4 3" },
+  divider: { stroke: colors.lineStrong, strokeDasharray: "4 3", strokeWidth: 1.5 },
   selected: { fill: colors.focusWash, stroke: colors.focus, strokeWidth: 1.5 },
   moving: { fill: colors.signalWash, stroke: colors.signal, strokeWidth: 1.5 },
   correct: { fill: colors.soundWash, stroke: colors.sound, strokeWidth: 1.5 },

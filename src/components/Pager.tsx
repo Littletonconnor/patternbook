@@ -1,6 +1,7 @@
 import NextLink from "next/link";
 import * as stylex from "@stylexjs/stylex";
-import { lessonHref, type Lesson } from "@/content/types";
+import { lessonHref } from "@/content/types";
+import type { Lesson } from "@/content/types";
 import { colors, motion, radius, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
 
@@ -9,36 +10,36 @@ const STACKED = "@media (max-width: 559px)";
 
 const styles = stylex.create({
   pager: {
-    display: "grid",
-    gridTemplateColumns: { default: "1fr 1fr", [STACKED]: "1fr" },
     gap: space.s4,
+    display: "grid",
+    gridTemplateColumns: { [STACKED]: "1fr", default: "1fr 1fr" },
   },
   card: {
-    display: "flex",
-    flexDirection: "column",
+    borderColor: {
+      default: colors.line,
+      ":hover": { [HOVER]: colors.lineStrong, default: null },
+    },
+    borderRadius: radius.frame,
+    borderStyle: "solid",
+    borderWidth: 1,
     gap: space.s1,
     paddingBlock: space.s4,
     paddingInline: 20,
-    color: colors.ink,
-    textDecorationLine: "none",
     backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderStyle: "solid",
-    borderColor: {
-      default: colors.line,
-      ":hover": { default: null, [HOVER]: colors.lineStrong },
-    },
-    borderRadius: radius.frame,
-    transitionProperty: "border-color",
-    transitionDuration: motion.press,
+    color: colors.ink,
+    display: "flex",
+    flexDirection: "column",
+    outlineColor: colors.focus,
+    outlineOffset: 2,
     outlineStyle: { default: "none", ":focus-visible": "solid" },
     outlineWidth: 2,
-    outlineOffset: 2,
-    outlineColor: colors.focus,
+    textDecorationLine: "none",
+    transitionDuration: motion.press,
+    transitionProperty: "border-color",
   },
   next: {
-    textAlign: { default: "end", [STACKED]: "start" },
-    gridColumn: { default: 2, [STACKED]: 1 },
+    gridColumn: { [STACKED]: 1, default: 2 },
+    textAlign: { [STACKED]: "start", default: "end" },
   },
   direction: { color: colors.inkMuted },
   title: { fontWeight: 500 },

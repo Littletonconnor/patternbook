@@ -4,34 +4,34 @@ import { colors, measure, radius, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
 
 const styles = stylex.create({
-  prose: { maxWidth: measure.prose, color: colors.ink },
+  prose: { color: colors.ink, maxWidth: measure.prose },
   h2: {
-    marginTop: { default: space.s12, ":first-child": 0 },
     marginBottom: space.s3,
+    marginTop: { default: space.s12, ":first-child": 0 },
     scrollMarginTop: `calc(57px + ${space.s6})`,
   },
   h3: {
-    marginTop: { default: space.s8, ":first-child": 0 },
-    marginBottom: space.s2,
     fontWeight: 600,
+    marginBottom: space.s2,
+    marginTop: { default: space.s8, ":first-child": 0 },
     scrollMarginTop: `calc(57px + ${space.s6})`,
   },
-  p: { marginTop: 0, marginBottom: space.s4 },
-  list: { marginTop: 0, marginBottom: space.s4, paddingInlineStart: 20 },
+  p: { marginBottom: space.s4, marginTop: 0 },
+  list: { paddingInlineStart: 20, marginBottom: space.s4, marginTop: 0 },
   item: { marginBottom: space.s1 },
   strong: { fontWeight: 600 },
   code: {
+    borderRadius: radius.mark,
     paddingBlock: 1,
     paddingInline: 5,
     backgroundColor: colors.sunken,
-    borderRadius: radius.mark,
     lineHeight: "inherit",
     whiteSpace: "nowrap",
   },
   block: { marginBottom: space.s6 },
   breakout: {
-    width: "100cqi",
     marginBlock: space.s8,
+    width: "100cqi",
   },
 });
 

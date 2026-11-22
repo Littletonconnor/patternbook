@@ -4,28 +4,29 @@ import { topics } from "@/content/catalog";
 import { measure, space } from "@/tokens/tokens.stylex";
 import { Footer } from "./Footer";
 import { Sidebar } from "./Sidebar";
-import { TopBar, type Section } from "./TopBar";
+import { TopBar } from "./TopBar";
+import type { Section } from "./TopBar";
 
 const WIDE = "@media (min-width: 768px)";
 
 const styles = stylex.create({
   page: { display: "flex", flexDirection: "column", minHeight: "100dvh" },
-  topBar: { position: "sticky", top: 0, zIndex: 10 },
+  topBar: { position: "sticky", zIndex: 10, top: 0 },
   main: {
-    flexGrow: 1,
+    paddingInline: { [WIDE]: space.s6, default: space.s4 },
     display: "flex",
     flexDirection: "column",
-    paddingInline: { default: space.s4, [WIDE]: space.s6 },
-    paddingTop: { default: space.s12, [WIDE]: space.s16 },
+    flexGrow: 1,
     paddingBottom: space.s8,
+    paddingTop: { [WIDE]: space.s16, default: space.s12 },
   },
   column: {
-    flexGrow: 1,
+    gap: space.s16,
+    marginInline: "auto",
     display: "flex",
     flexDirection: "column",
-    gap: space.s16,
+    flexGrow: 1,
     width: "100%",
-    marginInline: "auto",
   },
 });
 

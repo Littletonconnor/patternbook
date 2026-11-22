@@ -41,8 +41,11 @@ export function useReadLessons() {
 
   const setRead = useCallback((slug: string, isRead: boolean) => {
     const next = new Set(parse(getSnapshot()));
-    if (isRead) next.add(slug);
-    else next.delete(slug);
+    if (isRead) {
+      next.add(slug);
+    } else {
+      next.delete(slug);
+    }
     try {
       window.localStorage.setItem(KEY, JSON.stringify([...next]));
     } catch {

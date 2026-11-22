@@ -16,13 +16,13 @@ export const metadata: Metadata = {
 };
 
 const styles = stylex.create({
-  intro: { display: "flex", flexDirection: "column", gap: space.s6 },
-  actions: { display: "flex", flexWrap: "wrap", gap: space.s3 },
-  section: { display: "flex", flexDirection: "column", gap: space.s6 },
+  intro: { gap: space.s6, display: "flex", flexDirection: "column" },
+  actions: { gap: space.s3, display: "flex", flexWrap: "wrap" },
+  section: { gap: space.s6, display: "flex", flexDirection: "column" },
   grid: {
+    gap: space.s4,
     display: "grid",
     gridTemplateColumns: "repeat(auto-fit, minmax(min(200px, 100%), 1fr))",
-    gap: space.s4,
   },
 });
 

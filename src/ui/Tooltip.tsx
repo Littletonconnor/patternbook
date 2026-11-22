@@ -9,24 +9,24 @@ const REDUCED = "@media (prefers-reduced-motion: reduce)";
 
 const styles = stylex.create({
   popup: {
-    maxWidth: 260,
     backgroundColor: colors.ink,
-    color: colors.paper,
     boxShadow: "0 6px 20px rgb(22 24 29 / 0.16)",
-    opacity: { default: 1, [HIDDEN]: 0 },
-    transform: { default: "translateY(0)", [HIDDEN]: "translateY(4px)" },
-    transitionProperty: { default: "opacity, transform", [REDUCED]: "opacity" },
+    color: colors.paper,
+    opacity: { [HIDDEN]: 0, default: 1 },
+    transform: { [HIDDEN]: "translateY(4px)", default: "translateY(0)" },
     transitionDuration: { default: motion.press, ":is([data-instant])": "0s" },
+    transitionProperty: { [REDUCED]: "opacity", default: "opacity, transform" },
     transitionTimingFunction: motion.easeOut,
+    maxWidth: 260,
   },
-  rich: { paddingBlock: 10, paddingInline: 12, borderRadius: 8 },
+  rich: { borderRadius: 8, paddingBlock: 10, paddingInline: 12 },
   short: {
-    display: "flex",
-    alignItems: "center",
+    borderRadius: 6,
     gap: 6,
     paddingBlock: 6,
     paddingInline: 8,
-    borderRadius: 6,
+    alignItems: "center",
+    display: "flex",
   },
   body: { color: colors.lineStrong },
   shortcut: { color: colors.lineStrong },
@@ -44,7 +44,7 @@ type TooltipProps = {
 };
 
 export function Tooltip({ label, description, shortcut, children }: TooltipProps) {
-  const rich = description != null;
+  const rich = description !== undefined && description !== null;
   return (
     <BaseTooltip.Root>
       <BaseTooltip.Trigger delay={400} render={children} />

@@ -5,16 +5,16 @@ import { type } from "@/tokens/typography";
 
 const styles = stylex.create({
   base: {
-    display: "inline-flex",
-    alignItems: "center",
-    paddingTop: 3,
-    paddingBottom: 1,
-    paddingInline: 7,
-    whiteSpace: "nowrap",
-    borderRadius: radius.mark,
-    borderWidth: 1,
-    borderStyle: "solid",
     borderColor: "transparent",
+    borderRadius: radius.mark,
+    borderStyle: "solid",
+    borderWidth: 1,
+    paddingInline: 7,
+    alignItems: "center",
+    display: "inline-flex",
+    whiteSpace: "nowrap",
+    paddingBottom: 1,
+    paddingTop: 3,
   },
 });
 
@@ -22,13 +22,13 @@ const tones = stylex.create({
   neutral: { backgroundColor: colors.sunken, color: colors.inkSoft },
   read: { backgroundColor: colors.soundWash, color: colors.soundInk },
   new: { backgroundColor: colors.signalWash, color: colors.signalInk },
-  kind: { backgroundColor: "transparent", borderColor: colors.lineStrong, color: colors.ink },
+  kind: { borderColor: colors.lineStrong, backgroundColor: "transparent", color: colors.ink },
 });
 
 const levels = stylex.create({
-  foundations: { backgroundColor: colors.ink, borderColor: colors.ink, color: colors.paper },
-  core: { backgroundColor: colors.inkSoft, borderColor: colors.inkSoft, color: colors.paper },
-  advanced: { backgroundColor: colors.surface, borderColor: colors.ink, color: colors.ink },
+  foundations: { borderColor: colors.ink, backgroundColor: colors.ink, color: colors.paper },
+  core: { borderColor: colors.inkSoft, backgroundColor: colors.inkSoft, color: colors.paper },
+  advanced: { borderColor: colors.ink, backgroundColor: colors.surface, color: colors.ink },
 });
 
 export type Level = keyof typeof levels;
