@@ -49,7 +49,7 @@ Code placed in a shared folder before a second user exists is a guess about reus
 3. **No catch-all names and no barrels.** Zero files or folders in `src` named `utils`, `helpers`, `common`, `misc` or `shared`, and zero `index.ts` files.
 4. **Route-only code lives with its route.** Every module imported by one route sits in that route's `_parts/` folder. Every module imported by two or more routes sits in `src/components`.
 5. **One supported way to do each task.** Base UI is imported only in `src/ui`, `next/link` only in `src/ui/Link`, Lucide only in `src/ui/Icon`, and `localStorage` only in `src/hooks`. Each is enforced by lint.
-6. **New modules start in the right place.** Lessons, primitives and diagrams are created by generator commands that write files to the correct folder with the expected shape.
+6. **New modules start in the right place.** Every repeated addition (primitives, lessons, diagrams, pages, lint rules, RFCs) and every promotion out of `_parts/` is done by a generator command, so its location, names and registration are never written by hand.
 
 ## Proposal
 
@@ -126,13 +126,32 @@ When the same job can be done two ways, agents use both, and the codebase carrie
 
 ### 6. Generators
 
-The fastest way to add something should also be the correct way [[11]](#sources). Three commands create new modules with the right location, name and shape:
+A generator is a command that creates the files for a new piece of the codebase, in the right place, with the right names and the agreed shape, and wires them into anything that needs to know they exist. It turns "the right way" into "the easiest way" to add a file [[17]](#sources). Rails, Nx and Plop all ship generators for this reason: to keep new code consistent with existing conventions without anyone hunting for the current best example [[16]](#sources) [[17]](#sources) [[18]](#sources).
 
-- `new:primitive Name` creates `src/ui/Name.tsx` and its section on `/foundations`.
-- `new:lesson slug` creates `src/content/lessons/slug/index.mdx`.
-- `new:diagram slug Name` creates a diagram inside the lesson's folder.
+#### Why a generator beats a code snippet in Markdown
 
-When a convention changes, its generator changes in the same commit, so new code never starts from an old pattern.
+The usual alternative is a snippet in an `AGENTS.md` file or a README: "to add a primitive, copy this". A snippet has four weaknesses that a generator does not.
+
+- **A snippet is never checked.** Nothing compiles or lints the code inside a Markdown file, so it drifts from the real code the same way comments do. Comments change with their code in only 13% to 20% of commits [[19]](#sources). A generator's templates are real source files, so the type checker and linter fail the moment a convention changes and the template no longer matches it.
+- **A snippet is a suggestion.** An agent reads it, adapts it, and gets some details wrong, such as the folder, a file name, or a registration step. A generator produces the same output every time. Scaffolding is deterministic work, and it is cheaper and more reliable to keep it out of the model entirely [[15]](#sources).
+- **A snippet costs context on every task.** Instruction files are loaded whether or not the task needs them, and longer context files raise cost without raising success [[12]](#sources). A generator costs nothing until it runs.
+- **A snippet covers one file.** Most additions here touch several places: the new file, an index that lists it, and a page that shows it. A snippet cannot do the second and third steps; a generator does all of them in one command.
+
+#### What generators are for
+
+A task suits a generator when it is repeated, when its output follows a fixed shape, and when it touches more than one place. Creating new modules, registering them in a list, and moving a module to a new home all fit. A task does not suit a generator when each instance is mostly new logic, such as the body of a diagram or the text of a lesson. The generator creates the frame; the agent or author fills it in.
+
+#### Generators in this repository
+
+- **`new:primitive Name`** creates `src/ui/Name.tsx`, wrapping Base UI with styles from tokens and a named export, and adds a section for it on `/foundations` so every state is visible for review.
+- **`new:lesson slug`** creates `src/content/lessons/slug/index.mdx` with the lesson's required sections. The lesson counts as written because the file exists, so nothing else needs editing.
+- **`new:diagram slug Name`** creates a diagram in the lesson's folder, already using the kit's frame, transport controls and reduced-motion handling, and adds it to the diagram index.
+- **`new:page route`** creates `src/app/route/page.tsx` inside the shared page shell, with metadata filled in.
+- **`new:rule name`** creates a local lint rule in `lint/rules/`, registers it in `lint/plugin.ts`, and adds it to `oxlint.config.ts` at `error`.
+- **`new:rfc slug`** copies the RFC template to the next free number.
+- **`promote path area`** moves a module from a route's `_parts/` folder to `components/<area>` and rewrites every import, which is the step part 3 requires when a second route needs it.
+
+Generators live in `scripts/`, and their templates are ordinary `.ts` and `.tsx` files checked by the same type checker and linter as the rest of the code. When a convention changes, its generator changes in the same commit, so new code never starts from an old pattern.
 
 ### 7. Enforcement
 
@@ -175,6 +194,11 @@ Moving files changes history and conflicts with work in progress, so the moves h
 | 12  | [Gloaguen et al. 2026](https://arxiv.org/abs/2602.11988)                                                                                 | Peer-reviewed (ICLR)           | Repository overviews in context files did not improve agent results and raised cost.                                                               |
 | 13  | [RFC 0001: Agent-first repository](0001-agent-first-repo.md)                                                                             | This repository                | Architecture is the base of the priority pyramid.                                                                                                  |
 | 14  | [RFC 0004: Lint](0004-lint.md)                                                                                                           | This repository                | The linter and config that enforce the import rules.                                                                                               |
+| 15  | [Strumpflohner 2026, Let AI agents extract reusable Nx generators](https://nx.dev/blog/agent-extract-nx-generator)                       | Industry article               | Scaffolding is deterministic and belongs outside the model, for token cost and consistency.                                                        |
+| 16  | [Nx, Local generators](https://nx.dev/docs/extending-nx/local-generators)                                                                | Official docs                  | Generators standardise repeated tasks in a consistent, predictable way.                                                                            |
+| 17  | [Plop README](https://unpkg.com/plop@4.0.5/README.md)                                                                                    | Official docs                  | A micro-generator framework that turns the right way into the easiest way to make new files.                                                       |
+| 18  | [Rails guides, Creating and customizing generators](https://guides.rubyonrails.org/generators.html)                                      | Official docs                  | Generators automate boilerplate; project templates override defaults to match conventions.                                                         |
+| 19  | [Wen et al. 2019](https://www.inf.usi.ch/faculty/lanza/PUBS/P/Wen2019a.pdf)                                                              | Peer-reviewed (ICPC)           | Only 13% to 20% of code changes come with changes to the related comments.                                                                         |
 
 Speed figures in sources 8 and 9 are self-reported by their authors, from single projects. Source 3 is an industry report whose throughput figures are not used here.
 
@@ -186,6 +210,7 @@ Speed figures in sources 8 and 9 are self-reported by their authors, from single
 4. Barrel files have measured costs to build speed and correctness in Next.js projects, and the guides that once recommended them now advise importing files directly [7] [8] [9].
 5. Code should stay next to its only user until a second user appears [10]. Next.js private folders make that safe inside `app` [5].
 6. Describing a structure in prose does not change agent behaviour; enforcing it does [3] [12].
+7. Generating repeated code is more reliable than describing it: generator tools exist to make the conventional path the easiest one, and scaffolding is deterministic work best kept out of the model [15] [16] [17] [18]. Snippets in documentation are unchecked text and drift like comments [19].
 
 The strongest counter-argument is the Next.js position itself: any organisation works if it is consistent [5]. This RFC agrees, and treats consistency as the thing to enforce, since without enforcement no organisation stays consistent [2].
 
