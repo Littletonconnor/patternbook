@@ -1,8 +1,3 @@
-/**
- * Width and open state of the lesson sidebar. They live on <html> as CSS variables
- * and a data attribute, so dragging never re-renders React. This file has no client
- * code so the server layout can inline the script below.
- */
 export const SIDEBAR = {
   min: 200,
   max: 420,

@@ -865,6 +865,49 @@ export const topics: Topic[] = [
       },
     ],
   },
+  {
+    slug: "ai",
+    title: "AI",
+    description: "Context, tools and memory in coding agents, and repos built for them.",
+    lessons: [
+      {
+        number: 84,
+        slug: "context-engineering",
+        title: "Context engineering",
+        hook: "A model only sees its context window. Deciding what goes in it, and what stays out.",
+        level: "core",
+        minutes: 8,
+        status: "planned",
+      },
+      {
+        number: 85,
+        slug: "tool-use-and-mcp",
+        title: "Tool use and MCP",
+        hook: "How a model calls a function, and the protocol that lets any app offer tools.",
+        level: "core",
+        minutes: 8,
+        status: "planned",
+      },
+      {
+        number: 86,
+        slug: "agent-memory",
+        title: "Memory",
+        hook: "Every request starts empty. Keeping facts across sessions anyway.",
+        level: "core",
+        minutes: 7,
+        status: "planned",
+      },
+      {
+        number: 87,
+        slug: "agent-first-repositories",
+        title: "Agent-first repositories",
+        hook: "Architecture rules, types, lint, tests and prose, ranked by how reliably they catch an agent's mistakes.",
+        level: "advanced",
+        minutes: 12,
+        status: "planned",
+      },
+    ],
+  },
 ];
 
 export const lessons: Lesson[] = topics.flatMap((topic) => topic.lessons);

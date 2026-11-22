@@ -1,7 +1,7 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
 import type { Level } from "@/content/types";
+import { useLocalStorage, writeLocalStorage } from "./useLocalStorage";
 
 export type LevelFilter = Level | "all";
 
@@ -13,49 +13,21 @@ export const levelFilterOptions = [
 ] as const satisfies readonly { value: LevelFilter; label: string }[];
 
 const KEY = "patternbook:level";
-const EVENT = "patternbook:level-change";
-const values = new Set<string>(levelFilterOptions.map((o) => o.value));
+const values = new Set<unknown>(levelFilterOptions.map((option) => option.value));
 
-function isLevelFilter(value: string | null): value is LevelFilter {
-  return value !== null && values.has(value);
+function isLevelFilter(value: unknown): value is LevelFilter {
+  return values.has(value);
 }
 
-function subscribe(onChange: () => void) {
-  window.addEventListener("storage", onChange);
-  window.addEventListener(EVENT, onChange);
-  return () => {
-    window.removeEventListener("storage", onChange);
-    window.removeEventListener(EVENT, onChange);
-  };
-}
-
-function getSnapshot(): LevelFilter {
-  try {
-    const raw = window.localStorage.getItem(KEY);
-    return isLevelFilter(raw) ? raw : "all";
-  } catch {
-    return "all";
-  }
-}
-
-function getServerSnapshot(): LevelFilter {
-  return "all";
-}
-
-function save(level: LevelFilter): boolean {
-  try {
-    window.localStorage.setItem(KEY, level);
-    return true;
-  } catch {
-    return false;
-  }
+function parseLevel(stored: unknown) {
+  return isLevelFilter(stored) ? stored : undefined;
 }
 
 export function setLevelFilter(level: LevelFilter) {
-  save(level);
-  window.dispatchEvent(new Event(EVENT));
+  writeLocalStorage(KEY, level);
 }
 
 export function useLevelFilter() {
-  return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  const [level] = useLocalStorage(KEY, parseLevel, "all");
+  return level;
 }

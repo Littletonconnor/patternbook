@@ -93,7 +93,6 @@ export function ExampleRows({ rows }: { rows: readonly (Row & { example: ReactNo
   );
 }
 
-// Same panel holding one assembled part, e.g. a top bar or a lesson header.
 export function Preview({ children }: { children: ReactNode }) {
   return <div {...stylex.props(styles.panel, styles.preview)}>{children}</div>;
 }

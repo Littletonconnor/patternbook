@@ -3,7 +3,6 @@ import * as stylex from "@stylexjs/stylex";
 const DARK = "@media (prefers-color-scheme: dark)";
 
 export const colors = stylex.defineVars({
-  // Neutrals
   paper: { default: "#FBFBF9", [DARK]: "#0F1114" },
   surface: { default: "#FFFFFF", [DARK]: "#171A1F" },
   sunken: { default: "#F4F4F1", [DARK]: "#0A0B0D" },
@@ -13,7 +12,6 @@ export const colors = stylex.defineVars({
   inkSoft: { default: "#50545C", [DARK]: "#A9ADB4" },
   ink: { default: "#16181D", [DARK]: "#ECEDEA" },
 
-  // Meaning: only used inside diagrams
   signal: { default: "#F0590E", [DARK]: "#FF7F45" },
   signalWash: { default: "#FFEEE3", [DARK]: "#3A1D0E" },
   signalInk: { default: "#B03C00", [DARK]: "#FFA57A" },
@@ -29,6 +27,12 @@ export const colors = stylex.defineVars({
   sound: { default: "#1F8A5B", [DARK]: "#4FC790" },
   soundWash: { default: "#E3F4EB", [DARK]: "#10291D" },
   soundInk: { default: "#146943", [DARK]: "#86DDB3" },
+});
+
+export const shadows = stylex.defineVars({
+  thumb: "0 0 0 0.5px rgb(22 24 29 / 0.12), 0 1px 2px rgb(22 24 29 / 0.16)",
+  popover: "0 6px 20px rgb(22 24 29 / 0.16)",
+  sheet: "0 -6px 20px rgb(22 24 29 / 0.16)",
 });
 
 export const fonts = stylex.defineVars({

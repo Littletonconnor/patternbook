@@ -1,7 +1,7 @@
 import { Drawer as BaseDrawer } from "@base-ui/react/drawer";
 import * as stylex from "@stylexjs/stylex";
 import type { ReactElement, ReactNode } from "react";
-import { colors, motion, radius, space } from "@/tokens/tokens.stylex";
+import { colors, motion, radius, shadows, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
 
 const HIDDEN = ":is([data-starting-style], [data-ending-style])";
@@ -32,7 +32,7 @@ const styles = stylex.create({
     overscrollBehavior: "contain",
     paddingInline: space.s4,
     backgroundColor: colors.surface,
-    boxShadow: "0 -6px 20px rgb(22 24 29 / 0.16)",
+    boxShadow: shadows.sheet,
     outlineStyle: "none",
     transform: {
       [HIDDEN]: "translateY(100%)",

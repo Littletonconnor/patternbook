@@ -1,13 +1,64 @@
 # Patternbook TODO
 
-Work top to bottom. Each phase builds on the one before it. Board numbers refer to the design canvas.
+Open work first, roughly in the order to do it. Finished phases are under [Done](#done) at the bottom. Board numbers refer to the design canvas.
 
-## Done
+## Shadows
 
-- [x] Scaffold Next.js, StyleX, Base UI, Lucide, fonts
-- [x] Tokens and type styles (`src/tokens`)
-- [x] ESLint, Prettier, scripts
-- [x] `/foundations` page
+The current set in `src/tokens/tokens.stylex.ts` is three one-off values (`thumb`, `popover`, `sheet`), and none have dark mode values.
+
+- [ ] Design a shadow scale (for example raised, overlay, sheet) with light and dark values
+- [ ] Replace the current tokens and update `Switch`, `Tooltip` and `Drawer`
+- [ ] Add a "Shadows" section to `/foundations` showing each level
+
+## Branding
+
+The current mark (a dot-grid square with an orange dot) and the "Patternbook" wordmark were placeholders. Replace them with something more professional.
+
+- [ ] Design a new logo: mark and wordmark, light and dark versions
+- [ ] Update `Brand` in the top bar to use it
+- [ ] New favicon and app icons from the mark (`src/app/favicon.ico`, `manifest.ts`)
+- [ ] New Open Graph image (`OgCard`, site and lesson `opengraph-image.tsx`)
+
+## 6. Diagram kit (`src/diagrams`)
+
+The part that matters most. Board 02.
+
+- [ ] Decide the animation approach (CSS, Motion, or hand-rolled)
+- [ ] Diagram frame: title bar, dot-grid stage, actions, readouts, caption
+- [ ] Transport: play, pause, step, reset, speed
+- [ ] Marks: Record, Node, Packet, Window, Cursor, Fault (hatched), Ghost, Queue
+- [ ] Readout and Meter
+- [ ] Motion rules wired to the motion tokens; reduced-motion fallback
+- [ ] Keyboard and screen reader pass for controls
+- [ ] Homepage hero diagram (Diagram 0.1) built with the kit
+
+## Sidebar redesign
+
+The current sidebar doesn't work well yet. Decide what to change before building.
+
+- [ ] Review the current sidebar and list what isn't working
+- [ ] New design on the canvas (board 03)
+- [ ] Build it. Collapse buttons use `src/ui` parts instead of custom styles
+
+## 8. First lesson
+
+Proves the whole system end to end.
+
+- [ ] Lesson 33: Offset vs cursor pagination, full copy
+- [ ] Diagram 33.1: offset vs cursor race (load next, insert row, delete row, reset)
+- [ ] Diagram 33.2: meter
+- [ ] Real "Go deeper" resources
+- [ ] Review on mobile and in dark mode
+
+## 9. Starter set, then the rest
+
+- [ ] 25 Debounce vs throttle
+- [ ] 27 Optimistic updates
+- [ ] 28 Infinite scroll
+- [ ] 73 A container is just a process
+- [ ] Lessons 81 to 83: how the diagrams are built
+- [ ] AI topic (84 to 87). Lesson 87, Agent-first repositories, turns the `rfc/` documents into interactive diagrams
+- [ ] Continue through `src/content/catalog.ts`
 
 ## Agent-driven repo
 
@@ -33,6 +84,13 @@ Design: [RFC 0003: Types](rfc/0003-types.md).
 
 Design: [RFC 0004: Lint](rfc/0004-lint.md).
 
+- [x] Oxlint with every rule named, categories off, type-aware, errors only
+- [x] Next.js, accessibility and StyleX rules
+- [x] Disable comments caught: unused directives fail, `lint:directives` grep in `verify`
+- [x] Local rules: no comments, no `enum`, colours and type only from tokens, effects and timers only inside hooks
+- [ ] Spacing ratchet (after spacing tokens)
+- [ ] Switch Prettier to oxfmt
+
 ### 4. Tests
 
 Design: [RFC 0005: Tests](rfc/0005-tests.md).
@@ -45,7 +103,34 @@ Design: [RFC 0006: Runtime verification](rfc/0006-runtime-verification.md).
 
 Design: [RFC 0007: Prose](rfc/0007-prose.md).
 
-## 1. Primitives (`src/ui`)
+## Testing
+
+Not started. Everything that needs a test runner lives here, so the rest of the list can land without one. When this section starts, `test` joins `verify`.
+
+- [ ] Set up Vitest (Connor installs it). Tests sit next to their file as `Foo.test.ts`. No module mocking (`vi.mock`): use real seams.
+- [ ] `test` script: all unit tests. `test:rules`: only the lint rule tests, so changing a rule is fast to check.
+- [ ] Catalog integrity: slugs unique, numbers 1 to 83 with no gaps, every topic has lessons, previous and next wrap correctly, starter lessons exist. Glossary terms unique.
+- [ ] Content checks: every lesson marked written in `catalog.ts` has an MDX file, and every MDX file has a catalog entry.
+- [ ] Local lint rules: `RuleTester` cases in `lint/rules/*.test.ts`, at least one valid and one invalid example taken from real code in this repo.
+- [ ] Structure test: every file in `src` sits in an allowed path, and the failure message says where it belongs.
+- [ ] `AGENTS.md` files: line limits, and every file path they mention exists.
+
+## Later
+
+- [ ] Deploy to Vercel
+- [ ] Search
+- [ ] Domain
+
+## Done
+
+### Foundations
+
+- [x] Scaffold Next.js, StyleX, Base UI, Lucide, fonts
+- [x] Tokens and type styles (`src/tokens`)
+- [x] Lint (Oxlint, replaced ESLint), Prettier, scripts
+- [x] `/foundations` page
+
+### 1. Primitives (`src/ui`)
 
 Base UI parts styled with tokens. No app knowledge. Board 04.
 
@@ -63,7 +148,7 @@ Base UI parts styled with tokens. No app knowledge. Board 04.
 - [x] Drawer (phone menu and sidebar)
 - [x] Add a "Primitives" section to `/foundations` showing each one in every state
 
-## 2. Catalog data
+### 2. Catalog data
 
 The sidebar, homepage and pager all read the same list.
 
@@ -72,7 +157,7 @@ The sidebar, homepage and pager all read the same list.
 - [x] All 16 topics and 83 lessons entered
 - [x] Helpers: lesson by slug, previous and next, lessons by level, totals
 
-## 3. App shell
+### 3. App shell
 
 Board 03 shows the shell around a lesson.
 
@@ -85,7 +170,7 @@ Board 03 shows the shell around a lesson.
 - [x] Footer
 - [x] Read state stored in localStorage (no account)
 
-## 4. Homepage
+### 4. Homepage
 
 Board 00.
 
@@ -96,7 +181,7 @@ Board 00.
 - [x] Three level cards
 - [x] "Everything, by topic" list of all 16 topics
 
-## 5. Lesson components (`src/components`)
+### 5. Lesson components (`src/components`)
 
 Everything a lesson page needs apart from diagrams. Boards 03 and 04.
 
@@ -116,59 +201,9 @@ Everything a lesson page needs apart from diagrams. Boards 03 and 04.
 - [x] "Was this lesson useful?" feedback row
 - [x] Pager (previous / next)
 
-## 6. Diagram kit (`src/diagrams`)
-
-The part that matters most. Board 02.
-
-- [ ] Decide the animation approach (CSS, Motion, or hand-rolled)
-- [ ] Diagram frame: title bar, dot-grid stage, actions, readouts, caption
-- [ ] Transport: play, pause, step, reset, speed
-- [ ] Marks: Record, Node, Packet, Window, Cursor, Fault (hatched), Ghost, Queue
-- [ ] Readout and Meter
-- [ ] Motion rules wired to the motion tokens; reduced-motion fallback
-- [ ] Keyboard and screen reader pass for controls
-- [ ] Homepage hero diagram (Diagram 0.1) built with the kit
-
-## 7. Remaining pages
+### 7. Remaining pages
 
 - [x] Diagrams page with kind filter (board 05)
 - [x] About page (board 06)
 - [x] 404 page
 - [x] Metadata, favicon, Open Graph image
-
-## 8. First lesson
-
-Proves the whole system end to end.
-
-- [ ] Lesson 33: Offset vs cursor pagination, full copy
-- [ ] Diagram 33.1: offset vs cursor race (load next, insert row, delete row, reset)
-- [ ] Diagram 33.2: meter
-- [ ] Real "Go deeper" resources
-- [ ] Review on mobile and in dark mode
-
-## 9. Starter set, then the rest
-
-- [ ] 25 Debounce vs throttle
-- [ ] 27 Optimistic updates
-- [ ] 28 Infinite scroll
-- [ ] 73 A container is just a process
-- [ ] Lessons 81 to 83: how the diagrams are built
-- [ ] Continue through `CATALOG.md`
-
-## Later
-
-- [ ] Deploy to Vercel
-- [ ] Search
-- [ ] Domain
-
-## Testing
-
-Not started. Everything that needs a test runner lives here, so the rest of the list can land without one. When this section starts, `test` joins `verify`.
-
-- [ ] Set up Vitest (Connor installs it). Tests sit next to their file as `Foo.test.ts`. No module mocking (`vi.mock`): use real seams.
-- [ ] `test` script: all unit tests. `test:rules`: only the lint rule tests, so changing a rule is fast to check.
-- [ ] Catalog integrity: slugs unique, numbers 1 to 83 with no gaps, every topic has lessons, previous and next wrap correctly, starter lessons exist. Glossary terms unique.
-- [ ] Content checks: every lesson marked written in `catalog.ts` has an MDX file, and every MDX file has a catalog entry.
-- [ ] Local lint rules: `RuleTester` cases in `lint/rules/*.test.ts`, at least one valid and one invalid example taken from real code in this repo.
-- [ ] Structure test: every file in `src` sits in an allowed path, and the failure message says where it belongs.
-- [ ] `AGENTS.md` files: line limits, and every file path they mention exists.

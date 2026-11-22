@@ -47,7 +47,6 @@ function Timeline() {
   );
 }
 
-/** Optimistic updates: a change on its way through three steps. */
 function Flow() {
   return (
     <Svg width={264} height={36}>
@@ -61,7 +60,6 @@ function Flow() {
   );
 }
 
-/** Virtualization: only the rows in the window are real. */
 function Playground() {
   return (
     <Svg width={172} height={88}>
@@ -74,7 +72,6 @@ function Playground() {
   );
 }
 
-/** Offset vs cursor: one page repeats a row, the other doesn't. */
 function Race() {
   const rows = [0, 20, 40, 60];
   return (
@@ -123,7 +120,6 @@ function Race() {
   );
 }
 
-/** A container is just a process: layers, with one being written. */
 function Structure() {
   return (
     <Svg width={200} height={84}>

@@ -40,7 +40,12 @@ const styles = stylex.create({
     },
     textDecorationLine: "none",
   },
-  plain: { color: colors.ink, textDecorationLine: "none" },
+  plain: {
+    alignItems: "center",
+    color: colors.ink,
+    display: "inline-flex",
+    textDecorationLine: "none",
+  },
   current: { color: colors.ink, fontWeight: 500 },
   arrow: {
     color: {

@@ -1,6 +1,7 @@
 import { useSyncExternalStore } from "react";
 
 import { SIDEBAR, SIDEBAR_KEY as KEY } from "./sidebarScript";
+import { readLocalStorage, writeLocalStorage } from "./useLocalStorage";
 
 export { SIDEBAR };
 
@@ -8,32 +9,21 @@ type Stored = { width: number; collapsed: boolean };
 
 const fallback: Stored = { width: SIDEBAR.initial, collapsed: false };
 
-function parse(raw: unknown): Stored {
-  if (typeof raw !== "object" || raw === null || !("width" in raw)) {
-    return fallback;
+function parse(stored: unknown): Stored | undefined {
+  if (typeof stored !== "object" || stored === null || !("width" in stored)) {
+    return undefined;
   }
-  if (typeof raw.width !== "number") {
-    return fallback;
+  if (typeof stored.width !== "number") {
+    return undefined;
   }
-  return { width: clampWidth(raw.width), collapsed: "collapsed" in raw && raw.collapsed === true };
+  return {
+    width: clampWidth(stored.width),
+    collapsed: "collapsed" in stored && stored.collapsed === true,
+  };
 }
 
 function read(): Stored {
-  try {
-    const raw: unknown = JSON.parse(localStorage.getItem(KEY) ?? "null");
-    return parse(raw);
-  } catch {
-    return fallback;
-  }
-}
-
-function write(state: Stored): boolean {
-  try {
-    localStorage.setItem(KEY, JSON.stringify(state));
-    return true;
-  } catch {
-    return false;
-  }
+  return readLocalStorage(KEY, parse, fallback);
 }
 
 export function clampWidth(width: number) {
@@ -59,7 +49,7 @@ function apply(state: Stored) {
 export function commitSidebar(next: Partial<Stored>) {
   const state = { ...read(), ...next };
   state.width = clampWidth(state.width);
-  write(state);
+  writeLocalStorage(KEY, state);
   apply(state);
 }
 

@@ -1,6 +1,7 @@
 import * as stylex from "@stylexjs/stylex";
 import {
   Binary,
+  Bot,
   Braces,
   Container,
   Database,
@@ -44,6 +45,7 @@ const topicIcons: Record<string, LucideIcon> = {
   docker: Container,
   "shipping-and-operations": Rocket,
   "interactive-explainers": MousePointerClick,
+  ai: Bot,
 };
 
 const styles = stylex.create({

@@ -12,7 +12,6 @@ const styles = stylex.create({
   note: { margin: 0, color: colors.inkSoft },
 });
 
-// Links have no pressed or disabled state.
 const states = ["rest", "hover", "focus"] as const satisfies readonly PreviewState[];
 
 function preview(state: PreviewState) {

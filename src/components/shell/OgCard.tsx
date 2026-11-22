@@ -1,13 +1,9 @@
 import type { ReactNode } from "react";
+import { palette } from "@/tokens/palette";
 
 export const ogSize = { width: 1200, height: 630 };
 
-const paper = "#FBFBF9";
-const ink = "#16181D";
-const inkSoft = "#50545C";
-const inkMuted = "#6B6F76";
-const lineStrong = "#CFCFC8";
-const signal = "#F0590E";
+const { paper, ink, inkSoft, inkMuted, lineStrong, signal } = palette;
 
 type OgCardProps = {
   eyebrow: string;

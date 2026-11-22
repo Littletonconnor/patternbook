@@ -532,14 +532,19 @@ const stylex = {
 } satisfies Rules;
 
 // Conventions specific to this repository. The local rules from
-// ./lint/plugin.mts keep barrels, catch-all names, raw icons and stray storage
-// access out. Files and functions should fit on about one screen, so the size
+// ./lint/plugin.mts keep barrels, catch-all names, raw icons and stray
+// storage, cookie and clipboard access out. Files and functions should fit on about one screen, so the size
 // limits cap lines, nesting and branching.
 const repository = {
   "patternbook/no-barrel-files": "error",
   "patternbook/no-catch-all-names": "error",
   "patternbook/icons-through-icon": "error",
-  "patternbook/storage-in-hooks": "error",
+  "patternbook/browser-apis-in-hooks": "error",
+  "patternbook/no-comments": "error",
+  "patternbook/no-enum": "error",
+  "patternbook/colours-from-tokens": "error",
+  "patternbook/type-from-tokens": "error",
+  "patternbook/effects-in-hooks": "error",
   "max-lines": ["error", { max: 200, skipBlankLines: true, skipComments: false }],
   "max-lines-per-function": ["error", { max: 60, skipBlankLines: true }],
   "react/jsx-max-depth": ["error", { max: 5 }],
@@ -606,6 +611,15 @@ export default defineConfig({
         "oxlint.config.mts",
       ],
       rules: { "max-lines": "off" },
+    },
+    // This config is the documentation for every rule, so it is the one file
+    // where comments are allowed.
+    { files: ["oxlint.config.mts"], rules: { "patternbook/no-comments": "off" } },
+    // The Open Graph image is rendered by next/og, which takes inline styles and
+    // can't read StyleX, so it sets its type sizes directly.
+    {
+      files: ["src/components/shell/OgCard.tsx"],
+      rules: { "patternbook/type-from-tokens": "off" },
     },
     // Each layer may only import the layers below it, so each gets an override
     // listing the imports it may not make.

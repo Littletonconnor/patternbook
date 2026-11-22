@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { palette } from "@/tokens/palette";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
@@ -8,8 +9,8 @@ export default function manifest(): MetadataRoute.Manifest {
       "Interactive lessons on software engineering patterns, each with a diagram of the broken and fixed versions that you can change and step through.",
     start_url: "/",
     display: "standalone",
-    background_color: "#FBFBF9",
-    theme_color: "#FBFBF9",
+    background_color: palette.paper,
+    theme_color: palette.paper,
     icons: [
       { src: "/icons/icon-192.png", sizes: "192x192", type: "image/png", purpose: "any" },
       { src: "/icons/icon-512.png", sizes: "512x512", type: "image/png", purpose: "any" },

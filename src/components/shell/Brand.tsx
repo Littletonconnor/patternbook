@@ -1,21 +1,10 @@
 import * as stylex from "@stylexjs/stylex";
-import { colors, radius } from "@/tokens/tokens.stylex";
+import { colors } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
 import { Link } from "@/ui/Link";
 
 const styles = stylex.create({
-  brand: {
-    borderRadius: radius.mark,
-    gap: 10,
-    alignItems: "center",
-    color: colors.ink,
-    display: "inline-flex",
-    outlineColor: colors.focus,
-    outlineOffset: 2,
-    outlineStyle: { default: "none", ":focus-visible": "solid" },
-    outlineWidth: 2,
-    textDecorationLine: "none",
-  },
+  brand: { gap: 10, alignItems: "center", display: "inline-flex" },
   mark: {
     backgroundPosition: "center",
     borderColor: colors.ink,

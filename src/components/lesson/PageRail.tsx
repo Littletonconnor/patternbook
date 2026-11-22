@@ -7,6 +7,7 @@ import { type } from "@/tokens/typography";
 
 const HOVER = "@media (hover: hover)";
 const ACTIVE = ":is([aria-current=true])";
+const TOP_BAR_HEIGHT = "57px";
 
 const styles = stylex.create({
   rail: {
@@ -15,7 +16,7 @@ const styles = stylex.create({
     display: { default: "none", "@media (min-width: 1180px)": "flex" },
     flexDirection: "column",
     position: "sticky",
-    top: `calc(57px + ${space.s6})`, // below the sticky top bar
+    top: `calc(${TOP_BAR_HEIGHT} + ${space.s6})`,
     width: measure.rail,
   },
   label: { color: colors.inkMuted },
@@ -44,7 +45,7 @@ const styles = stylex.create({
 
 export type RailItem = { id: string; label: string };
 
-export function PageRail({ items }: { items: readonly RailItem[] }) {
+function useActiveHeading(items: readonly RailItem[]) {
   const [active, setActive] = useState(items[0]?.id);
 
   useEffect(() => {
@@ -69,6 +70,12 @@ export function PageRail({ items }: { items: readonly RailItem[] }) {
     headings.forEach((heading) => observer.observe(heading));
     return () => observer.disconnect();
   }, [items]);
+
+  return active;
+}
+
+export function PageRail({ items }: { items: readonly RailItem[] }) {
+  const active = useActiveHeading(items);
 
   return (
     <nav aria-label="On this page" {...stylex.props(styles.rail)}>

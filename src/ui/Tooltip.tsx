@@ -1,7 +1,7 @@
 import { Tooltip as BaseTooltip } from "@base-ui/react/tooltip";
 import * as stylex from "@stylexjs/stylex";
 import type { ReactElement, ReactNode } from "react";
-import { colors, motion } from "@/tokens/tokens.stylex";
+import { colors, motion, shadows } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
 
 const HIDDEN = ":is([data-starting-style], [data-ending-style])";
@@ -10,7 +10,7 @@ const REDUCED = "@media (prefers-reduced-motion: reduce)";
 const styles = stylex.create({
   popup: {
     backgroundColor: colors.ink,
-    boxShadow: "0 6px 20px rgb(22 24 29 / 0.16)",
+    boxShadow: shadows.popover,
     color: colors.paper,
     opacity: { [HIDDEN]: 0, default: 1 },
     transform: { [HIDDEN]: "translateY(4px)", default: "translateY(0)" },

@@ -1,12 +1,17 @@
 import { relative } from "node:path";
 
-export type Node = { type: string };
+export type Node = { type: string; parent?: Node };
 
-export type Report = { node: Node; message: string };
+type Location = { start: { line: number; column: number }; end: { line: number; column: number } };
+
+export type Comment = { type: string; value: string; loc: Location };
+
+export type Report = ({ node: Node } | { loc: Location }) & { message: string };
 
 export type Context = {
   filename: string;
   report: (report: Report) => void;
+  sourceCode: { getAllComments: () => Comment[] };
 };
 
 export type Visitors = Partial<Record<string, (node: never) => void>>;

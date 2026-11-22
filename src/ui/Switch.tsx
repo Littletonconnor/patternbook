@@ -1,7 +1,7 @@
 import { Switch as BaseSwitch } from "@base-ui/react/switch";
 import * as stylex from "@stylexjs/stylex";
 import type { ComponentProps, ReactNode } from "react";
-import { colors, motion } from "@/tokens/tokens.stylex";
+import { colors, motion, shadows } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
 
 const CHECKED = ":is([data-checked])";
@@ -37,7 +37,7 @@ const styles = stylex.create({
   thumb: {
     borderRadius: "50%",
     backgroundColor: colors.surface,
-    boxShadow: "0 0 0 0.5px rgb(22 24 29 / 0.12), 0 1px 2px rgb(22 24 29 / 0.16)",
+    boxShadow: shadows.thumb,
     position: "absolute",
     transform: { [CHECKED]: "translateX(14px)", default: "translateX(0)" },
     transitionDuration: { [REDUCED]: "0s", default: motion.move },

@@ -1,10 +1,11 @@
 "use client";
 
 import * as stylex from "@stylexjs/stylex";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { ReactNode } from "react";
 import { colors, motion } from "@/tokens/tokens.stylex";
 import { toggleSidebar, useSidebarCollapsed, useSidebarWidth } from "@/hooks/useSidebar";
+import { useWindowEvent } from "@/hooks/useWindowEvent";
 import { SidebarHandle } from "./SidebarHandle";
 
 const WIDE = "@media (min-width: 768px)";
@@ -62,16 +63,12 @@ type SidebarColumnsProps = {
 };
 
 function useToggleShortcut() {
-  useEffect(() => {
-    function onKey(event: globalThis.KeyboardEvent) {
-      if (event.key === "\\" && (event.metaKey || event.ctrlKey)) {
-        event.preventDefault();
-        toggleSidebar();
-      }
+  useWindowEvent("keydown", (event) => {
+    if (event.key === "\\" && (event.metaKey || event.ctrlKey)) {
+      event.preventDefault();
+      toggleSidebar();
     }
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, []);
+  });
 }
 
 export function SidebarColumns({ sidebar, children }: SidebarColumnsProps) {

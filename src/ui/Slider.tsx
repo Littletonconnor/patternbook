@@ -61,7 +61,6 @@ type SliderProps = Omit<
 > & {
   label: ReactNode;
   unit?: string;
-  /** full control over the readout, e.g. (v) => `${v}×`; wins over `unit` */
   renderValue?: (value: number) => ReactNode;
 };
 

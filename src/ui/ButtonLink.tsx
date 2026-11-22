@@ -9,7 +9,6 @@ type ButtonLinkProps = Omit<ComponentProps<typeof NextLink>, "className" | "styl
   size?: "default" | "small" | "large";
 };
 
-/** A link that looks like a Button. Use it when the action navigates. */
 export function ButtonLink({ variant = "secondary", size = "default", ...props }: ButtonLinkProps) {
   return (
     <NextLink

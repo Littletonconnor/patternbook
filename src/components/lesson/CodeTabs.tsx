@@ -2,8 +2,9 @@
 
 import * as stylex from "@stylexjs/stylex";
 import { Check, Copy } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { ReactNode } from "react";
+import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
 import { colors, radius, space } from "@/tokens/tokens.stylex";
 import { IconButton } from "@/ui/IconButton";
 import { Tab, Tabs, TabsList, TabsPanel } from "@/ui/Tabs";
@@ -35,24 +36,7 @@ type CodeTab = { label: string; code: string; body: ReactNode };
 
 export function CodeTabs({ tabs }: { tabs: readonly CodeTab[] }) {
   const [active, setActive] = useState(0);
-  const [copied, setCopied] = useState(false);
-
-  useEffect(() => {
-    if (!copied) {
-      return;
-    }
-    const timer = setTimeout(() => setCopied(false), 1500);
-    return () => clearTimeout(timer);
-  }, [copied]);
-
-  async function copy() {
-    try {
-      await navigator.clipboard.writeText(tabs[active]?.code ?? "");
-      setCopied(true);
-    } catch {
-      // clipboard blocked: leave the icon as it is
-    }
-  }
+  const { copied, copy } = useCopyToClipboard();
 
   return (
     <div {...stylex.props(styles.box)}>
@@ -73,7 +57,7 @@ export function CodeTabs({ tabs }: { tabs: readonly CodeTab[] }) {
               label={copied ? "Copied" : "Copy code"}
               variant="ghost"
               size="small"
-              onClick={copy}
+              onClick={() => void copy(tabs[active]?.code ?? "")}
             />
           </span>
         </div>
