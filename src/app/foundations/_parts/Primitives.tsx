@@ -6,14 +6,10 @@ import { IconButtonExample } from "./IconButton";
 import { LinkExample } from "./Link";
 import { CardLinkExample, RowLinkExample } from "./LinkSurfaces";
 import { BadgeExample, KbdExample } from "./Badge";
-import {
-  SliderExample,
-  SwitchExample,
-  TabsExample,
-  ToggleExample,
-  ToggleGroupExample,
-} from "./Controls";
-import { CollapsibleExample, DrawerExample, TooltipExample } from "./Overlays";
+import { SliderExample, TabsExample, ToggleGroupExample } from "./Controls";
+import { CollapsibleExample } from "./CollapsibleDemo";
+import { DrawerExample, TooltipExample } from "./Overlays";
+import { SwitchExample, ToggleExample } from "./ToggleControls";
 
 const styles = stylex.create({
   grid: {

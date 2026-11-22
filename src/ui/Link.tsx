@@ -67,33 +67,39 @@ type LinkProps = Omit<ComponentProps<typeof NextLink>, "className" | "style"> & 
   current?: boolean;
 };
 
+const variantStyles = {
+  inline: styles.underlined,
+  nav: [type.ui, styles.nav],
+  plain: styles.plain,
+};
+
+function ExternalLink({ children, ...props }: Omit<LinkProps, "variant" | "current">) {
+  return (
+    <NextLink
+      target="_blank"
+      rel="noreferrer"
+      {...props}
+      {...stylex.props(styles.base, styles.underlined, stylex.defaultMarker())}
+    >
+      {children}
+      <span {...stylex.props(styles.arrow)}>
+        <Icon icon={ArrowUpRight} size={14} />
+      </span>
+    </NextLink>
+  );
+}
+
 export function Link({ variant = "inline", current = false, children, ...props }: LinkProps) {
   if (variant === "external") {
-    return (
-      <NextLink
-        target="_blank"
-        rel="noreferrer"
-        {...props}
-        {...stylex.props(styles.base, styles.underlined, stylex.defaultMarker())}
-      >
-        {children}
-        <span {...stylex.props(styles.arrow)}>
-          <Icon icon={ArrowUpRight} size={14} />
-        </span>
-      </NextLink>
-    );
+    return <ExternalLink {...props}>{children}</ExternalLink>;
   }
-
   return (
     <NextLink
       aria-current={current ? "page" : undefined}
       {...props}
       {...stylex.props(
         styles.base,
-        variant === "nav" && type.ui,
-        variant === "inline" && styles.underlined,
-        variant === "nav" && styles.nav,
-        variant === "plain" && styles.plain,
+        variantStyles[variant],
         variant === "nav" && current && styles.current,
       )}
     >

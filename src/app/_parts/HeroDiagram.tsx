@@ -1,18 +1,18 @@
 "use client";
 
 import * as stylex from "@stylexjs/stylex";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { colors, radius, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
 import { Button } from "@/ui/Button";
 import { Slider } from "@/ui/Slider";
+import { useRoundTrip } from "@/diagrams/useRoundTrip";
+import { HeroStage } from "./HeroStage";
 
 const ONE_WAY_MS = 22;
 const ROUND_TRIP_MS = ONE_WAY_MS * 2;
 const START_X = 96;
 const DISTANCE = 248;
-
-const easeInOut = (p: number) => (p < 0.5 ? 4 * p * p * p : 1 - (-2 * p + 2) ** 3 / 2);
 
 const styles = stylex.create({
   diagram: {
@@ -48,30 +48,6 @@ const styles = stylex.create({
     height: 46,
   },
   diagramLabel: { color: colors.inkMuted },
-  stage: {
-    paddingInline: space.s4,
-    placeItems: "center",
-    backgroundColor: colors.sunken,
-    backgroundImage: `radial-gradient(${colors.lineStrong} 1px, transparent 1px)`,
-    backgroundSize: "16px 16px",
-    display: "grid",
-    position: "relative",
-    height: 220,
-  },
-  readout: {
-    color: colors.inkMuted,
-    fontVariantNumeric: "tabular-nums",
-    position: "absolute",
-    right: space.s4,
-    top: space.s3,
-  },
-  svg: { overflow: "visible", display: "block", height: "auto", maxWidth: 440, width: "100%" },
-  wire: { stroke: colors.ink, strokeWidth: 1.5 },
-  node: { fill: colors.surface, stroke: colors.ink, strokeWidth: 1.5 },
-  name: { fill: colors.ink, fontWeight: 500 },
-  sub: { fill: colors.inkMuted },
-  halo: { fill: colors.signal, opacity: 0.18 },
-  dot: { fill: colors.signal },
   controls: {
     gap: `${space.s3} ${space.s6}`,
     paddingBlock: space.s3,
@@ -89,12 +65,6 @@ const styles = stylex.create({
   disclosure: { color: colors.inkMuted, marginInlineEnd: space.s2 },
 });
 
-const nodes = [
-  { x: 0, name: "Client", sub: "browser" },
-  { x: 172, name: "API", sub: "GET /posts" },
-  { x: 344, name: "Database", sub: "posts" },
-];
-
 function controlLabel(playing: boolean, started: boolean) {
   if (playing) {
     return "Pause";
@@ -107,42 +77,12 @@ export function HeroDiagram() {
   const [started, setStarted] = useState(false);
   const [slowdown, setSlowdown] = useState(100);
 
-  const packet = useRef<SVGGElement>(null);
-  const readout = useRef<HTMLSpanElement>(null);
-  const simulated = useRef(0);
-  const slowdownRef = useRef(slowdown);
-
-  useEffect(() => {
-    slowdownRef.current = slowdown;
-  }, [slowdown]);
-
-  useEffect(() => {
-    if (!playing) {
-      return;
-    }
-    let frame = 0;
-    let last = performance.now();
-
-    const tick = (now: number) => {
-      simulated.current += (now - last) / slowdownRef.current;
-      last = now;
-
-      const t = simulated.current % ROUND_TRIP_MS;
-      const outbound = t < ONE_WAY_MS;
-      const progress = outbound ? t / ONE_WAY_MS : 2 - t / ONE_WAY_MS;
-      packet.current?.setAttribute(
-        "transform",
-        `translate(${(easeInOut(progress) * DISTANCE).toFixed(2)} 0)`,
-      );
-      if (readout.current) {
-        readout.current.textContent = `${outbound ? "request" : "response"} · t = ${t.toFixed(1)} ms`;
-      }
-      frame = requestAnimationFrame(tick);
-    };
-
-    frame = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frame);
-  }, [playing]);
+  const { packet, readout } = useRoundTrip({
+    playing,
+    slowdown,
+    oneWayMs: ONE_WAY_MS,
+    distance: DISTANCE,
+  });
 
   const toggle = () => {
     setStarted(true);
@@ -156,57 +96,13 @@ export function HeroDiagram() {
           <span {...stylex.props(type.label, styles.diagramLabel)}>Diagram 0.1</span>
           <span {...stylex.props(type.control)}>One request, one round trip</span>
         </div>
-        <div {...stylex.props(styles.stage)}>
-          <span ref={readout} aria-hidden="true" {...stylex.props(type.number, styles.readout)}>
-            idle · t = 0.0 ms
-          </span>
-          <svg
-            viewBox="-1 -1 442 54"
-            role="img"
-            aria-label={`A request travels from the client, through the API, to the database and back, about ${ROUND_TRIP_MS} ms round trip.`}
-            {...stylex.props(styles.svg)}
-          >
-            <line
-              x1={START_X}
-              y1={26}
-              x2={START_X + DISTANCE}
-              y2={26}
-              {...stylex.props(styles.wire)}
-            />
-            <g ref={packet}>
-              <circle cx={START_X} cy={26} r={10} {...stylex.props(styles.halo)} />
-              <circle cx={START_X} cy={26} r={6} {...stylex.props(styles.dot)} />
-            </g>
-            {nodes.map((node) => (
-              <g key={node.name}>
-                <rect
-                  x={node.x}
-                  y={0}
-                  width={96}
-                  height={52}
-                  rx={8}
-                  {...stylex.props(styles.node)}
-                />
-                <text
-                  x={node.x + 48}
-                  y={24}
-                  textAnchor="middle"
-                  {...stylex.props(type.ui, styles.name)}
-                >
-                  {node.name}
-                </text>
-                <text
-                  x={node.x + 48}
-                  y={40}
-                  textAnchor="middle"
-                  {...stylex.props(type.tag, styles.sub)}
-                >
-                  {node.sub}
-                </text>
-              </g>
-            ))}
-          </svg>
-        </div>
+        <HeroStage
+          packet={packet}
+          readout={readout}
+          startX={START_X}
+          distance={DISTANCE}
+          roundTripMs={ROUND_TRIP_MS}
+        />
         <div {...stylex.props(styles.controls)}>
           <Button variant="primary" onClick={toggle}>
             {controlLabel(playing, started)}

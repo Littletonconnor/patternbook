@@ -5,9 +5,7 @@ import { useState } from "react";
 import { colors, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
 import { Slider } from "@/ui/Slider";
-import { Switch } from "@/ui/Switch";
 import { Tab, Tabs, TabsList, TabsPanel } from "@/ui/Tabs";
-import { Toggle } from "@/ui/Toggle";
 import { ToggleGroup } from "@/ui/ToggleGroup";
 import { Card, Specs } from "./Section";
 import { ExampleRows } from "./StateMatrix";
@@ -21,7 +19,6 @@ const styles = stylex.create({
     paddingTop: space.s3,
   },
 });
-
 const modes = [
   { value: "offset", label: "Offset" },
   { value: "cursor", label: "Cursor" },
@@ -132,69 +129,6 @@ export function TabsExample() {
             "2px ink bar on the list border · slides between tabs over motion.move, motion.easeOut",
           ],
           ["Focus", "ring on the tab, inset 2px so it is not clipped"],
-        ]}
-      />
-    </Card>
-  );
-}
-
-export function SwitchExample() {
-  return (
-    <Card title="Switch">
-      <ExampleRows
-        rows={[
-          {
-            name: "on",
-            use: "Diagram condition",
-            example: <Switch label="New rows keep arriving" defaultChecked />,
-          },
-          { name: "off", use: "Diagram condition", example: <Switch label="Slow network" /> },
-          {
-            name: "disabled",
-            use: "Not available yet",
-            example: <Switch label="Replay" disabled />,
-          },
-        ]}
-      />
-      <Specs
-        rows={[
-          ["Status", "Built: src/ui/Switch.tsx, Base UI Switch"],
-          ["Props", "label (required) · checked / defaultChecked / onCheckedChange · disabled"],
-          ["Track", "36 × 22 · radius 11 · off lineStrong · on ink · :is([data-checked])"],
-          ["Thumb", "18 × 18 surface, 2px inset, hairline shadow · moves 14px over motion.move"],
-          ["Label", "type.control · gap 10 · the whole row is clickable"],
-          ["Focus", "ring around the track"],
-        ]}
-      />
-    </Card>
-  );
-}
-
-export function ToggleExample() {
-  return (
-    <Card title="Toggle">
-      <ExampleRows
-        rows={[
-          { name: "off", use: "Mark a lesson as read", example: <Toggle>Mark as read</Toggle> },
-          {
-            name: "pressed",
-            use: "Lesson already read",
-            example: <Toggle defaultPressed>Read</Toggle>,
-          },
-          {
-            name: "disabled",
-            use: "Not available yet",
-            example: <Toggle disabled>Mark as read</Toggle>,
-          },
-        ]}
-      />
-      <Specs
-        rows={[
-          ["Status", "Built: src/ui/Toggle.tsx, Base UI Toggle"],
-          ["Props", "pressed / defaultPressed / onPressedChange · size default | small · disabled"],
-          ["Off", "secondary button: surface, lineStrong border, sunken on hover"],
-          ["Pressed", "soundWash fill, sound border, soundInk text · :is([data-pressed])"],
-          ["Focus", "same ring as Button"],
         ]}
       />
     </Card>

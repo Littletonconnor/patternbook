@@ -9,10 +9,18 @@
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
     "lint:directives": "! grep -rnE '(oxlint|eslint)-disable' src",
+    "structure": "node scripts/checkStructure.mts",
     "typecheck": "tsc --noEmit",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "verify": "npm run format:check && npm run lint && npm run lint:directives && npm run typecheck"
+    "verify": "npm run format:check && npm run lint && npm run lint:directives && npm run typecheck && npm run structure",
+    "new:primitive": "node scripts/newPrimitive.mts",
+    "new:lesson": "node scripts/newLesson.mts",
+    "new:diagram": "node scripts/newDiagram.mts",
+    "new:page": "node scripts/newPage.mts",
+    "new:rule": "node scripts/newRule.mts",
+    "new:rfc": "node scripts/newRfc.mts",
+    "promote": "node scripts/promote.mts"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",

@@ -17,6 +17,14 @@ Design and reasoning: [RFC 0001: Agent-first repository](rfc/0001-agent-first-re
 
 Design: [RFC 0002: Architecture](rfc/0002-architecture.md).
 
+- [x] Layers and import direction, enforced by per-layer `no-restricted-imports`
+- [x] Folder moves: route-only code in `_parts/`, shared parts in `components/{shell,lesson,catalog}`, shared hooks in `src/hooks`
+- [x] One way to do each task: Base UI and `next/link` only in `src/ui`, icons through `<Icon>`, browser storage only in `src/hooks`
+- [x] Names: no barrel files, no catch-all names, `PascalCase.tsx` / `camelCase.ts`
+- [x] File and function size limits, oversized files split
+- [x] Structure check (`npm run structure`, part of `verify`)
+- [x] Generators: `new:primitive`, `new:lesson`, `new:diagram`, `new:page`, `new:rule`, `new:rfc`, `promote`
+
 ### 2. Types
 
 Design: [RFC 0003: Types](rfc/0003-types.md).

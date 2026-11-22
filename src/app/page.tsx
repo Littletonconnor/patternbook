@@ -1,9 +1,7 @@
 import * as stylex from "@stylexjs/stylex";
-import { ArrowRight } from "lucide-react";
-import { formatMinutes, lessons, starterLessons, topics, totals } from "@/content/catalog";
-import { lessonHref } from "@/content/types";
+import { formatMinutes, starterLessons, topics, totals } from "@/content/catalog";
 import { Footer } from "@/components/shell/Footer";
-import { HeroDiagram } from "./_parts/HeroDiagram";
+import { HomeHero } from "./_parts/HomeHero";
 import { LevelCards } from "./_parts/LevelCards";
 import { SectionHead } from "@/components/catalog/SectionHead";
 import { Thumbnail } from "@/components/catalog/Thumbnail";
@@ -11,10 +9,7 @@ import { TopicList } from "./_parts/TopicList";
 import { LessonCard } from "@/components/catalog/LessonCard";
 import { Sidebar } from "@/components/shell/Sidebar";
 import { TopBar } from "@/components/shell/TopBar";
-import { colors, measure, space } from "@/tokens/tokens.stylex";
-import { type } from "@/tokens/typography";
-import { ButtonLink } from "@/ui/ButtonLink";
-import { Icon } from "@/ui/Icon";
+import { measure, space } from "@/tokens/tokens.stylex";
 
 const WIDE = "@media (min-width: 768px)";
 
@@ -33,32 +28,6 @@ const styles = stylex.create({
     paddingBottom: space.s8,
     width: "100%",
   },
-  hero: {
-    gap: `${space.s12} ${space.s16}`,
-    alignItems: "center",
-    display: "flex",
-    flexWrap: "wrap",
-    paddingTop: { [WIDE]: space.s24, default: space.s12 },
-  },
-  intro: {
-    gap: space.s6,
-    display: "flex",
-    flexBasis: "420px",
-    flexDirection: "column",
-    flexGrow: "1",
-    flexShrink: "1",
-    minWidth: 0,
-  },
-  eyebrow: { color: colors.inkMuted },
-  headline: { margin: 0, textWrap: "balance" },
-  lede: { margin: 0, color: colors.inkSoft, textWrap: "pretty", maxWidth: 520 },
-  actions: { gap: space.s3, alignItems: "center", display: "flex", flexWrap: "wrap" },
-  facts: {
-    gap: `${space.s2} 20px`,
-    color: colors.inkMuted,
-    display: "flex",
-    flexWrap: "wrap",
-  },
   section: { gap: space.s6, display: "flex", flexDirection: "column", scrollMarginTop: 80 },
   starters: {
     gap: space.s4,
@@ -70,7 +39,6 @@ const styles = stylex.create({
 export default function Home() {
   const all = totals();
   const starters = totals(starterLessons);
-  const hours = Math.round(all.minutes / 60);
 
   return (
     <div {...stylex.props(styles.page)}>
@@ -78,38 +46,7 @@ export default function Home() {
         <TopBar drawer={<Sidebar topics={topics} />} />
       </div>
       <main {...stylex.props(styles.main)}>
-        <section {...stylex.props(styles.hero)}>
-          <div {...stylex.props(styles.intro)}>
-            <div {...stylex.props(type.label, styles.eyebrow)}>
-              Lessons with interactive diagrams
-            </div>
-            <h1 {...stylex.props(type.hero, styles.headline)}>
-              Interactive lessons on software engineering patterns
-            </h1>
-            <p {...stylex.props(type.lede, styles.lede)}>
-              Each lesson explains one problem, such as duplicate rows in offset pagination or race
-              conditions in optimistic updates, and the pattern that solves it. Each lesson also has
-              an interactive diagram of the broken and fixed versions. You can change the inputs,
-              step through both and watch the pattern work. The diagram makes the timing and
-              ordering visible, which is usually where these bugs hide.
-            </p>
-            <div {...stylex.props(styles.actions)}>
-              <ButtonLink variant="primary" size="large" href={lessonHref(lessons[0])}>
-                Start with lesson 1
-                <Icon icon={ArrowRight} size={14} />
-              </ButtonLink>
-              <ButtonLink size="large" href="#topics">
-                Browse all topics
-              </ButtonLink>
-            </div>
-            <div {...stylex.props(type.number, styles.facts)}>
-              <span>{topics.length} topics</span>
-              <span>{all.lessons} lessons</span>
-              <span>about {hours} hours</span>
-            </div>
-          </div>
-          <HeroDiagram />
-        </section>
+        <HomeHero />
 
         <section {...stylex.props(styles.section)}>
           <SectionHead

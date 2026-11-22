@@ -65,12 +65,14 @@ type SliderProps = Omit<
   renderValue?: (value: number) => ReactNode;
 };
 
-function formatValue(
-  formatted: string | undefined,
-  value: number | undefined,
-  unit: string | undefined,
-  renderValue: ((value: number) => ReactNode) | undefined,
-): ReactNode {
+type Readout = {
+  formatted: string | undefined;
+  value: number | undefined;
+  unit: string | undefined;
+  renderValue: ((value: number) => ReactNode) | undefined;
+};
+
+function formatValue({ formatted, value, unit, renderValue }: Readout): ReactNode {
   if (renderValue && value !== undefined) {
     return renderValue(value);
   }
@@ -86,7 +88,9 @@ export function Slider({ label, unit, renderValue, ...props }: SliderProps) {
       <div {...stylex.props(styles.header)}>
         <BaseSlider.Label {...stylex.props(type.ui, styles.label)}>{label}</BaseSlider.Label>
         <BaseSlider.Value {...stylex.props(type.value, styles.value)}>
-          {(formatted, values) => formatValue(formatted[0], values[0], unit, renderValue)}
+          {(formatted, values) =>
+            formatValue({ formatted: formatted[0], value: values[0], unit, renderValue })
+          }
         </BaseSlider.Value>
       </div>
       <BaseSlider.Control {...stylex.props(styles.control)}>

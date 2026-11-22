@@ -34,7 +34,6 @@ const styles = stylex.create({
   },
   number: { color: colors.inkMuted },
 });
-
 export function TooltipExample() {
   return (
     <Card title="Tooltip">
@@ -102,60 +101,6 @@ const topics = [
     ],
   },
 ];
-
-export function CollapsibleExample() {
-  return (
-    <Card title="Collapsible">
-      <ExampleRows
-        rows={[
-          {
-            name: "sidebar topic",
-            use: "APIs starts open",
-            example: (
-              <div {...stylex.props(styles.sidebar)}>
-                {topics.map((topic) => (
-                  <Collapsible key={topic.name} defaultOpen={topic.name === "APIs"}>
-                    <CollapsibleTrigger meta={topic.meta}>{topic.name}</CollapsibleTrigger>
-                    <CollapsiblePanel>
-                      <div {...stylex.props(styles.lessons)}>
-                        {topic.lessons.map((lesson) => (
-                          <span key={lesson.number} {...stylex.props(type.ui, styles.lesson)}>
-                            <span {...stylex.props(type.number, styles.number)}>
-                              {lesson.number}
-                            </span>
-                            {lesson.title}
-                          </span>
-                        ))}
-                      </div>
-                    </CollapsiblePanel>
-                  </Collapsible>
-                ))}
-              </div>
-            ),
-          },
-        ]}
-      />
-      <Specs
-        rows={[
-          [
-            "Status",
-            "Built: src/ui/Collapsible.tsx, Base UI Collapsible (Collapsible, CollapsibleTrigger, CollapsiblePanel)",
-          ],
-          [
-            "Trigger",
-            "padding 6 × 10 · radius 6 · type.ui · closed inkSoft · open ink 600 · hover sunken",
-          ],
-          ["Chevron", "12px, points right; rotates 90° when open over motion.move"],
-          [
-            "Panel",
-            "height animates from 0 with --collapsible-panel-height · motion.move, easeOut",
-          ],
-          ["Reduced motion", "no height animation, opens instantly"],
-        ]}
-      />
-    </Card>
-  );
-}
 
 export function DrawerExample() {
   return (

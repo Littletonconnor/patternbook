@@ -26,49 +26,51 @@ const rows = [
   { name: "external", use: "Go deeper resources" },
 ] as const;
 
+function LinkSample({ row, state }: { row: (typeof rows)[number]; state: PreviewState }) {
+  if (row.name === "inline") {
+    return (
+      <p {...stylex.props(type.small, styles.prose)}>
+        Read the{" "}
+        <Link href="#links" {...preview(state)}>
+          pagination primer
+        </Link>{" "}
+        first.
+      </p>
+    );
+  }
+  if (row.name === "nav") {
+    return (
+      <span {...stylex.props(styles.nav)}>
+        <Link variant="nav" href="#links" {...preview(state)}>
+          Lessons
+        </Link>
+        <Link variant="nav" href="#links" current>
+          About
+        </Link>
+      </span>
+    );
+  }
+  if (row.name === "plain") {
+    return (
+      <Link variant="plain" href="#links" {...preview(state)}>
+        Patternbook
+      </Link>
+    );
+  }
+  return (
+    <Link variant="external" href="https://use-the-index-luke.com" {...preview(state)}>
+      use-the-index-luke.com
+    </Link>
+  );
+}
+
 export function LinkExample() {
   return (
     <Card title="Link">
       <StateMatrix
         rows={rows}
         states={states}
-        render={(row, state) => {
-          if (row.name === "inline") {
-            return (
-              <p {...stylex.props(type.small, styles.prose)}>
-                Read the{" "}
-                <Link href="#links" {...preview(state)}>
-                  pagination primer
-                </Link>{" "}
-                first.
-              </p>
-            );
-          }
-          if (row.name === "nav") {
-            return (
-              <span {...stylex.props(styles.nav)}>
-                <Link variant="nav" href="#links" {...preview(state)}>
-                  Lessons
-                </Link>
-                <Link variant="nav" href="#links" current>
-                  About
-                </Link>
-              </span>
-            );
-          }
-          if (row.name === "plain") {
-            return (
-              <Link variant="plain" href="#links" {...preview(state)}>
-                Patternbook
-              </Link>
-            );
-          }
-          return (
-            <Link variant="external" href="https://use-the-index-luke.com" {...preview(state)}>
-              use-the-index-luke.com
-            </Link>
-          );
-        }}
+        render={(row, state) => <LinkSample row={row} state={state} />}
       />
       <Specs
         rows={[

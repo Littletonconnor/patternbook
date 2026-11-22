@@ -2,8 +2,10 @@ import { defineConfig } from "oxlint";
 import type { OxlintConfig, OxlintOverride } from "oxlint";
 
 type Rules = NonNullable<OxlintConfig["rules"]>;
+type ImportPattern = { regex: string; message: string };
 
-// Files whose names and default exports Next.js requires.
+// Next.js finds these files by name and loads their default export, so they
+// are exempt from the file-name and named-export rules below.
 const nextSpecialFiles = [
   "src/app/**/page.tsx",
   "src/app/**/layout.tsx",
@@ -24,20 +26,22 @@ const nextSpecialFiles = [
   "src/mdx-components.tsx",
   "src/middleware.ts",
   "src/proxy.ts",
+  "scripts/templates/app/page.tsx",
 ];
 
-// Plugin entry points Oxlint loads through a default export.
+// Oxlint loads plugins through a default export, so these files keep one.
 const jsPluginEntries = ["lint/plugin.mts"];
 
-// Tool config files, which their tools load through a default export.
+// Tools load their config through a default export, so these files keep one.
 const toolConfigFiles = ["*.config.ts", "*.config.mts", "*.config.js", "*.config.mjs"];
 
-// Config files that must stay CommonJS, because Next.js loads them with require().
+// Next.js loads these configs with require(), so they stay CommonJS and get
+// the CommonJS override below.
 const commonJsConfigFiles = ["babel.config.js", "postcss.config.js"];
 
-// Layers of src from RFC 0002, bottom to top, with the layers each may import.
-// Imports only point down, so a lower layer can be read and changed without
-// reading anything above it.
+// A lower layer should be readable and changeable without reading anything
+// above it. These are the top-level folders of src from the bottom up, and the
+// layers each one may import. Imports only point down.
 const layerNames = [
   "lib",
   "tokens",
@@ -62,10 +66,10 @@ const allowedImports: Record<Layer, Layer[]> = {
   app: ["lib", "tokens", "content", "ui", "hooks", "diagrams", "components"],
 };
 
-// Imports that fail in every layer. Cross-folder imports use the @/ alias so
-// the layer is visible in the path, and route code is reachable only from its
-// own route through ./_parts.
-const importsBannedEverywhere = [
+// The layer an import comes from should be visible in its path, and code that
+// belongs to one route should stay private to it. So relative imports that
+// leave the folder, and any import of @/app, fail in every layer.
+const importsBannedEverywhere: ImportPattern[] = [
   {
     regex: String.raw`^\.\./`,
     message: "Import from another folder with the @/ alias, so the layer it comes from is visible.",
@@ -77,9 +81,10 @@ const importsBannedEverywhere = [
   },
 ];
 
-// Libraries wrapped by src/ui. Only the ui layer imports them, so every use
-// gets the design system's styling and behaviour.
-const wrappedLibraries = [
+// Every control and link should get the design system's styling and
+// behaviour. These libraries are wrapped by src/ui, so only src/ui may import
+// them.
+const wrappedLibraries: ImportPattern[] = [
   {
     regex: "^@base-ui/",
     message: "Base UI is imported only inside src/ui. Use the wrapped control from @/ui.",
@@ -95,7 +100,7 @@ function bannedLayers(allowed: Layer[], own: Layer) {
   return layerNames.filter((name) => name !== own && !allowed.includes(name));
 }
 
-function layerImports(own: Layer): OxlintOverride {
+function layerPatterns(own: Layer, label = `src/${own}`) {
   const allowed = allowedImports[own];
   const banned = bannedLayers(allowed, own);
   const allowedText = allowed.length > 0 ? allowed.join(", ") : "nothing else in src";
@@ -104,14 +109,45 @@ function layerImports(own: Layer): OxlintOverride {
   if (banned.length > 0) {
     patterns.push({
       regex: `^@/(${banned.join("|")})(/|$)`,
-      message: `src/${own} may import only ${allowedText}. Move the shared code down a layer, or move this module up.`,
+      message: `${label} may import only ${allowedText}. Move the shared code down a layer, or move this module up.`,
     });
   }
-  return { files: [`src/${own}/**`], rules: { "no-restricted-imports": ["error", { patterns }] } };
+  return patterns;
 }
 
-// Definite bugs. Code the TypeScript compiler accepts but that fails or
-// misbehaves at runtime. Every rule here has a single correct fix.
+function importOverride(files: string[], patterns: ImportPattern[]): OxlintOverride {
+  return { files, rules: { "no-restricted-imports": ["error", { patterns }] } };
+}
+
+function layerImports(own: Layer) {
+  return importOverride([`src/${own}/**`], layerPatterns(own));
+}
+
+// A lesson's diagrams draw, so they need tokens, ui and hooks like the diagram
+// kit does. They live in the lesson's folder under content, so that folder gets
+// the diagram kit's import rules instead of content's.
+const lessonDiagramImports = importOverride(
+  ["src/content/lessons/*/**"],
+  layerPatterns("diagrams", "A lesson's diagrams"),
+);
+
+// Generator templates should break the moment a convention changes. Scripts
+// sit outside src and reach into it with relative paths, so the relative ban is
+// lifted there, and each template is checked against the rules of the layer it
+// is copied into.
+const notRelative = (pattern: ImportPattern) => pattern !== importsBannedEverywhere[0];
+const scriptImports = [
+  importOverride(["scripts/**"], wrappedLibraries),
+  importOverride(["scripts/templates/ui/**"], layerPatterns("ui").filter(notRelative)),
+  importOverride(["scripts/templates/app/**"], layerPatterns("app").filter(notRelative)),
+  importOverride(
+    ["scripts/templates/lesson/**"],
+    layerPatterns("diagrams", "A lesson's diagrams").filter(notRelative),
+  ),
+];
+
+// The TypeScript compiler accepts some code that fails or misbehaves at
+// runtime. These rules catch it. Every rule here has a single correct fix.
 const definiteBugs = {
   // Writing to something that should not change.
   "no-const-assign": "error",
@@ -237,9 +273,9 @@ const definiteBugs = {
   "import/export": "error",
 } satisfies Rules;
 
-// Type safety. Keeps `any`, unchecked assertions and compiler suppressions
-// out of the code, so the types describe what actually happens at runtime.
-// Data from JSON.parse, fetch and URL params must be narrowed from `unknown`.
+// Types are only useful if they describe what happens at runtime. These rules
+// keep `any`, unchecked assertions and compiler suppressions out, so data from
+// JSON.parse, fetch and URL params has to be narrowed from `unknown`.
 const typeSafety = {
   "typescript/no-unsafe-argument": "error",
   "typescript/no-unsafe-assignment": "error",
@@ -272,8 +308,9 @@ const typeSafety = {
   "typescript/array-type": ["error", { default: "array" }],
 } satisfies Rules;
 
-// Promises and errors. Rejections that disappear, errors thrown as strings,
-// and failures swallowed by empty blocks.
+// A failure nobody sees is the hardest kind to debug. These rules catch
+// rejections that disappear, errors thrown as strings, and failures swallowed
+// by empty blocks.
 const promisesAndErrors = {
   "typescript/no-floating-promises": "error",
   // `attributes: false` allows async event handlers in JSX, which React supports.
@@ -293,9 +330,9 @@ const promisesAndErrors = {
   "no-empty": "error",
 } satisfies Rules;
 
-// Modules and imports. Type-only imports marked with `import type`, named
-// imports and exports only, and file names that match what the file exports.
-// Next.js special files get an override below.
+// A module should be findable from the name of what it exports. These rules
+// require named imports and exports, `import type` for type-only imports, and
+// file names that match the export. Next.js special files get an override below.
 const modulesAndImports = {
   "typescript/consistent-type-imports": "error",
   "import/consistent-type-specifier-style": ["error", "prefer-top-level"],
@@ -306,7 +343,8 @@ const modulesAndImports = {
   "unicorn/filename-case": ["error", { cases: { camelCase: true, pascalCase: true } }],
 } satisfies Rules;
 
-// React. Hooks, the React Compiler's rules, JSX mistakes and legacy APIs.
+// React code that breaks hooks, defeats the React Compiler or uses removed
+// APIs fails quietly in the browser. These rules catch it at lint time.
 const react = {
   // Hooks and the React Compiler: components the compiler cannot optimise safely.
   "react/rules-of-hooks": "error",
@@ -352,9 +390,9 @@ const react = {
   "react/require-render-return": "error",
 } satisfies Rules;
 
-// One way to write each thing. Where the language offers several forms of the
-// same operation, the form that hides bugs or reads worse is banned, so agents
-// copy one pattern and reviewers read one pattern.
+// When the language offers several ways to write the same thing, agents copy
+// all of them and reviewers have to read all of them. These rules keep one
+// form: the one that hides fewer bugs and reads better.
 const oneWayToWriteEachThing = {
   // Forms that hide bugs.
   curly: "error",
@@ -410,14 +448,15 @@ const oneWayToWriteEachThing = {
   "unicorn/prefer-dom-node-append": "error",
   "unicorn/prefer-node-protocol": "error",
 
-  // unicorn/no-instanceof-builtins: Array.isArray and typeof instead of instanceof on built-in types. unicorn/no-abusive-eslint-disable: disable comments must name a rule.
+  // instanceof fails across realms, so built-in types are checked with
+  // Array.isArray and typeof. A disable comment must name the rule it silences.
   "unicorn/no-instanceof-builtins": "error",
   "unicorn/no-abusive-eslint-disable": "error",
 } satisfies Rules;
 
-// Next.js. Native port of @next/eslint-plugin-next, all 21 rules. Catches
-// framework misuse that renders fine but costs performance or correctness,
-// such as <img> instead of next/image or <a> instead of Link.
+// Some framework misuse renders fine but costs performance or correctness,
+// such as <img> instead of next/image. These are all 21 rules of the Next.js
+// plugin, run natively.
 const nextjs = {
   "nextjs/google-font-display": "error",
   "nextjs/google-font-preconnect": "error",
@@ -442,8 +481,8 @@ const nextjs = {
   "nextjs/no-unwanted-polyfillio": "error",
 } satisfies Rules;
 
-// Accessibility. Native port of eslint-plugin-jsx-a11y. Markup that screen
-// readers and keyboards cannot use, which a screenshot never shows.
+// A screenshot never shows markup that screen readers and keyboards cannot
+// use. These rules from the jsx-a11y plugin, run natively, catch it.
 const accessibility = {
   "jsx-a11y/alt-text": "error",
   "jsx-a11y/anchor-has-content": "error",
@@ -480,8 +519,8 @@ const accessibility = {
   "jsx-a11y/tabindex-no-positive": "error",
 } satisfies Rules;
 
-// StyleX. Loaded from @stylexjs/eslint-plugin through jsPlugins. Styles the
-// StyleX compiler cannot handle, or that behave unexpectedly.
+// Some styles compile to something unexpected, or don't compile at all. These
+// rules come from StyleX's own plugin, loaded through jsPlugins.
 const stylex = {
   "@stylexjs/valid-styles": "error",
   "@stylexjs/no-unused": "error",
@@ -492,8 +531,21 @@ const stylex = {
   "@stylexjs/no-legacy-contextual-styles": "error",
 } satisfies Rules;
 
-// Existing rules configured for this codebase. Local rules from ./lint/plugin.mts go here too.
+// Conventions specific to this repository. The local rules from
+// ./lint/plugin.mts keep barrels, catch-all names, raw icons and stray storage
+// access out. Files and functions should fit on about one screen, so the size
+// limits cap lines, nesting and branching.
 const repository = {
+  "patternbook/no-barrel-files": "error",
+  "patternbook/no-catch-all-names": "error",
+  "patternbook/icons-through-icon": "error",
+  "patternbook/storage-in-hooks": "error",
+  "max-lines": ["error", { max: 200, skipBlankLines: true, skipComments: false }],
+  "max-lines-per-function": ["error", { max: 60, skipBlankLines: true }],
+  "react/jsx-max-depth": ["error", { max: 5 }],
+  complexity: ["error", { max: 10 }],
+  "max-depth": ["error", { max: 3 }],
+  "max-params": ["error", { max: 3 }],
   "no-restricted-imports": [
     "error",
     { patterns: [...importsBannedEverywhere, ...wrappedLibraries] },
@@ -502,14 +554,15 @@ const repository = {
 } satisfies Rules;
 
 export default defineConfig({
-  // Native plugins: Rust ports of ESLint plugins. Turning one on enables nothing
-  // by itself; each rule is still named below.
+  // Each plugin's rules have to be named before they can run. These are the
+  // native plugins, Rust ports of ESLint plugins. Turning one on enables nothing
+  // by itself.
   plugins: ["typescript", "react", "nextjs", "jsx-a11y", "import", "unicorn", "promise", "oxc"],
-  // ESLint-format plugins with no native port, loaded through Oxlint's JS plugin
-  // support: StyleX's published plugin, and this repository's local rules.
+  // StyleX's plugin and this repository's local rules have no native port, so
+  // they run through Oxlint's support for ESLint-format plugins.
   jsPlugins: ["@stylexjs/eslint-plugin", "./lint/plugin.mts"],
-  // Categories are Oxlint's preset groups of rules. All off, so only the rules
-  // named here run.
+  // Every rule that runs should be one we chose. Categories are Oxlint's preset
+  // groups of rules, so all of them are off and only the rules named here run.
   categories: {
     correctness: "off",
     suspicious: "off",
@@ -520,13 +573,15 @@ export default defineConfig({
     nursery: "off",
   },
   options: {
-    // Runs the rules that need type information (the no-unsafe-* family,
-    // floating promises and others) through oxlint-tsgolint.
+    // Some rules, such as the no-unsafe-* family and floating promises, need type
+    // information. This runs them through oxlint-tsgolint.
     typeAware: true,
-    // A disable comment that no longer suppresses anything fails the run.
+    // A stale disable comment hides the next real problem on that line, so one
+    // that no longer suppresses anything fails the run.
     reportUnusedDisableDirectives: "error",
   },
-  // Build output and files Next.js generates.
+  // Generated files are not ours to fix, so build output and Next.js's
+  // generated types are skipped.
   ignorePatterns: [".next/**", "out/**", "build/**", "next-env.d.ts"],
   rules: {
     ...definiteBugs,
@@ -541,10 +596,25 @@ export default defineConfig({
     ...repository,
   },
   overrides: [
-    // One override per layer: the imports each layer may not make.
+    // A catalog of every lesson is long by nature, and so is this config, so
+    // these files are exempt from the line limit.
+    {
+      files: [
+        "src/content/catalog.ts",
+        "src/content/glossary.ts",
+        "src/content/diagrams.ts",
+        "oxlint.config.mts",
+      ],
+      rules: { "max-lines": "off" },
+    },
+    // Each layer may only import the layers below it, so each gets an override
+    // listing the imports it may not make.
     ...layerNames.map((name) => layerImports(name)),
-    // The compiler already reports these on TypeScript files, and
-    // no-throw-literal gives way to its type-aware version, only-throw-error.
+    lessonDiagramImports,
+    ...scriptImports,
+    // The compiler already reports these on TypeScript files, so they are off
+    // there. no-throw-literal is replaced by its type-aware version,
+    // only-throw-error.
     {
       files: ["**/*.ts", "**/*.tsx", "**/*.mts"],
       rules: {
@@ -555,7 +625,8 @@ export default defineConfig({
         "no-throw-literal": "off",
       },
     },
-    // Next.js and tools require default exports and their own file names.
+    // Next.js and tools find these files by name and load a default export, so
+    // the naming and named-export rules are off for them.
     {
       files: [...nextSpecialFiles, ...toolConfigFiles, ...jsPluginEntries],
       rules: {
@@ -563,8 +634,8 @@ export default defineConfig({
         "unicorn/filename-case": "off",
       },
     },
-    // CommonJS config files: require() is allowed, and the type-aware rules are
-    // off because require() returns untyped values.
+    // These configs must stay CommonJS, so require() is allowed. require()
+    // returns untyped values, so the type-aware rules are off.
     {
       files: commonJsConfigFiles,
       env: { node: true, commonjs: true },
