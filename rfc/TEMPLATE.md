@@ -12,10 +12,6 @@ The general problem first, with evidence from research. Then one subsection per 
 
 Numbered outcomes. Each one states what will be true and how it is measured.
 
-## Non-goals
-
-Things that could reasonably be goals but are deliberately left out, and where they go instead.
-
 ## Proposal
 
 The design, ordered by priority, with a diagram where structure matters (`assets/NNNN-name.svg`). For each part: the practice, why it is needed, why it holds its place in the order, and how this repository achieves it. Cite with numbered links such as `[[1]](#sources)`.

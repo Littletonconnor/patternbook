@@ -1,4 +1,4 @@
-# RFC 0003: Repository architecture
+# RFC 0002: Architecture
 
 ## Summary
 
@@ -51,12 +51,6 @@ Code placed in a shared folder before a second user exists is a guess about reus
 5. **One supported way to do each task.** Base UI is imported only in `src/ui`, `next/link` only in `src/ui/Link`, Lucide only in `src/ui/Icon`, and `localStorage` only in `src/hooks`. Each is enforced by lint.
 6. **New modules start in the right place.** Lessons, primitives and diagrams are created by generator commands that write files to the correct folder with the expected shape.
 
-## Non-goals
-
-- **The structural check itself.** It needs a test runner, which is designed separately. Until it exists, the lint rules in part 6 enforce everything they can.
-- **Workspaces or packages.** One Next.js app does not need a monorepo. Revisit if a second app or a published package appears.
-- **Adopting a published methodology wholesale.** Layered methodologies such as Feature-Sliced Design are a source of patterns [[6]](#sources), not a dependency. Their standard layer names do not fit a content site with a design system and a diagram kit.
-
 ## Proposal
 
 The parts are ordered by how much each one prevents. The import direction comes first because it is fully enforced by lint and stops the most damaging kind of drift, coupling between parts that should stay separate. Fixed homes come next, because they decide where each file goes. Colocation and naming refine those homes. Wrappers and generators make the correct path the easiest one. Enforcement and migration close the RFC.
@@ -65,7 +59,7 @@ The parts are ordered by how much each one prevents. The import direction comes 
 
 A layer is a top-level folder in `src` with one role. Layers are stacked by how much of the application each one knows about. Code may import from layers below it and never from layers above, so a lower layer can always be understood, and changed, without reading anything above it [[1]](#sources) [[6]](#sources) [[7]](#sources).
 
-![Layer diagram of src: app at the top, then components, diagrams, ui and hooks, tokens and content, and lib at the bottom. Imports only point down.](assets/0003-layers.svg)
+![Layer diagram of src: app at the top, then components, diagrams, ui and hooks, tokens and content, and lib at the bottom. Imports only point down.](assets/0002-layers.svg)
 
 From the bottom up:
 
@@ -144,7 +138,7 @@ When a convention changes, its generator changes in the same commit, so new code
 
 Every rule above is checked by a tool. Describing the structure in prose does not make agents follow it [[12]](#sources); failing the build does [[3]](#sources) [[4]](#sources).
 
-- **Import direction and wrappers** use `no-restricted-imports` in one override per layer in `oxlint.config.ts`, as defined in RFC 0002. Each error message names the layer the import should come from or the wrapper to use. The same approach is used by published React architecture guides with `import/no-restricted-paths` [[7]](#sources).
+- **Import direction and wrappers** use `no-restricted-imports` in one override per layer in `oxlint.config.ts`, as defined in RFC 0004. Each error message names the layer the import should come from or the wrapper to use. The same approach is used by published React architecture guides with `import/no-restricted-paths` [[7]](#sources).
 - **File names** use `unicorn/filename-case`, with named overrides for Next.js special files.
 - **Barrels and catch-all names** are reported by a small local rule that checks the file path.
 - **Placement** is checked by the structural check once a test runner exists. Its failure message says where the file belongs.
@@ -180,7 +174,7 @@ Moving files changes history and conflicts with work in progress, so the moves h
 | 11  | [Dune method write-up](https://github.com/Dahhrk/dark-factory/blob/main/docs/dune-method.md)                                             | Secondary write-up             | The conventional path should take fewer decisions than a shortcut; generators; one writer for each piece of durable state.                         |
 | 12  | [Gloaguen et al. 2026](https://arxiv.org/abs/2602.11988)                                                                                 | Peer-reviewed (ICLR)           | Repository overviews in context files did not improve agent results and raised cost.                                                               |
 | 13  | [RFC 0001: Agent-first repository](0001-agent-first-repo.md)                                                                             | This repository                | Architecture is the base of the priority pyramid.                                                                                                  |
-| 14  | [RFC 0002: Lint and format with the Oxc toolchain](0002-oxlint.md)                                                                       | This repository                | The linter and config that enforce the import rules.                                                                                               |
+| 14  | [RFC 0004: Lint](0004-lint.md)                                                                                                           | This repository                | The linter and config that enforce the import rules.                                                                                               |
 
 Speed figures in sources 8 and 9 are self-reported by their authors, from single projects. Source 3 is an industry report whose throughput figures are not used here.
 
@@ -201,7 +195,7 @@ The strongest counter-argument is the Next.js position itself: any organisation 
 - **Full Feature-Sliced Design.** A complete, documented layer system with tooling [6]. Not chosen because its standard layers (entities, features, widgets) describe business-domain apps, and mapping a design system and diagram kit onto them adds names without adding rules.
 - **`components/<page>/` instead of `_parts/`.** Keeps every component in one tree. Not chosen because route-only code ends up far from its route, and the folder name does not say who may import it.
 - **A flat `components/` folder.** Fewer placement decisions. Not chosen because it mixes page parts, single-route sections and storage hooks today, and will roughly double as lessons and diagrams arrive.
-- **`eslint-plugin-boundaries` or `dependency-cruiser`.** Purpose-built for layer rules, with richer reports. Not chosen because `no-restricted-imports` in per-layer overrides covers eight folders with no new dependency and runs inside the single linter from RFC 0002.
+- **`eslint-plugin-boundaries` or `dependency-cruiser`.** Purpose-built for layer rules, with richer reports. Not chosen because `no-restricted-imports` in per-layer overrides covers eight folders with no new dependency and runs inside the single linter from RFC 0004.
 - **Keep barrels for `src/ui`.** Shorter imports for the most used folder. Not chosen because the costs in sources 8 and 9 apply to internal folders too, and named file imports keep each control's dependencies visible.
 
 ## Tradeoffs and risks

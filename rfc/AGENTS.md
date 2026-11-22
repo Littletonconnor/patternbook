@@ -13,7 +13,7 @@ Not for a single component, a bug fix, copy changes, or work that follows a patt
 
 ## Process
 
-1. **Write.** Copy `TEMPLATE.md` to `NNNN-short-slug.md`, using the next free number. Research first, then write the proposal. The change adds the RFC and its assets, nothing else.
+1. **Write.** Copy `TEMPLATE.md` to `NNNN-short-slug.md`. RFC 0001 is the overview, and 0002 to 0007 are the layers of its priority pyramid in order: architecture, types, lint, tests, runtime verification, prose. Each layer's RFC is named after its layer. Any other RFC takes the next free number from 0008. Research first, then write the proposal. The change adds the RFC and its assets, nothing else.
 2. **Review.** Answer questions by editing the RFC, so the document stays the single record. Do not leave open questions: where there is a choice, recommend an option and give the evidence.
 3. **Decide.** The maintainer decides. Once agreed, update the RFC to match the decision, then turn it into `TODO.md` items that link back to it. The link runs one way: an RFC never points to `TODO.md`, because the RFC is the lasting record and the task list changes.
 

@@ -11,23 +11,31 @@ Work top to bottom. Each phase builds on the one before it. Board numbers refer 
 
 ## Agent-driven repo
 
-Design and reasoning: [RFC 0001: Agent-first repository](rfc/0001-agent-first-repo.md). Each sub-section below matches a layer of the RFC's priority pyramid, from most to least deterministic. Where a layer has its own RFC, the sub-section links to it. Sub-sections stay empty until the implementation details are agreed.
+Design and reasoning: [RFC 0001: Agent-first repository](rfc/0001-agent-first-repo.md). Each sub-section below matches a layer of the RFC's priority pyramid, from most to least deterministic. Each sub-section links to its layer's RFC. Sub-sections stay empty until the implementation details are agreed.
 
 ### 1. Architecture
 
-Design: [RFC 0003: Repository architecture](rfc/0003-architecture.md).
+Design: [RFC 0002: Architecture](rfc/0002-architecture.md).
 
 ### 2. Types
 
+Design: [RFC 0003: Types](rfc/0003-types.md).
+
 ### 3. Lint rules
 
-Design: [RFC 0002: Lint and format with the Oxc toolchain](rfc/0002-oxlint.md).
+Design: [RFC 0004: Lint](rfc/0004-lint.md).
 
 ### 4. Tests
 
+Design: [RFC 0005: Tests](rfc/0005-tests.md).
+
 ### 5. Runtime verification
 
+Design: [RFC 0006: Runtime verification](rfc/0006-runtime-verification.md).
+
 ### 6. Prose
+
+Design: [RFC 0007: Prose](rfc/0007-prose.md).
 
 ## 1. Primitives (`src/ui`)
 
