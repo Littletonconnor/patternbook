@@ -8,7 +8,7 @@ This RFC gives every kind of module one home and fixes the direction imports may
 
 ## Problem
 
-Architecture here means two things: where each piece of code lives, and which code is allowed to import which. Software architecture erodes when actual structure drifts from intended structure. The drift comes from many small changes that each look reasonable, it is usually noticed only through symptoms, and few tools detect it [[2]](#sources). Agents speed it up because they replicate whatever patterns already exist, including poor ones [[3]](#sources). Next.js does not prevent any of this: it leaves organisation to each project and asks only that the project be consistent [[5]](#sources). Nothing makes a project consistent unless a check does.
+Architecture here means two things: where each piece of code lives, and which code is allowed to import which. Software architecture erodes when actual structure drifts from intended structure. The drift comes from many small changes that each look reasonable, it is usually noticed only through symptoms, and few tools detect it [[2]](#sources). Agents speed it up because they replicate whatever patterns already exist, including poor ones [[3]](#sources).
 
 ### Code without a fixed home
 
@@ -50,10 +50,11 @@ Code placed in a shared folder before a second user exists is a guess about reus
 4. **Route-only code lives with its route.** Every module imported by one route sits in that route's `_parts/` folder. Every module imported by two or more routes sits in `src/components`.
 5. **One supported way to do each task.** Base UI is imported only in `src/ui`, `next/link` only in `src/ui/Link`, Lucide only in `src/ui/Icon`, and `localStorage` only in `src/hooks`. Each is enforced by lint.
 6. **New modules start in the right place.** Every repeated addition (primitives, lessons, diagrams, pages, lint rules, RFCs) and every promotion out of `_parts/` is done by a generator command, so its location, names and registration are never written by hand.
+7. **Files stay small enough to read whole.** No file in `src` passes 200 lines and no function passes 60, outside the named data files. Measured by `max-lines` and `max-lines-per-function` at zero violations.
 
 ## Proposal
 
-The parts are ordered by how much each one prevents. The import direction comes first because it is fully enforced by lint and stops the most damaging kind of drift, coupling between parts that should stay separate. Fixed homes come next, because they decide where each file goes. Colocation and naming refine those homes. Wrappers and generators make the correct path the easiest one. Enforcement and migration close the RFC.
+The parts are ordered by how much each one prevents. The import direction comes first because it is fully enforced by lint and stops the most damaging kind of drift, coupling between parts that should stay separate. Fixed homes come next, because they decide where each file goes. Colocation and naming refine those homes. Wrappers and generators make the correct path the easiest one. Enforcement closes the RFC.
 
 ### 1. Layers and import direction
 
@@ -96,7 +97,13 @@ scripts/               Repository scripts, such as screenshots and generators
 rfc/                   Decisions
 ```
 
-`components` is split by area because a flat folder stops telling the reader anything once it passes a couple of dozen files, and because the area names say which page each part belongs to. The three areas match how the site is built: the shell around every page, the parts of a lesson, and the parts that list lessons and diagrams. A new area needs a new RFC, so areas do not multiply.
+`components` is split by area because a flat folder stops telling the reader anything once it passes a couple of dozen files, and because the area names say which page each part belongs to. The three areas match how the site is built: the shell around every page, the parts of a lesson, and the parts that list lessons and diagrams.
+
+Areas come from how modules are used, not from a decision made in advance, so the repository can tell when a new one is needed. An area is defined by the routes that use its modules: `shell` holds modules used by every route, `lesson` holds modules used only by lesson routes, and `catalog` holds modules used by the routes that list lessons and diagrams.
+
+- **Placing a promoted module.** When a module leaves `_parts/`, the `promote` generator (part 6) looks at which routes import it and moves it into the area whose routes match.
+- **Creating an area.** If no existing area matches, the module waits for company. Once three promoted modules share the same set of importing routes that no area covers, `promote` creates a new area for them, named after what those routes have in common. Three is the threshold because one or two modules are a coincidence, while three are a pattern worth a folder.
+- **Splitting an area.** An area that grows past about fifteen files has stopped describing its contents. The structural check reports it, along with any module whose importers no longer match its area, and the fix is to split the area by the same rule.
 
 Folders under `app` that are not routes start with an underscore. Next.js treats an underscore folder as private and never turns it into a URL, so route-only code can sit beside its route safely [[5]](#sources).
 
@@ -108,6 +115,25 @@ Code starts as close as possible to the one place that uses it, and moves out on
 - **A hook used by one component** stays in that component's file. When a second module needs it, it moves to `src/hooks` as `useThing.ts`. Animation hooks live in `src/diagrams`, because nothing else should animate.
 - **A lesson's diagrams** live in that lesson's folder. A diagram reused by a second lesson moves into the kit.
 - **New work adds files** instead of editing shared ones. A lesson is a folder, and whether it is written is derived from its MDX file existing, not from a flag kept in sync by hand [[11]](#sources).
+
+#### When to split a file
+
+Colocation says where code goes; it does not say how much belongs in one file. A file that does several things is hard to read, and it is also hard for an agent to edit. In one controlled study, an agent that viewed files 100 lines at a time solved more tasks than the same agent shown whole files (18.0% against 12.7%), and showing too little, 30 lines, also hurt (14.3%) [[21]](#sources). Code that fits in one screen is code an agent can see all of at once.
+
+The rule is the one React gives for components: each one should be concerned with one thing, and when it grows, it is decomposed into smaller pieces [[20]](#sources). That is the same idea as hiding one decision per module [[1]](#sources). In practice:
+
+- **Keep it in the file** when a piece is small, used only by the file's main component, and has no state of its own. A row, a label or a list item that exists to make the main component read clearly stays as an unexported function in the same file, below the main component.
+- **Extract a subcomponent in the same file** when a block of JSX has a name of its own in the design, repeats, or nests deeper than the limit below. Naming the block makes the main component read as an outline of the page.
+- **Move it to its own file** when it has its own state, Effects or hooks, when another module needs it, or when the file passes the size limit. A file exports one component, named after the file, so moving a piece out is how it becomes reusable.
+
+The limits are enforced by lint, so the decision does not rely on judgment:
+
+- **`max-lines`**: 200 lines per file, not counting blank lines. Data files in `src/content` are exempt by name, because a catalog of 83 lessons is long by nature.
+- **`max-lines-per-function`**: 60 lines per function, which keeps every component and hook to about one screen.
+- **`react/jsx-max-depth`**: 5 levels of nested JSX. Deeper markup is a sign that a block deserves a name.
+- **`complexity`** at 10, **`max-depth`** at 3 and **`max-params`** at 3: functions with many branches, deep nesting or long argument lists are split or given an options object.
+
+When a limit fails, the error message says to extract the largest named block into a subcomponent, so the fix is mechanical.
 
 ### 4. Names that say what a module is
 
@@ -159,20 +185,9 @@ Every rule above is checked by a tool. Describing the structure in prose does no
 
 - **Import direction and wrappers** use `no-restricted-imports` in one override per layer in `oxlint.config.ts`, as defined in RFC 0004. Each error message names the layer the import should come from or the wrapper to use. The same approach is used by published React architecture guides with `import/no-restricted-paths` [[7]](#sources).
 - **File names** use `unicorn/filename-case`, with named overrides for Next.js special files.
+- **File and function size** use `max-lines`, `max-lines-per-function`, `react/jsx-max-depth`, `complexity`, `max-depth` and `max-params`, as set out in part 3.
 - **Barrels and catch-all names** are reported by a small local rule that checks the file path.
 - **Placement** is checked by the structural check once a test runner exists. Its failure message says where the file belongs.
-
-### 8. Migration
-
-Moving files changes history and conflicts with work in progress, so the moves happen in one change once in-flight work has landed, and the lint rules land in the same change so the structure cannot drift back.
-
-- `Brand`, `Footer`, `TopBar`, `Sidebar`, `SidebarColumns`, `SidebarToggle`, `PageShell`, `PageIntro`, `PageRail` and `sidebarScript` move to `components/shell/`.
-- `LessonLayout`, `LessonHeader`, `LessonEnd`, `Pager`, `Prose`, `Callout`, `CodeBlock`, `CodeTabs`, `Term`, `Table` and `ResourceList` move to `components/lesson/`.
-- `LessonCard`, `DiagramCard`, `DiagramIndex`, `DiagramSketch`, `Thumbnail` and `SectionHead` move to `components/catalog/`.
-- `HeroDiagram`, `LevelCards` and `TopicList`, used only by the homepage, move to `app/_parts/`.
-- `readState`, `sidebarState` and `levelFilter` read and write browser storage, so they become hooks in `src/hooks/`.
-- The `/foundations` modules move to `app/foundations/_parts/`.
-- `app/ogImage.tsx`, shared by two Open Graph image routes, moves to `components/shell/`.
 
 ## Research
 
@@ -199,6 +214,8 @@ Moving files changes history and conflicts with work in progress, so the moves h
 | 17  | [Plop README](https://unpkg.com/plop@4.0.5/README.md)                                                                                    | Official docs                  | A micro-generator framework that turns the right way into the easiest way to make new files.                                                       |
 | 18  | [Rails guides, Creating and customizing generators](https://guides.rubyonrails.org/generators.html)                                      | Official docs                  | Generators automate boilerplate; project templates override defaults to match conventions.                                                         |
 | 19  | [Wen et al. 2019](https://www.inf.usi.ch/faculty/lanza/PUBS/P/Wen2019a.pdf)                                                              | Peer-reviewed (ICPC)           | Only 13% to 20% of code changes come with changes to the related comments.                                                                         |
+| 20  | [React, Thinking in React](https://react.dev/learn/thinking-in-react)                                                                    | Official docs                  | A component should be concerned with one thing; when it grows, it is decomposed into smaller subcomponents.                                        |
+| 21  | [Yang et al. 2024, SWE-agent](https://arxiv.org/abs/2405.15793)                                                                          | Peer-reviewed (NeurIPS)        | A 100-line file viewer resolved 18.0% of tasks, against 14.3% for 30 lines and 12.7% for whole files.                                              |
 
 Speed figures in sources 8 and 9 are self-reported by their authors, from single projects. Source 3 is an industry report whose throughput figures are not used here.
 
@@ -211,6 +228,7 @@ Speed figures in sources 8 and 9 are self-reported by their authors, from single
 5. Code should stay next to its only user until a second user appears [10]. Next.js private folders make that safe inside `app` [5].
 6. Describing a structure in prose does not change agent behaviour; enforcing it does [3] [12].
 7. Generating repeated code is more reliable than describing it: generator tools exist to make the conventional path the easiest one, and scaffolding is deterministic work best kept out of the model [15] [16] [17] [18]. Snippets in documentation are unchecked text and drift like comments [19].
+8. Small, single-purpose files help agents as well as people. An agent edits more accurately seeing about 100 lines at a time than a whole file [21], and React's guidance is to split a component once it does more than one thing [20].
 
 The strongest counter-argument is the Next.js position itself: any organisation works if it is consistent [5]. This RFC agrees, and treats consistency as the thing to enforce, since without enforcement no organisation stays consistent [2].
 
@@ -227,7 +245,6 @@ The strongest counter-argument is the Next.js position itself: any organisation 
 
 - **Promotion moves files.** Moving a module when a second route needs it adds a file move to a change that was about something else. This is deliberate: the move is the signal that the module became shared.
 - **Strict layers can feel indirect.** Code that a lower layer needs from a higher one has to be passed down as a prop or moved down. That is the cost of being able to read each layer on its own.
-- **The migration churns history.** One large move makes `git blame` harder to follow. Doing it in a single change, with no other edits, keeps it easy to skip in history.
 - **Placement is only partly enforced until tests exist.** Lint catches wrong imports and names, but not a file in the wrong folder that imports nothing wrong.
 
-Revisit if the site gains a second app, if a fourth `components` area is needed, or if lint-based boundaries become too slow or too coarse.
+Revisit if the site gains a second app, if areas start splitting often enough to suggest the rule is wrong, or if lint-based boundaries become too slow or too coarse.

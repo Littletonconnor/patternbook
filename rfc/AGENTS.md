@@ -43,4 +43,5 @@ The register is a technical design document, not a conversation.
 - **Give alternatives their best case** before saying why they lose.
 - **Plain, precise language.** Full sentences, short paragraphs, terms defined on first use. No hype words (powerful, seamless, robust, leverage), no arrow chains, no fragments.
 - **Diagrams where structure matters.** Hand-drawn style SVGs in `rfc/assets/`, named `NNNN-name.svg`, with alt text that states the content.
+- **No migration plans.** An RFC records the decision and its reasons. How and when the change rolls out belongs in `TODO.md`, not the RFC.
 - **Small code snippets only**, to show a shape. Aim for under about 400 lines; longer usually means two RFCs.
