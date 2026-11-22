@@ -1,4 +1,5 @@
 import type { DiagramKind } from "@/content/types";
+
 import { DiagramSketch } from "./DiagramSketch";
 
 const bySlug: Record<string, DiagramKind> = {

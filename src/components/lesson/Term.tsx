@@ -1,5 +1,6 @@
 import * as stylex from "@stylexjs/stylex";
 import type { ReactNode } from "react";
+
 import { glossary } from "@/content/glossary";
 import type { GlossaryId } from "@/content/glossary";
 import { colors, motion, radius } from "@/tokens/tokens.stylex";

@@ -1,12 +1,14 @@
-import type { Metadata } from "next";
 import * as stylex from "@stylexjs/stylex";
+import type { Metadata } from "next";
+
 import { colors, measure, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
+
 import { Colour } from "./_parts/Colour";
 import { Layout } from "./_parts/Layout";
-import { Typography } from "./_parts/Typography";
-import { Primitives } from "./_parts/Primitives";
 import { PageParts } from "./_parts/PageParts";
+import { Primitives } from "./_parts/Primitives";
+import { Typography } from "./_parts/Typography";
 
 export const metadata: Metadata = { title: "Foundations · Patternbook" };
 

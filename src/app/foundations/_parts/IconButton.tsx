@@ -1,9 +1,11 @@
 import * as stylex from "@stylexjs/stylex";
-import { Card, Specs } from "./Section";
-import { type } from "@/tokens/typography";
-import { colors } from "@/tokens/tokens.stylex";
-import { IconButton } from "@/ui/IconButton";
 import { Copy, Menu, Play, RotateCcw, StepForward } from "lucide-react";
+
+import { colors } from "@/tokens/tokens.stylex";
+import { type } from "@/tokens/typography";
+import { IconButton } from "@/ui/IconButton";
+
+import { Card, Specs } from "./Section";
 import { StateMatrix, previewProps } from "./StateMatrix";
 
 const styles = stylex.create({

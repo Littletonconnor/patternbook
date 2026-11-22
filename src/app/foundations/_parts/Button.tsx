@@ -1,11 +1,13 @@
 import * as stylex from "@stylexjs/stylex";
-import { Card, Specs } from "./Section";
-import { previewProps, StateMatrix } from "./StateMatrix";
-import { type } from "@/tokens/typography";
+import { RotateCcw } from "lucide-react";
+
 import { colors } from "@/tokens/tokens.stylex";
+import { type } from "@/tokens/typography";
 import { Button } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";
-import { RotateCcw } from "lucide-react";
+
+import { Card, Specs } from "./Section";
+import { previewProps, StateMatrix } from "./StateMatrix";
 
 const styles = stylex.create({
   note: { margin: 0, color: colors.inkSoft },

@@ -1,9 +1,11 @@
-import NextLink from "next/link";
 import * as stylex from "@stylexjs/stylex";
-import type { ComponentProps } from "react";
 import { ArrowUpRight } from "lucide-react";
+import NextLink from "next/link";
+import type { ComponentProps } from "react";
+
 import { colors, motion, radius } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
+
 import { Icon } from "./Icon";
 
 const HOVER = "@media (hover: hover)";

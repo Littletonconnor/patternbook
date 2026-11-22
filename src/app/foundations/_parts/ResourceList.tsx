@@ -1,5 +1,6 @@
 import * as stylex from "@stylexjs/stylex";
 import { ArrowUpRight } from "lucide-react";
+
 import { colors, motion, radius, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
 import { Icon } from "@/ui/Icon";

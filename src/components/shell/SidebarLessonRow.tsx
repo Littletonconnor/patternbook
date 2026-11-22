@@ -1,5 +1,6 @@
 import * as stylex from "@stylexjs/stylex";
 import { CircleCheck, FileText } from "lucide-react";
+
 import { lessonHref } from "@/content/types";
 import type { Lesson } from "@/content/types";
 import { colors, motion } from "@/tokens/tokens.stylex";

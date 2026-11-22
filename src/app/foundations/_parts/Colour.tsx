@@ -1,6 +1,8 @@
 import * as stylex from "@stylexjs/stylex";
+
 import { colors, radius, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
+
 import { Card, Section, Token } from "./Section";
 
 const HATCH = `repeating-linear-gradient(135deg, ${colors.faultWash} 0 6px, color-mix(in srgb, ${colors.fault} 25%, ${colors.faultWash}) 6px 8px)`;

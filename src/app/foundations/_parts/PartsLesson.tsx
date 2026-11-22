@@ -1,12 +1,14 @@
 import * as stylex from "@stylexjs/stylex";
+
+import { LessonCard, LessonGrid } from "@/components/catalog/LessonCard";
 import { Callout } from "@/components/lesson/Callout";
 import { CodeBlock } from "@/components/lesson/CodeBlock";
-import { LessonCard, LessonGrid } from "@/components/catalog/LessonCard";
 import { LessonHeader } from "@/components/lesson/LessonHeader";
 import { Code, H2, Item, List, P, Prose, Strong } from "@/components/lesson/Prose";
 import { Term } from "@/components/lesson/Term";
 import { space } from "@/tokens/tokens.stylex";
 import { Link } from "@/ui/Link";
+
 import { sampleLesson, sampleTopics } from "./sample";
 import { Card, Specs } from "./Section";
 import { Preview } from "./StateMatrix";

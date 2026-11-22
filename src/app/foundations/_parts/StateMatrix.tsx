@@ -1,8 +1,10 @@
+import * as stylex from "@stylexjs/stylex";
 import { Fragment } from "react";
 import type { ReactNode } from "react";
-import * as stylex from "@stylexjs/stylex";
+
 import { colors, radius, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
+
 import { Token } from "./Section";
 
 export const previewStates = ["rest", "hover", "pressed", "focus", "disabled"] as const;

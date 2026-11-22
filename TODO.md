@@ -66,15 +66,7 @@ Design and reasoning: [RFC 0001: Agent-first repository](rfc/0001-agent-first-re
 
 ### 1. Architecture
 
-Design: [RFC 0002: Architecture](rfc/0002-architecture.md).
-
-- [x] Layers and import direction, enforced by per-layer `no-restricted-imports`
-- [x] Folder moves: route-only code in `_parts/`, shared parts in `components/{shell,lesson,catalog}`, shared hooks in `src/hooks`
-- [x] One way to do each task: Base UI and `next/link` only in `src/ui`, icons through `<Icon>`, browser storage only in `src/hooks`
-- [x] Names: no barrel files, no catch-all names, `PascalCase.tsx` / `camelCase.ts`
-- [x] File and function size limits, oversized files split
-- [x] Structure check (`npm run structure`, part of `verify`)
-- [x] Generators: `new:primitive`, `new:lesson`, `new:diagram`, `new:page`, `new:rule`, `new:rfc`, `promote`
+Design: [RFC 0002: Architecture](rfc/0002-architecture.md). Done, see [Agent-driven repo: Architecture](#agent-driven-repo-architecture) under Done.
 
 ### 2. Types
 
@@ -82,14 +74,7 @@ Design: [RFC 0003: Types](rfc/0003-types.md).
 
 ### 3. Lint rules
 
-Design: [RFC 0004: Lint](rfc/0004-lint.md).
-
-- [x] Oxlint with every rule named, categories off, type-aware, errors only
-- [x] Next.js, accessibility and StyleX rules
-- [x] Disable comments caught: unused directives fail, `lint:directives` grep in `verify`
-- [x] Local rules: no comments, no `enum`, colours and type only from tokens, effects and timers only inside hooks
-- [ ] Spacing ratchet (after spacing tokens)
-- [ ] Switch Prettier to oxfmt
+Design: [RFC 0004: Lint](rfc/0004-lint.md). Done, see [Agent-driven repo: Lint rules](#agent-driven-repo-lint-rules) under Done.
 
 ### 4. Tests
 
@@ -127,7 +112,7 @@ Not started. Everything that needs a test runner lives here, so the rest of the 
 
 - [x] Scaffold Next.js, StyleX, Base UI, Lucide, fonts
 - [x] Tokens and type styles (`src/tokens`)
-- [x] Lint (Oxlint, replaced ESLint), Prettier, scripts
+- [x] Lint (Oxlint, replaced ESLint), oxfmt (replaced Prettier), scripts
 - [x] `/foundations` page
 
 ### 1. Primitives (`src/ui`)
@@ -207,3 +192,26 @@ Everything a lesson page needs apart from diagrams. Boards 03 and 04.
 - [x] About page (board 06)
 - [x] 404 page
 - [x] Metadata, favicon, Open Graph image
+
+### Agent-driven repo: Architecture
+
+Design: [RFC 0002: Architecture](rfc/0002-architecture.md).
+
+- [x] Layers and import direction, enforced by per-layer `no-restricted-imports`
+- [x] Folder moves: route-only code in `_parts/`, shared parts in `components/{shell,lesson,catalog}`, shared hooks in `src/hooks`
+- [x] One way to do each task: Base UI and `next/link` only in `src/ui`, icons through `<Icon>`, browser storage only in `src/hooks`
+- [x] Names: no barrel files, no catch-all names, `PascalCase.tsx` / `camelCase.ts`
+- [x] File and function size limits, oversized files split
+- [x] Structure check (`npm run structure`, part of `verify`)
+- [x] Generators: `new:primitive`, `new:lesson`, `new:diagram`, `new:page`, `new:rule`, `new:rfc`, `promote`
+
+### Agent-driven repo: Lint rules
+
+Design: [RFC 0004: Lint](rfc/0004-lint.md).
+
+- [x] Oxlint with every rule named, categories off, type-aware, errors only
+- [x] Next.js, accessibility and StyleX rules
+- [x] Disable comments caught: unused directives fail, `lint:directives` grep in `verify`
+- [x] Local rules: no comments, no `enum`, colours and type only from tokens, effects and timers only inside hooks, storage, cookies and clipboard only through `src/hooks`
+- [x] Spacing ratchet (`npm run spacing`, part of `verify`)
+- [x] Switch Prettier to oxfmt, with import sorting

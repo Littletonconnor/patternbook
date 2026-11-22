@@ -1,4 +1,5 @@
 import * as stylex from "@stylexjs/stylex";
+
 import { formatMinutes, lessons, lessonsByLevel, totals } from "@/content/catalog";
 import { lessonHref } from "@/content/types";
 import type { Level } from "@/content/types";

@@ -1,11 +1,11 @@
+import * as stylex from "@stylexjs/stylex";
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import * as stylex from "@stylexjs/stylex";
+
+import { sidebarScript } from "@/hooks/sidebarScript";
 import { palette } from "@/tokens/palette";
 import { colors } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
-
-import { sidebarScript } from "@/hooks/sidebarScript";
 
 import "./globals.css";
 

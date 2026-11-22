@@ -1,6 +1,6 @@
-import { Primitive } from "../ui/Primitive";
 import { Card, Specs } from "../../../src/app/foundations/_parts/Section";
 import { ExampleRows } from "../../../src/app/foundations/_parts/StateMatrix";
+import { Primitive } from "../ui/Primitive";
 
 export function PrimitiveExample() {
   return (

@@ -3,7 +3,7 @@
 import * as stylex from "@stylexjs/stylex";
 import { useRef } from "react";
 import type { KeyboardEvent, PointerEvent } from "react";
-import { colors, motion } from "@/tokens/tokens.stylex";
+
 import {
   SIDEBAR,
   clampWidth,
@@ -12,6 +12,7 @@ import {
   previewWidth,
   toggleSidebar,
 } from "@/hooks/useSidebar";
+import { colors, motion } from "@/tokens/tokens.stylex";
 
 const KEY_STEP = 16;
 

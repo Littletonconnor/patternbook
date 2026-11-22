@@ -3,8 +3,10 @@
 import { Toggle as BaseToggle } from "@base-ui/react/toggle";
 import * as stylex from "@stylexjs/stylex";
 import type { ComponentProps } from "react";
+
 import { colors } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
+
 import { buttonStyles } from "./Button";
 
 const PRESSED = ":is([data-pressed])";

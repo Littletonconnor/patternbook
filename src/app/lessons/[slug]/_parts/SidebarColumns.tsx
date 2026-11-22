@@ -3,9 +3,11 @@
 import * as stylex from "@stylexjs/stylex";
 import { useState } from "react";
 import type { ReactNode } from "react";
-import { colors, motion } from "@/tokens/tokens.stylex";
+
 import { toggleSidebar, useSidebarCollapsed, useSidebarWidth } from "@/hooks/useSidebar";
 import { useWindowEvent } from "@/hooks/useWindowEvent";
+import { colors, motion } from "@/tokens/tokens.stylex";
+
 import { SidebarHandle } from "./SidebarHandle";
 
 const WIDE = "@media (min-width: 768px)";

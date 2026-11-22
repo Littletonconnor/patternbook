@@ -1,5 +1,6 @@
 import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
 import { basename } from "node:path";
+
 import { importsOf, moduleFile, walk } from "./moduleGraph.mts";
 import { expect, finish, readArgs, run } from "./scaffold.mts";
 

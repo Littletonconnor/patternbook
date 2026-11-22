@@ -3,12 +3,13 @@
 import * as stylex from "@stylexjs/stylex";
 import { Circle, CircleCheck } from "lucide-react";
 import { useState } from "react";
+
+import { useReadLessons } from "@/hooks/useReadLessons";
 import { colors, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
 import { Button } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";
 import { Toggle } from "@/ui/Toggle";
-import { useReadLessons } from "@/hooks/useReadLessons";
 
 const styles = stylex.create({
   end: {

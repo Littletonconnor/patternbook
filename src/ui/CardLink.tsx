@@ -1,6 +1,7 @@
-import NextLink from "next/link";
 import * as stylex from "@stylexjs/stylex";
+import NextLink from "next/link";
 import type { ComponentProps } from "react";
+
 import { colors, motion, radius, space } from "@/tokens/tokens.stylex";
 
 const HOVER = "@media (hover: hover)";

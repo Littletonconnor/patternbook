@@ -75,7 +75,7 @@ export function addImport(text: string, line: string) {
 }
 
 export function finish(created: string[], updated: string[]) {
-  execFileSync("npx", ["prettier", "--write", "--log-level", "warn", ...created, ...updated], {
+  execFileSync("npx", ["oxfmt", ...created, ...updated], {
     stdio: "inherit",
   });
   const lines = [

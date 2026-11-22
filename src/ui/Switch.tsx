@@ -1,6 +1,7 @@
 import { Switch as BaseSwitch } from "@base-ui/react/switch";
 import * as stylex from "@stylexjs/stylex";
 import type { ComponentProps, ReactNode } from "react";
+
 import { colors, motion, shadows } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
 

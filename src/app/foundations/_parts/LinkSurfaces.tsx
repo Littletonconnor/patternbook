@@ -1,8 +1,10 @@
 import * as stylex from "@stylexjs/stylex";
+
 import { colors, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
 import { CardLink } from "@/ui/CardLink";
 import { RowLink } from "@/ui/RowLink";
+
 import { Card, Specs } from "./Section";
 import { StateMatrix } from "./StateMatrix";
 import type { PreviewState } from "./StateMatrix";

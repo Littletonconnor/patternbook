@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { lessonBySlug, lessons, neighbours, topicOf } from "@/content/catalog";
+
 import { LessonEnd } from "@/components/lesson/LessonEnd";
 import { LessonHeader } from "@/components/lesson/LessonHeader";
-import { LessonLayout } from "./_parts/LessonLayout";
 import { Pager } from "@/components/lesson/Pager";
 import { H2, P, Prose } from "@/components/lesson/Prose";
+import { lessonBySlug, lessons, neighbours, topicOf } from "@/content/catalog";
 import { hasLessonSource, lessonHeadings, loadLesson } from "@/content/lessonSource";
+
+import { LessonLayout } from "./_parts/LessonLayout";
 
 export function generateStaticParams() {
   return lessons.map((lesson) => ({ slug: lesson.slug }));

@@ -1,14 +1,16 @@
-import type { Metadata } from "next";
 import * as stylex from "@stylexjs/stylex";
-import { AboutAreas } from "./_parts/AboutAreas";
-import { AboutRules } from "./_parts/AboutRules";
-import { AboutSteps } from "./_parts/AboutSteps";
-import { lessons, topics } from "@/content/catalog";
+import type { Metadata } from "next";
+
 import { PageIntro } from "@/components/shell/PageIntro";
 import { PageShell } from "@/components/shell/PageShell";
+import { lessons, topics } from "@/content/catalog";
 import { colors, measure, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
 import { Link } from "@/ui/Link";
+
+import { AboutAreas } from "./_parts/AboutAreas";
+import { AboutRules } from "./_parts/AboutRules";
+import { AboutSteps } from "./_parts/AboutSteps";
 
 export const metadata: Metadata = {
   title: "About",

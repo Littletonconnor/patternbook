@@ -1,5 +1,7 @@
 import * as stylex from "@stylexjs/stylex";
 import { ArrowRight } from "lucide-react";
+
+import { DiagramSketch } from "@/components/catalog/DiagramSketch";
 import { diagramKinds } from "@/content/diagrams";
 import { lessonHref } from "@/content/types";
 import type { Diagram, Lesson } from "@/content/types";
@@ -8,7 +10,6 @@ import { type } from "@/tokens/typography";
 import { Badge } from "@/ui/Badge";
 import { CardLink } from "@/ui/CardLink";
 import { Icon } from "@/ui/Icon";
-import { DiagramSketch } from "@/components/catalog/DiagramSketch";
 
 const styles = stylex.create({
   stage: {

@@ -1,15 +1,17 @@
-import type { Metadata } from "next";
 import * as stylex from "@stylexjs/stylex";
+import type { Metadata } from "next";
+
+import { PageIntro } from "@/components/shell/PageIntro";
+import { PageShell } from "@/components/shell/PageShell";
 import { lessonBySlug } from "@/content/catalog";
 import { diagramLesson, diagrams } from "@/content/diagrams";
 import { lessonHref } from "@/content/types";
 import type { Lesson } from "@/content/types";
-import { DiagramIndex } from "./_parts/DiagramIndex";
-import { PageIntro } from "@/components/shell/PageIntro";
-import { PageShell } from "@/components/shell/PageShell";
 import { colors, radius, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
 import { RowLink } from "@/ui/RowLink";
+
+import { DiagramIndex } from "./_parts/DiagramIndex";
 
 export const metadata: Metadata = {
   title: "Diagrams",

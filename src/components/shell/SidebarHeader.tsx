@@ -1,10 +1,11 @@
 import * as stylex from "@stylexjs/stylex";
 import { ChevronsDownUp, PanelLeftClose } from "lucide-react";
+
+import { toggleSidebar } from "@/hooks/useSidebar";
 import { colors, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
 import { Icon } from "@/ui/Icon";
 import { Tooltip } from "@/ui/Tooltip";
-import { toggleSidebar } from "@/hooks/useSidebar";
 
 const HOVER = "@media (hover: hover)";
 

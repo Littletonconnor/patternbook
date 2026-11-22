@@ -1,15 +1,17 @@
 "use client";
 
-import { usePathname } from "next/navigation";
 import * as stylex from "@stylexjs/stylex";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
+
 import type { Lesson, Topic } from "@/content/types";
-import { colors, radius, space } from "@/tokens/tokens.stylex";
-import { type } from "@/tokens/typography";
-import { ToggleGroup } from "@/ui/ToggleGroup";
 import { levelFilterOptions, setLevelFilter, useLevelFilter } from "@/hooks/useLevelFilter";
 import type { LevelFilter } from "@/hooks/useLevelFilter";
 import { useReadLessons } from "@/hooks/useReadLessons";
+import { colors, radius, space } from "@/tokens/tokens.stylex";
+import { type } from "@/tokens/typography";
+import { ToggleGroup } from "@/ui/ToggleGroup";
+
 import { SidebarHeader } from "./SidebarHeader";
 import { SidebarTopic } from "./SidebarTopic";
 

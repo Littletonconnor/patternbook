@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+
 import { PageIntro } from "@/components/shell/PageIntro";
 import { PageShell } from "@/components/shell/PageShell";
 

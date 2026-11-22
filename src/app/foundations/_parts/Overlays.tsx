@@ -2,13 +2,15 @@
 
 import * as stylex from "@stylexjs/stylex";
 import { Menu, StepForward } from "lucide-react";
+
 import { colors, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
-import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from "@/ui/Collapsible";
 import { Button } from "@/ui/Button";
+import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from "@/ui/Collapsible";
 import { Drawer } from "@/ui/Drawer";
 import { IconButton } from "@/ui/IconButton";
 import { Tooltip, TooltipProvider } from "@/ui/Tooltip";
+
 import { Card, Specs } from "./Section";
 import { ExampleRows } from "./StateMatrix";
 
@@ -27,7 +29,7 @@ const styles = stylex.create({
   lessons: { paddingBlock: space.s1, display: "flex", flexDirection: "column" },
   lesson: {
     gap: space.s2,
-    paddingBlock: 4,
+    paddingBlock: space.s1,
     color: colors.inkSoft,
     display: "flex",
     paddingInlineStart: 30,

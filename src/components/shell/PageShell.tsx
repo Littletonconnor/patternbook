@@ -1,7 +1,9 @@
 import * as stylex from "@stylexjs/stylex";
 import type { ReactNode } from "react";
+
 import { topics } from "@/content/catalog";
 import { measure, space } from "@/tokens/tokens.stylex";
+
 import { Footer } from "./Footer";
 import { Sidebar } from "./Sidebar";
 import { TopBar } from "./TopBar";

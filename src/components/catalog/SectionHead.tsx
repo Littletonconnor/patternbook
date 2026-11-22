@@ -1,5 +1,6 @@
 import * as stylex from "@stylexjs/stylex";
 import type { ReactNode } from "react";
+
 import { colors, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
 

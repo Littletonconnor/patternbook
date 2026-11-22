@@ -1,6 +1,7 @@
 import { ImageResponse } from "next/og";
-import { lessonBySlug, lessons, topicOf } from "@/content/catalog";
+
 import { OgCard, ogSize } from "@/components/shell/OgCard";
+import { lessonBySlug, lessons, topicOf } from "@/content/catalog";
 
 export const alt = "A Patternbook lesson";
 export const size = ogSize;

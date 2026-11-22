@@ -1,7 +1,8 @@
 import { Tooltip as BaseTooltip } from "@base-ui/react/tooltip";
 import * as stylex from "@stylexjs/stylex";
 import type { ReactElement, ReactNode } from "react";
-import { colors, motion, shadows } from "@/tokens/tokens.stylex";
+
+import { colors, motion, shadows, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
 
 const HIDDEN = ":is([data-starting-style], [data-ending-style])";
@@ -19,12 +20,12 @@ const styles = stylex.create({
     transitionTimingFunction: motion.easeOut,
     maxWidth: 260,
   },
-  rich: { borderRadius: 8, paddingBlock: 10, paddingInline: 12 },
+  rich: { borderRadius: 8, paddingBlock: 10, paddingInline: space.s3 },
   short: {
     borderRadius: 6,
     gap: 6,
     paddingBlock: 6,
-    paddingInline: 8,
+    paddingInline: space.s2,
     alignItems: "center",
     display: "flex",
   },

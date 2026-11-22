@@ -1,4 +1,5 @@
 import { readdirSync } from "node:fs";
+
 import { createFile, expect, finish, fromTemplate, kebabName, readArgs, run } from "./scaffold.mts";
 import { titleFromKebab } from "./scaffold.mts";
 

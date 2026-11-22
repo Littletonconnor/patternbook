@@ -1,9 +1,11 @@
 import * as stylex from "@stylexjs/stylex";
-import { Footer } from "@/components/shell/Footer";
+
 import { PageRail } from "@/components/lesson/PageRail";
+import { Footer } from "@/components/shell/Footer";
 import { Sidebar } from "@/components/shell/Sidebar";
 import { TopBar } from "@/components/shell/TopBar";
 import { space } from "@/tokens/tokens.stylex";
+
 import { sampleLesson, sampleTopics } from "./sample";
 import { Card, Specs } from "./Section";
 import { Preview } from "./StateMatrix";

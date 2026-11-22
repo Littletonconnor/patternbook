@@ -1,12 +1,13 @@
-import type { Metadata } from "next";
 import * as stylex from "@stylexjs/stylex";
 import { ArrowRight } from "lucide-react";
-import { starterLessons } from "@/content/catalog";
+import type { Metadata } from "next";
+
 import { LessonCard } from "@/components/catalog/LessonCard";
-import { PageIntro } from "@/components/shell/PageIntro";
-import { PageShell } from "@/components/shell/PageShell";
 import { SectionHead } from "@/components/catalog/SectionHead";
 import { Thumbnail } from "@/components/catalog/Thumbnail";
+import { PageIntro } from "@/components/shell/PageIntro";
+import { PageShell } from "@/components/shell/PageShell";
+import { starterLessons } from "@/content/catalog";
 import { space } from "@/tokens/tokens.stylex";
 import { ButtonLink } from "@/ui/ButtonLink";
 import { Icon } from "@/ui/Icon";

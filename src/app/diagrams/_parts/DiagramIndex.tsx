@@ -2,11 +2,13 @@
 
 import * as stylex from "@stylexjs/stylex";
 import { useState } from "react";
+
 import { diagramKinds } from "@/content/diagrams";
 import type { Diagram, DiagramKind, Lesson } from "@/content/types";
 import { colors, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
 import { ToggleGroup } from "@/ui/ToggleGroup";
+
 import { DiagramCard } from "./DiagramCard";
 
 const styles = stylex.create({

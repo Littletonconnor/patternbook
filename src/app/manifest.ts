@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+
 import { palette } from "@/tokens/palette";
 
 export default function manifest(): MetadataRoute.Manifest {

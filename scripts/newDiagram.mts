@@ -1,4 +1,5 @@
 import { existsSync } from "node:fs";
+
 import { diagramCount, diagramKinds, lessonNumber } from "./catalogSource.mts";
 import {
   addImport,

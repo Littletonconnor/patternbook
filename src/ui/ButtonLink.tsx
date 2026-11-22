@@ -1,7 +1,9 @@
-import NextLink from "next/link";
 import * as stylex from "@stylexjs/stylex";
+import NextLink from "next/link";
 import type { ComponentProps } from "react";
+
 import { type } from "@/tokens/typography";
+
 import { buttonHovers, buttonStyles, buttonVariants } from "./Button";
 
 type ButtonLinkProps = Omit<ComponentProps<typeof NextLink>, "className" | "style"> & {

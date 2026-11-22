@@ -1,7 +1,9 @@
 import * as stylex from "@stylexjs/stylex";
+
 import { type } from "@/tokens/typography";
 import { Badge } from "@/ui/Badge";
 import { Kbd } from "@/ui/Kbd";
+
 import { Card, Specs } from "./Section";
 import { ExampleRows } from "./StateMatrix";
 

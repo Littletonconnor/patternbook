@@ -1,14 +1,16 @@
 import * as stylex from "@stylexjs/stylex";
 import type { ReactNode } from "react";
-import { topics } from "@/content/catalog";
-import { measure, space } from "@/tokens/tokens.stylex";
-import { Footer } from "@/components/shell/Footer";
+
 import { PageRail } from "@/components/lesson/PageRail";
 import type { RailItem } from "@/components/lesson/PageRail";
+import { Footer } from "@/components/shell/Footer";
 import { Sidebar } from "@/components/shell/Sidebar";
+import { TopBar } from "@/components/shell/TopBar";
+import { topics } from "@/content/catalog";
+import { measure, space } from "@/tokens/tokens.stylex";
+
 import { SidebarColumns } from "./SidebarColumns";
 import { SidebarToggle } from "./SidebarToggle";
-import { TopBar } from "@/components/shell/TopBar";
 
 const WIDE = "@media (min-width: 768px)";
 const RAIL = "@media (min-width: 1180px)";

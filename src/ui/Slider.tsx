@@ -1,6 +1,7 @@
 import { Slider as BaseSlider } from "@base-ui/react/slider";
 import * as stylex from "@stylexjs/stylex";
 import type { ComponentProps, ReactNode } from "react";
+
 import { colors, motion, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
 

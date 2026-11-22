@@ -1,9 +1,11 @@
 import { Collapsible as BaseCollapsible } from "@base-ui/react/collapsible";
 import * as stylex from "@stylexjs/stylex";
-import type { ComponentProps, ReactNode } from "react";
 import { ChevronRight } from "lucide-react";
-import { colors, motion } from "@/tokens/tokens.stylex";
+import type { ComponentProps, ReactNode } from "react";
+
+import { colors, motion, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
+
 import { Icon } from "./Icon";
 
 const HOVER = "@media (hover: hover)";
@@ -15,7 +17,7 @@ const styles = stylex.create({
   trigger: {
     borderRadius: 6,
     borderWidth: 0,
-    gap: 8,
+    gap: space.s2,
     paddingBlock: 0,
     paddingInline: 10,
     alignItems: "center",

@@ -1,4 +1,5 @@
 import * as stylex from "@stylexjs/stylex";
+
 import { formatMinutes, topics, totals } from "@/content/catalog";
 import { lessonHref } from "@/content/types";
 import { colors, space } from "@/tokens/tokens.stylex";

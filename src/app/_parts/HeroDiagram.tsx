@@ -2,11 +2,13 @@
 
 import * as stylex from "@stylexjs/stylex";
 import { useState } from "react";
+
+import { useRoundTrip } from "@/diagrams/useRoundTrip";
 import { colors, radius, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
 import { Button } from "@/ui/Button";
 import { Slider } from "@/ui/Slider";
-import { useRoundTrip } from "@/diagrams/useRoundTrip";
+
 import { HeroStage } from "./HeroStage";
 
 const ONE_WAY_MS = 22;

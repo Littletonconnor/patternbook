@@ -1,3 +1,4 @@
+import { browserApisInHooks } from "./rules/browserApisInHooks.mts";
 import { coloursFromTokens } from "./rules/coloursFromTokens.mts";
 import { effectsInHooks } from "./rules/effectsInHooks.mts";
 import { iconsThroughIcon } from "./rules/iconsThroughIcon.mts";
@@ -5,7 +6,6 @@ import { noBarrelFiles } from "./rules/noBarrelFiles.mts";
 import { noCatchAllNames } from "./rules/noCatchAllNames.mts";
 import { noComments } from "./rules/noComments.mts";
 import { noEnum } from "./rules/noEnum.mts";
-import { browserApisInHooks } from "./rules/browserApisInHooks.mts";
 import { typeFromTokens } from "./rules/typeFromTokens.mts";
 
 const plugin = {

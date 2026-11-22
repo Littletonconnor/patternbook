@@ -1,11 +1,12 @@
 "use client";
 
-import { ToggleGroup as BaseToggleGroup } from "@base-ui/react/toggle-group";
 import { Toggle } from "@base-ui/react/toggle";
+import { ToggleGroup as BaseToggleGroup } from "@base-ui/react/toggle-group";
 import * as stylex from "@stylexjs/stylex";
 import { useState } from "react";
 import type { ReactNode } from "react";
-import { colors, radius } from "@/tokens/tokens.stylex";
+
+import { colors, radius, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
 
 const HOVER = "@media (hover: hover)";
@@ -26,7 +27,7 @@ const styles = stylex.create({
     borderStyle: "solid",
     borderWidth: 1,
     paddingBlock: 5,
-    paddingInline: 12,
+    paddingInline: space.s3,
     backgroundColor: { [PRESSED]: colors.surface, default: "transparent" },
     color: {
       [PRESSED]: colors.ink,
@@ -43,7 +44,7 @@ const styles = stylex.create({
   },
   itemSmall: {
     paddingBlock: 6,
-    paddingInline: 8,
+    paddingInline: space.s2,
     flexBasis: "auto",
     flexGrow: 1,
     outlineOffset: -2,

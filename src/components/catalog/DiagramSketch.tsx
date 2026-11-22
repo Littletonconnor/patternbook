@@ -1,5 +1,6 @@
 import * as stylex from "@stylexjs/stylex";
 import type { ReactNode } from "react";
+
 import type { DiagramKind } from "@/content/types";
 import { colors } from "@/tokens/tokens.stylex";
 

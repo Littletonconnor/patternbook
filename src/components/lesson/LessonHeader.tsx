@@ -1,4 +1,5 @@
 import * as stylex from "@stylexjs/stylex";
+
 import type { Lesson } from "@/content/types";
 import { colors, measure, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";

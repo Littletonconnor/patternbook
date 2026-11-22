@@ -1,8 +1,10 @@
 import * as stylex from "@stylexjs/stylex";
 import { codeToTokens } from "shiki";
 import type { BundledLanguage, ThemedToken } from "shiki";
+
 import { colors, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
+
 import { CodeTabs } from "./CodeTabs";
 
 const syntax = stylex.create({

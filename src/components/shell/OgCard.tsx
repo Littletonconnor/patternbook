@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+
 import { palette } from "@/tokens/palette";
 
 export const ogSize = { width: 1200, height: 630 };

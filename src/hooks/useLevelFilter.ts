@@ -1,6 +1,7 @@
 "use client";
 
 import type { Level } from "@/content/types";
+
 import { useLocalStorage, writeLocalStorage } from "./useLocalStorage";
 
 export type LevelFilter = Level | "all";

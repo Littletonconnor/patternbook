@@ -1,8 +1,9 @@
 import { Button as BaseButton } from "@base-ui/react/button";
 import * as stylex from "@stylexjs/stylex";
-import type { ComponentProps } from "react";
-import { buttonStyles, buttonVariants, buttonHovers } from "./Button";
 import type { LucideIcon } from "lucide-react";
+import type { ComponentProps } from "react";
+
+import { buttonStyles, buttonVariants, buttonHovers } from "./Button";
 import { Icon } from "./Icon";
 
 const styles = stylex.create({

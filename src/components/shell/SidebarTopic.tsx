@@ -20,10 +20,12 @@ import {
   SquareTerminal,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+
 import type { Lesson, Topic } from "@/content/types";
 import { colors, space } from "@/tokens/tokens.stylex";
 import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from "@/ui/Collapsible";
 import { Icon } from "@/ui/Icon";
+
 import { SidebarLessonRow } from "./SidebarLessonRow";
 
 const OPEN = ":is([data-panel-open])";

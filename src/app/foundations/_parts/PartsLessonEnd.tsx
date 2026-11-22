@@ -1,7 +1,8 @@
 import { LessonEnd } from "@/components/lesson/LessonEnd";
 import { Pager } from "@/components/lesson/Pager";
-import { ResourceList } from "./ResourceList";
 import { Table } from "@/components/lesson/Table";
+
+import { ResourceList } from "./ResourceList";
 import { sampleLesson, sampleTopics } from "./sample";
 import { Card, Specs } from "./Section";
 import { Preview } from "./StateMatrix";

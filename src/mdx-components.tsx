@@ -3,12 +3,13 @@ import { isValidElement } from "react";
 import type { ComponentProps, ReactNode } from "react";
 import { bundledLanguages } from "shiki";
 import type { BundledLanguage } from "shiki";
-import { headingId } from "@/lib/headingId";
+
 import { Callout } from "@/components/lesson/Callout";
 import { CodeBlock } from "@/components/lesson/CodeBlock";
 import { Block, Breakout, Code, H2, H3, Item, List, P, Strong } from "@/components/lesson/Prose";
 import { Table } from "@/components/lesson/Table";
 import { Term } from "@/components/lesson/Term";
+import { headingId } from "@/lib/headingId";
 import { Link } from "@/ui/Link";
 
 function textOf(node: ReactNode): string {

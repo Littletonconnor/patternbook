@@ -1,6 +1,7 @@
 import * as stylex from "@stylexjs/stylex";
 import type { ReactNode } from "react";
-import { colors } from "@/tokens/tokens.stylex";
+
+import { colors, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
 
 const styles = stylex.create({
@@ -8,7 +9,7 @@ const styles = stylex.create({
   table: { borderCollapse: "collapse", minWidth: 520, width: "100%" },
   cell: {
     paddingBlock: 10,
-    paddingInline: 16,
+    paddingInline: space.s4,
     textAlign: "start",
     verticalAlign: "top",
     borderBottomColor: colors.line,

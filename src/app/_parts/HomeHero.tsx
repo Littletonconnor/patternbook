@@ -1,11 +1,13 @@
 import * as stylex from "@stylexjs/stylex";
 import { ArrowRight } from "lucide-react";
+
 import { lessons, topics, totals } from "@/content/catalog";
 import { lessonHref } from "@/content/types";
 import { colors, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
 import { ButtonLink } from "@/ui/ButtonLink";
 import { Icon } from "@/ui/Icon";
+
 import { HeroDiagram } from "./HeroDiagram";
 
 const WIDE = "@media (min-width: 768px)";

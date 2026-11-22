@@ -1,15 +1,17 @@
 import * as stylex from "@stylexjs/stylex";
-import { formatMinutes, starterLessons, topics, totals } from "@/content/catalog";
-import { Footer } from "@/components/shell/Footer";
-import { HomeHero } from "./_parts/HomeHero";
-import { LevelCards } from "./_parts/LevelCards";
+
+import { LessonCard } from "@/components/catalog/LessonCard";
 import { SectionHead } from "@/components/catalog/SectionHead";
 import { Thumbnail } from "@/components/catalog/Thumbnail";
-import { TopicList } from "./_parts/TopicList";
-import { LessonCard } from "@/components/catalog/LessonCard";
+import { Footer } from "@/components/shell/Footer";
 import { Sidebar } from "@/components/shell/Sidebar";
 import { TopBar } from "@/components/shell/TopBar";
+import { formatMinutes, starterLessons, topics, totals } from "@/content/catalog";
 import { measure, space } from "@/tokens/tokens.stylex";
+
+import { HomeHero } from "./_parts/HomeHero";
+import { LevelCards } from "./_parts/LevelCards";
+import { TopicList } from "./_parts/TopicList";
 
 const WIDE = "@media (min-width: 768px)";
 

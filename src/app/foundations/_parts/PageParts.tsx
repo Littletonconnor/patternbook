@@ -1,10 +1,12 @@
 import * as stylex from "@stylexjs/stylex";
+
 import { space } from "@/tokens/tokens.stylex";
 import { TooltipProvider } from "@/ui/Tooltip";
-import { Section } from "./Section";
+
 import { TopBarPart, SidebarPart, PageRailPart, FooterPart } from "./PartsFrame";
 import { LessonHeaderPart, LessonCardPart, ProsePart, CodeBlockPart } from "./PartsLesson";
 import { TablePart, ResourceListPart, LessonEndPart, PagerPart } from "./PartsLessonEnd";
+import { Section } from "./Section";
 const styles = stylex.create({
   grid: { gap: space.s4, display: "flex", flexDirection: "column" },
 });

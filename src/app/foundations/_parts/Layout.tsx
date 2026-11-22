@@ -1,6 +1,8 @@
 import * as stylex from "@stylexjs/stylex";
+
 import { colors, radius, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
+
 import { Card, Section, Token } from "./Section";
 
 const styles = stylex.create({

@@ -1,4 +1,5 @@
 import * as stylex from "@stylexjs/stylex";
+
 import { colors } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
 import { Link } from "@/ui/Link";

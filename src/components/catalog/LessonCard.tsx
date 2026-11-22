@@ -2,13 +2,14 @@
 
 import * as stylex from "@stylexjs/stylex";
 import type { ReactNode } from "react";
+
 import { lessonHref } from "@/content/types";
 import type { Lesson } from "@/content/types";
+import { useReadLessons } from "@/hooks/useReadLessons";
 import { colors, radius, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
 import { Badge } from "@/ui/Badge";
 import { CardLink } from "@/ui/CardLink";
-import { useReadLessons } from "@/hooks/useReadLessons";
 
 const styles = stylex.create({
   body: { gap: space.s3, display: "flex", flexDirection: "column", flexGrow: 1 },
