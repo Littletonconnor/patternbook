@@ -1,39 +1,16 @@
-import NextLink from "next/link";
 import * as stylex from "@stylexjs/stylex";
 import { ArrowRight } from "lucide-react";
 import { diagramKinds } from "@/content/diagrams";
 import { lessonHref } from "@/content/types";
 import type { Diagram, Lesson } from "@/content/types";
-import { colors, motion, radius, space } from "@/tokens/tokens.stylex";
+import { colors, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
 import { Badge } from "@/ui/Badge";
+import { CardLink } from "@/ui/CardLink";
 import { Icon } from "@/ui/Icon";
-import { DiagramSketch } from "./DiagramSketch";
-
-const HOVER = "@media (hover: hover)";
+import { DiagramSketch } from "@/components/catalog/DiagramSketch";
 
 const styles = stylex.create({
-  card: {
-    borderColor: {
-      default: colors.line,
-      ":hover": { [HOVER]: colors.lineStrong, default: null },
-    },
-    borderRadius: radius.frame,
-    borderStyle: "solid",
-    borderWidth: 1,
-    overflow: "hidden",
-    backgroundColor: colors.surface,
-    color: colors.ink,
-    display: "flex",
-    flexDirection: "column",
-    outlineColor: colors.focus,
-    outlineOffset: 2,
-    outlineStyle: { default: "none", ":focus-visible": "solid" },
-    outlineWidth: 2,
-    textDecorationLine: "none",
-    transitionDuration: motion.press,
-    transitionProperty: "border-color",
-  },
   stage: {
     placeItems: "center",
     backgroundColor: colors.sunken,
@@ -79,7 +56,7 @@ type DiagramCardProps = {
 
 export function DiagramCard({ diagram, lesson }: DiagramCardProps) {
   return (
-    <NextLink href={lessonHref(lesson)} {...stylex.props(styles.card, stylex.defaultMarker())}>
+    <CardLink href={lessonHref(lesson)} padding="none">
       <div {...stylex.props(styles.stage)}>
         <span {...stylex.props(type.labelSmall, styles.number)}>Diagram {diagram.number}</span>
         <span {...stylex.props(styles.kind)}>
@@ -99,6 +76,6 @@ export function DiagramCard({ diagram, lesson }: DiagramCardProps) {
           <Icon icon={ArrowRight} size={14} />
         </span>
       </div>
-    </NextLink>
+    </CardLink>
   );
 }

@@ -1,7 +1,7 @@
-import NextLink from "next/link";
 import * as stylex from "@stylexjs/stylex";
 import { colors, radius } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
+import { Link } from "@/ui/Link";
 
 const styles = stylex.create({
   brand: {
@@ -44,11 +44,13 @@ const styles = stylex.create({
 
 export function Brand() {
   return (
-    <NextLink href="/" {...stylex.props(styles.brand)}>
-      <span aria-hidden {...stylex.props(styles.mark)}>
-        <span {...stylex.props(styles.dot)} />
+    <Link href="/" variant="plain">
+      <span {...stylex.props(styles.brand)}>
+        <span aria-hidden {...stylex.props(styles.mark)}>
+          <span {...stylex.props(styles.dot)} />
+        </span>
+        <span {...stylex.props(type.control, styles.word)}>Patternbook</span>
       </span>
-      <span {...stylex.props(type.control, styles.word)}>Patternbook</span>
-    </NextLink>
+    </Link>
   );
 }

@@ -4,7 +4,7 @@ import * as stylex from "@stylexjs/stylex";
 import { PanelLeftOpen } from "lucide-react";
 import { IconButton } from "@/ui/IconButton";
 import { Tooltip } from "@/ui/Tooltip";
-import { toggleSidebar, useSidebarCollapsed } from "./sidebarState";
+import { toggleSidebar, useSidebarCollapsed } from "@/hooks/useSidebar";
 
 const WIDE = "@media (min-width: 768px)";
 

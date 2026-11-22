@@ -1,23 +1,21 @@
 import type { Metadata } from "next";
-import NextLink from "next/link";
 import * as stylex from "@stylexjs/stylex";
 import { lessonBySlug } from "@/content/catalog";
 import { diagramLesson, diagrams } from "@/content/diagrams";
 import { lessonHref } from "@/content/types";
 import type { Lesson } from "@/content/types";
-import { DiagramIndex } from "@/components/DiagramIndex";
-import { PageIntro } from "@/components/PageIntro";
-import { PageShell } from "@/components/PageShell";
+import { DiagramIndex } from "./_parts/DiagramIndex";
+import { PageIntro } from "@/components/shell/PageIntro";
+import { PageShell } from "@/components/shell/PageShell";
 import { colors, radius, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
+import { RowLink } from "@/ui/RowLink";
 
 export const metadata: Metadata = {
   title: "Diagrams",
   description:
     "Every interactive diagram on Patternbook, filterable by kind, each linked to its lesson.",
 };
-
-const HOVER = "@media (hover: hover)";
 
 const craftSlugs = [
   "building-interactive-svg-explainers",
@@ -65,23 +63,6 @@ const styles = stylex.create({
     borderTopStyle: "solid",
     borderTopWidth: { default: 1, ":first-child": 0 },
   },
-  row: {
-    gap: space.s4,
-    paddingBlock: 14,
-    paddingInline: 18,
-    alignItems: "baseline",
-    backgroundColor: {
-      default: "transparent",
-      ":hover": { [HOVER]: colors.sunken, default: null },
-    },
-    color: colors.ink,
-    display: "flex",
-    outlineColor: colors.focus,
-    outlineOffset: -2,
-    outlineStyle: { default: "none", ":focus-visible": "solid" },
-    outlineWidth: 2,
-    textDecorationLine: "none",
-  },
   number: { color: colors.inkMuted },
   title: { flexGrow: 1, fontWeight: 500 },
   minutes: { color: colors.inkMuted, whiteSpace: "nowrap" },
@@ -118,11 +99,11 @@ export default function DiagramsPage() {
         <ul {...stylex.props(styles.list)}>
           {craft.map((lesson) => (
             <li key={lesson.slug} {...stylex.props(styles.item)}>
-              <NextLink href={lessonHref(lesson)} {...stylex.props(styles.row)}>
+              <RowLink href={lessonHref(lesson)}>
                 <span {...stylex.props(type.number, styles.number)}>{lesson.number}</span>
                 <span {...stylex.props(type.body, styles.title)}>{lesson.title}</span>
                 <span {...stylex.props(type.number, styles.minutes)}>{lesson.minutes} min</span>
-              </NextLink>
+              </RowLink>
             </li>
           ))}
         </ul>

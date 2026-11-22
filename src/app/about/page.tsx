@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import * as stylex from "@stylexjs/stylex";
 import { lessons, topics } from "@/content/catalog";
-import { PageIntro } from "@/components/PageIntro";
-import { PageShell } from "@/components/PageShell";
+import { PageIntro } from "@/components/shell/PageIntro";
+import { PageShell } from "@/components/shell/PageShell";
 import { colors, measure, radius, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
 import { Link } from "@/ui/Link";

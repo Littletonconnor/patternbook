@@ -1,9 +1,9 @@
-import NextLink from "next/link";
 import * as stylex from "@stylexjs/stylex";
 import { formatMinutes, topics, totals } from "@/content/catalog";
 import { lessonHref } from "@/content/types";
 import { colors, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
+import { RowLink } from "@/ui/RowLink";
 
 const styles = stylex.create({
   grid: {
@@ -17,21 +17,7 @@ const styles = stylex.create({
     borderBottomStyle: "solid",
     borderBottomWidth: 1,
   },
-  row: {
-    gap: space.s3,
-    paddingBlock: space.s4,
-    alignItems: "baseline",
-    color: colors.ink,
-    display: "flex",
-    outlineColor: colors.focus,
-    outlineOffset: 2,
-    outlineStyle: { default: "none", ":focus-visible": "solid" },
-    outlineWidth: 2,
-    textDecorationLine: "none",
-    borderTopColor: colors.line,
-    borderTopStyle: "solid",
-    borderTopWidth: 1,
-  },
+  item: { borderTopColor: colors.line, borderTopStyle: "solid", borderTopWidth: 1 },
   number: { color: colors.inkMuted, flexBasis: "20px", flexGrow: "0", flexShrink: "0" },
   text: { gap: 2, display: "flex", flexDirection: "column", flexGrow: 1, minWidth: 0 },
   name: {
@@ -49,11 +35,8 @@ export function TopicList() {
       {topics.map((topic, i) => {
         const { lessons, minutes } = totals(topic.lessons);
         return (
-          <li key={topic.slug}>
-            <NextLink
-              href={lessonHref(topic.lessons[0])}
-              {...stylex.props(styles.row, stylex.defaultMarker())}
-            >
+          <li key={topic.slug} {...stylex.props(styles.item)}>
+            <RowLink href={lessonHref(topic.lessons[0])}>
               <span {...stylex.props(type.number, styles.number)}>
                 {String(i + 1).padStart(2, "0")}
               </span>
@@ -64,7 +47,7 @@ export function TopicList() {
               <span {...stylex.props(type.number, styles.meta)}>
                 {lessons} · {formatMinutes(minutes)}
               </span>
-            </NextLink>
+            </RowLink>
           </li>
         );
       })}

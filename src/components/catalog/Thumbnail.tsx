@@ -1,5 +1,5 @@
 import type { DiagramKind } from "@/content/types";
-import { DiagramSketch } from "@/components/DiagramSketch";
+import { DiagramSketch } from "./DiagramSketch";
 
 const bySlug: Record<string, DiagramKind> = {
   "debounce-vs-throttle": "timeline",

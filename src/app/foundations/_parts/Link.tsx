@@ -22,6 +22,7 @@ function preview(state: PreviewState) {
 const rows = [
   { name: "inline", use: "In lesson prose" },
   { name: "nav", use: "Top bar; About is current" },
+  { name: "plain", use: "Brand mark in the top bar" },
   { name: "external", use: "Go deeper resources" },
 ] as const;
 
@@ -55,6 +56,13 @@ export function LinkExample() {
               </span>
             );
           }
+          if (row.name === "plain") {
+            return (
+              <Link variant="plain" href="#links" {...preview(state)}>
+                Patternbook
+              </Link>
+            );
+          }
           return (
             <Link variant="external" href="https://use-the-index-luke.com" {...preview(state)}>
               use-the-index-luke.com
@@ -67,13 +75,17 @@ export function LinkExample() {
           ["Status", "Built: src/ui/Link.tsx, on next/link"],
           [
             "Props",
-            "variant: inline (default) | nav | external · current: nav only, sets aria-current=page",
+            "variant: inline (default) | nav | plain | external · current: nav only, sets aria-current=page",
           ],
           [
             "Inline",
             "ink text · 1px underline in lineStrong, offset 3 · hover: underline turns ink",
           ],
           ["Nav", "type.ui · inkSoft · hover and current ink · current is weight 500"],
+          [
+            "Plain",
+            "ink · no underline · for links whose content styles itself, such as the brand",
+          ],
           [
             "External",
             "underlined like inline · arrow 14 · hover: arrow turns signal and nudges 2px up-right over motion.press · opens in a new tab",

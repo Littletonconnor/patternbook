@@ -4,7 +4,7 @@ import * as stylex from "@stylexjs/stylex";
 import { colors } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
 
-import { sidebarScript } from "@/components/sidebarScript";
+import { sidebarScript } from "@/hooks/sidebarScript";
 
 import "./globals.css";
 

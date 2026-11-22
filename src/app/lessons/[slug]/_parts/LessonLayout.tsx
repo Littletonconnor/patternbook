@@ -2,13 +2,13 @@ import * as stylex from "@stylexjs/stylex";
 import type { ReactNode } from "react";
 import { topics } from "@/content/catalog";
 import { measure, space } from "@/tokens/tokens.stylex";
-import { Footer } from "./Footer";
-import { PageRail } from "./PageRail";
-import type { RailItem } from "./PageRail";
-import { Sidebar } from "./Sidebar";
+import { Footer } from "@/components/shell/Footer";
+import { PageRail } from "@/components/lesson/PageRail";
+import type { RailItem } from "@/components/lesson/PageRail";
+import { Sidebar } from "@/components/shell/Sidebar";
 import { SidebarColumns } from "./SidebarColumns";
 import { SidebarToggle } from "./SidebarToggle";
-import { TopBar } from "./TopBar";
+import { TopBar } from "@/components/shell/TopBar";
 
 const WIDE = "@media (min-width: 768px)";
 const RAIL = "@media (min-width: 1180px)";

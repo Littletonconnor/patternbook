@@ -40,6 +40,7 @@ const styles = stylex.create({
     },
     textDecorationLine: "none",
   },
+  plain: { color: colors.ink, textDecorationLine: "none" },
   current: { color: colors.ink, fontWeight: 500 },
   arrow: {
     color: {
@@ -62,7 +63,7 @@ const styles = stylex.create({
 });
 
 type LinkProps = Omit<ComponentProps<typeof NextLink>, "className" | "style"> & {
-  variant?: "inline" | "nav" | "external";
+  variant?: "inline" | "nav" | "plain" | "external";
   current?: boolean;
 };
 
@@ -90,7 +91,9 @@ export function Link({ variant = "inline", current = false, children, ...props }
       {...stylex.props(
         styles.base,
         variant === "nav" && type.ui,
-        variant === "inline" ? styles.underlined : styles.nav,
+        variant === "inline" && styles.underlined,
+        variant === "nav" && styles.nav,
+        variant === "plain" && styles.plain,
         variant === "nav" && current && styles.current,
       )}
     >

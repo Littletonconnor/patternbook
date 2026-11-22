@@ -13,7 +13,7 @@ import {
   toggleSidebar,
   useSidebarCollapsed,
   useSidebarWidth,
-} from "./sidebarState";
+} from "@/hooks/useSidebar";
 
 const WIDE = "@media (min-width: 768px)";
 const REDUCED = "@media (prefers-reduced-motion: reduce)";

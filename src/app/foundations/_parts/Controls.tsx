@@ -7,6 +7,7 @@ import { type } from "@/tokens/typography";
 import { Slider } from "@/ui/Slider";
 import { Switch } from "@/ui/Switch";
 import { Tab, Tabs, TabsList, TabsPanel } from "@/ui/Tabs";
+import { Toggle } from "@/ui/Toggle";
 import { ToggleGroup } from "@/ui/ToggleGroup";
 import { Card, Specs } from "./Section";
 import { ExampleRows } from "./StateMatrix";
@@ -163,6 +164,37 @@ export function SwitchExample() {
           ["Thumb", "18 × 18 surface, 2px inset, hairline shadow · moves 14px over motion.move"],
           ["Label", "type.control · gap 10 · the whole row is clickable"],
           ["Focus", "ring around the track"],
+        ]}
+      />
+    </Card>
+  );
+}
+
+export function ToggleExample() {
+  return (
+    <Card title="Toggle">
+      <ExampleRows
+        rows={[
+          { name: "off", use: "Mark a lesson as read", example: <Toggle>Mark as read</Toggle> },
+          {
+            name: "pressed",
+            use: "Lesson already read",
+            example: <Toggle defaultPressed>Read</Toggle>,
+          },
+          {
+            name: "disabled",
+            use: "Not available yet",
+            example: <Toggle disabled>Mark as read</Toggle>,
+          },
+        ]}
+      />
+      <Specs
+        rows={[
+          ["Status", "Built: src/ui/Toggle.tsx, Base UI Toggle"],
+          ["Props", "pressed / defaultPressed / onPressedChange · size default | small · disabled"],
+          ["Off", "secondary button: surface, lineStrong border, sunken on hover"],
+          ["Pressed", "soundWash fill, sound border, soundInk text · :is([data-pressed])"],
+          ["Focus", "same ring as Button"],
         ]}
       />
     </Card>

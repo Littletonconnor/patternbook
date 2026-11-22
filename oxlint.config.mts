@@ -1,5 +1,5 @@
 import { defineConfig } from "oxlint";
-import type { OxlintConfig } from "oxlint";
+import type { OxlintConfig, OxlintOverride } from "oxlint";
 
 type Rules = NonNullable<OxlintConfig["rules"]>;
 
@@ -34,6 +34,81 @@ const toolConfigFiles = ["*.config.ts", "*.config.mts", "*.config.js", "*.config
 
 // Config files that must stay CommonJS, because Next.js loads them with require().
 const commonJsConfigFiles = ["babel.config.js", "postcss.config.js"];
+
+// Layers of src from RFC 0002, bottom to top, with the layers each may import.
+// Imports only point down, so a lower layer can be read and changed without
+// reading anything above it.
+const layerNames = [
+  "lib",
+  "tokens",
+  "content",
+  "ui",
+  "hooks",
+  "diagrams",
+  "components",
+  "app",
+] as const;
+
+type Layer = (typeof layerNames)[number];
+
+const allowedImports: Record<Layer, Layer[]> = {
+  lib: [],
+  tokens: [],
+  content: ["lib"],
+  ui: ["tokens", "lib"],
+  hooks: ["content", "lib"],
+  diagrams: ["tokens", "ui", "lib", "hooks"],
+  components: ["lib", "tokens", "content", "ui", "hooks", "diagrams"],
+  app: ["lib", "tokens", "content", "ui", "hooks", "diagrams", "components"],
+};
+
+// Imports that fail in every layer. Cross-folder imports use the @/ alias so
+// the layer is visible in the path, and route code is reachable only from its
+// own route through ./_parts.
+const importsBannedEverywhere = [
+  {
+    regex: String.raw`^\.\./`,
+    message: "Import from another folder with the @/ alias, so the layer it comes from is visible.",
+  },
+  {
+    regex: "^@/app(/|$)",
+    message:
+      "Route code is private to its route. Import ./_parts from the route itself, or move the module to src/components/<area> when a second route needs it.",
+  },
+];
+
+// Libraries wrapped by src/ui. Only the ui layer imports them, so every use
+// gets the design system's styling and behaviour.
+const wrappedLibraries = [
+  {
+    regex: "^@base-ui/",
+    message: "Base UI is imported only inside src/ui. Use the wrapped control from @/ui.",
+  },
+  {
+    regex: "^next/link$",
+    message:
+      "next/link is imported only inside src/ui. Use Link, ButtonLink, CardLink or RowLink from @/ui.",
+  },
+];
+
+function bannedLayers(allowed: Layer[], own: Layer) {
+  return layerNames.filter((name) => name !== own && !allowed.includes(name));
+}
+
+function layerImports(own: Layer): OxlintOverride {
+  const allowed = allowedImports[own];
+  const banned = bannedLayers(allowed, own);
+  const allowedText = allowed.length > 0 ? allowed.join(", ") : "nothing else in src";
+  const patterns =
+    own === "ui" ? [...importsBannedEverywhere] : [...importsBannedEverywhere, ...wrappedLibraries];
+  if (banned.length > 0) {
+    patterns.push({
+      regex: `^@/(${banned.join("|")})(/|$)`,
+      message: `src/${own} may import only ${allowedText}. Move the shared code down a layer, or move this module up.`,
+    });
+  }
+  return { files: [`src/${own}/**`], rules: { "no-restricted-imports": ["error", { patterns }] } };
+}
 
 // Definite bugs. Code the TypeScript compiler accepts but that fails or
 // misbehaves at runtime. Every rule here has a single correct fix.
@@ -417,9 +492,12 @@ const stylex = {
   "@stylexjs/no-legacy-contextual-styles": "error",
 } satisfies Rules;
 
-// Repository conventions (RFC 0002 and the other layer RFCs). Existing rules
-// configured for this codebase. Local rules from ./lint/plugin.mts go here too.
+// Existing rules configured for this codebase. Local rules from ./lint/plugin.mts go here too.
 const repository = {
+  "no-restricted-imports": [
+    "error",
+    { patterns: [...importsBannedEverywhere, ...wrappedLibraries] },
+  ],
   "no-nested-ternary": "error",
 } satisfies Rules;
 
@@ -463,6 +541,8 @@ export default defineConfig({
     ...repository,
   },
   overrides: [
+    // One override per layer: the imports each layer may not make.
+    ...layerNames.map((name) => layerImports(name)),
     // The compiler already reports these on TypeScript files, and
     // no-throw-literal gives way to its type-aware version, only-throw-error.
     {

@@ -4,8 +4,15 @@ import { Section } from "./Section";
 import { ButtonExample } from "./Button";
 import { IconButtonExample } from "./IconButton";
 import { LinkExample } from "./Link";
+import { CardLinkExample, RowLinkExample } from "./LinkSurfaces";
 import { BadgeExample, KbdExample } from "./Badge";
-import { SliderExample, SwitchExample, TabsExample, ToggleGroupExample } from "./Controls";
+import {
+  SliderExample,
+  SwitchExample,
+  TabsExample,
+  ToggleExample,
+  ToggleGroupExample,
+} from "./Controls";
 import { CollapsibleExample, DrawerExample, TooltipExample } from "./Overlays";
 
 const styles = stylex.create({
@@ -27,11 +34,14 @@ export function Primitives() {
         <ButtonExample />
         <IconButtonExample />
         <LinkExample />
+        <CardLinkExample />
+        <RowLinkExample />
         <BadgeExample />
         <KbdExample />
         <ToggleGroupExample />
         <TabsExample />
         <SwitchExample />
+        <ToggleExample />
         <SliderExample />
         <TooltipExample />
         <CollapsibleExample />

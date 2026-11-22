@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { headingId } from "./headingId";
-import { lessonSources } from "./lessons/registry";
+import { headingId } from "@/lib/headingId";
+import { lessonSources } from "@/content/lessons/registry";
 
 const LESSONS_DIR = join(process.cwd(), "src", "content", "lessons");
 

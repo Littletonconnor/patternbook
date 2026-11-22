@@ -2,11 +2,11 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { lessonBySlug, lessons, neighbours, topicOf } from "@/content/catalog";
-import { LessonEnd } from "@/components/LessonEnd";
-import { LessonHeader } from "@/components/LessonHeader";
-import { LessonLayout } from "@/components/LessonLayout";
-import { Pager } from "@/components/Pager";
-import { H2, P, Prose } from "@/components/Prose";
+import { LessonEnd } from "@/components/lesson/LessonEnd";
+import { LessonHeader } from "@/components/lesson/LessonHeader";
+import { LessonLayout } from "./_parts/LessonLayout";
+import { Pager } from "@/components/lesson/Pager";
+import { H2, P, Prose } from "@/components/lesson/Prose";
 import { hasLessonSource, lessonHeadings, loadLesson } from "@/content/lessonSource";
 
 export function generateStaticParams() {

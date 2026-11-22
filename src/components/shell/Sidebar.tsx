@@ -1,6 +1,5 @@
 "use client";
 
-import NextLink from "next/link";
 import { usePathname } from "next/navigation";
 import * as stylex from "@stylexjs/stylex";
 import {
@@ -31,13 +30,14 @@ import { lessonHref } from "@/content/types";
 import type { Lesson, Topic } from "@/content/types";
 import { colors, motion, radius, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
+import { RowLink } from "@/ui/RowLink";
 import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from "@/ui/Collapsible";
 import { Icon } from "@/ui/Icon";
 import { ToggleGroup } from "@/ui/ToggleGroup";
 import { Tooltip } from "@/ui/Tooltip";
-import { levelFilterOptions, setLevelFilter, useLevelFilter } from "./levelFilter";
-import { useReadLessons } from "./readState";
-import { toggleSidebar } from "./sidebarState";
+import { levelFilterOptions, setLevelFilter, useLevelFilter } from "@/hooks/useLevelFilter";
+import { useReadLessons } from "@/hooks/useReadLessons";
+import { toggleSidebar } from "@/hooks/useSidebar";
 
 const HOVER = "@media (hover: hover)";
 const OPEN = ":is([data-panel-open])";
@@ -170,13 +170,6 @@ const styles = stylex.create({
     transitionDuration: motion.press,
     transitionProperty: "background-color, color",
     height: 30,
-  },
-  rowLink: {
-    backgroundColor: {
-      default: "transparent",
-      ":hover": { [HOVER]: colors.sunken, default: null },
-    },
-    color: { default: colors.inkSoft, ":hover": { [HOVER]: colors.ink, default: null } },
   },
   current: {
     backgroundColor: { default: colors.line, ":hover": colors.line },
@@ -370,12 +363,8 @@ function LessonRow({ lesson, isCurrent, isRead }: LessonRowProps) {
     );
   }
   return (
-    <NextLink
-      href={lessonHref(lesson)}
-      aria-current={isCurrent ? "page" : undefined}
-      {...stylex.props(type.ui, styles.row, styles.rowLink, isCurrent && styles.current)}
-    >
+    <RowLink href={lessonHref(lesson)} size="compact" current={isCurrent}>
       {contents}
-    </NextLink>
+    </RowLink>
   );
 }

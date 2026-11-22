@@ -1,40 +1,17 @@
 "use client";
 
-import NextLink from "next/link";
 import * as stylex from "@stylexjs/stylex";
 import type { ReactNode } from "react";
 import { lessonHref } from "@/content/types";
 import type { Lesson } from "@/content/types";
-import { colors, motion, radius, space } from "@/tokens/tokens.stylex";
+import { colors, radius, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
 import { Badge } from "@/ui/Badge";
-import { useReadLessons } from "./readState";
-
-const HOVER = "@media (hover: hover)";
+import { CardLink } from "@/ui/CardLink";
+import { useReadLessons } from "@/hooks/useReadLessons";
 
 const styles = stylex.create({
-  card: {
-    padding: space.s3,
-    borderColor: {
-      default: colors.line,
-      ":hover": { [HOVER]: colors.lineStrong, default: null },
-    },
-    borderRadius: radius.frame,
-    borderStyle: "solid",
-    borderWidth: 1,
-    gap: space.s3,
-    backgroundColor: colors.surface,
-    color: colors.ink,
-    display: "flex",
-    flexDirection: "column",
-    outlineColor: colors.focus,
-    outlineOffset: 2,
-    outlineStyle: { default: "none", ":focus-visible": "solid" },
-    outlineWidth: 2,
-    textDecorationLine: "none",
-    transitionDuration: motion.press,
-    transitionProperty: "border-color",
-  },
+  body: { gap: space.s3, display: "flex", flexDirection: "column", flexGrow: 1 },
   thumb: {
     borderRadius: radius.control,
     overflow: "hidden",
@@ -76,26 +53,28 @@ type LessonCardProps = {
 export function LessonCard({ lesson, thumbnail }: LessonCardProps) {
   const { read } = useReadLessons();
   return (
-    <NextLink href={lessonHref(lesson)} {...stylex.props(styles.card, stylex.defaultMarker())}>
-      <div {...stylex.props(styles.thumb)}>
-        {thumbnail && <div {...stylex.props(styles.diagram)}>{thumbnail}</div>}
-        <span {...stylex.props(type.number, styles.meta)}>
-          {lesson.number} · {lesson.minutes} min
-        </span>
-        {read.has(lesson.slug) && (
-          <span {...stylex.props(styles.read)}>
-            <Badge tone="read">Read</Badge>
+    <CardLink href={lessonHref(lesson)}>
+      <span {...stylex.props(styles.body)}>
+        <div {...stylex.props(styles.thumb)}>
+          {thumbnail && <div {...stylex.props(styles.diagram)}>{thumbnail}</div>}
+          <span {...stylex.props(type.number, styles.meta)}>
+            {lesson.number} · {lesson.minutes} min
           </span>
-        )}
-      </div>
-      <div {...stylex.props(styles.text)}>
-        <div {...stylex.props(styles.heading)}>
-          <Badge level={lesson.level} />
-          <span {...stylex.props(type.body, styles.title)}>{lesson.title}</span>
+          {read.has(lesson.slug) && (
+            <span {...stylex.props(styles.read)}>
+              <Badge tone="read">Read</Badge>
+            </span>
+          )}
         </div>
-        <p {...stylex.props(type.small, styles.hook)}>{lesson.hook}</p>
-      </div>
-    </NextLink>
+        <div {...stylex.props(styles.text)}>
+          <div {...stylex.props(styles.heading)}>
+            <Badge level={lesson.level} />
+            <span {...stylex.props(type.body, styles.title)}>{lesson.title}</span>
+          </div>
+          <p {...stylex.props(type.small, styles.hook)}>{lesson.hook}</p>
+        </div>
+      </span>
+    </CardLink>
   );
 }
 

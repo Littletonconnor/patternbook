@@ -1,17 +1,14 @@
 "use client";
 
-import { Toggle } from "@base-ui/react/toggle";
 import * as stylex from "@stylexjs/stylex";
 import { Circle, CircleCheck } from "lucide-react";
 import { useState } from "react";
 import { colors, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
-import { Button, buttonStyles } from "@/ui/Button";
+import { Button } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";
-import { useReadLessons } from "./readState";
-
-const PRESSED = ":is([data-pressed])";
-const HOVER = "@media (hover: hover)";
+import { Toggle } from "@/ui/Toggle";
+import { useReadLessons } from "@/hooks/useReadLessons";
 
 const styles = stylex.create({
   end: {
@@ -20,15 +17,6 @@ const styles = stylex.create({
     display: "flex",
     flexWrap: "wrap",
     justifyContent: "space-between",
-  },
-  read: {
-    borderColor: { [PRESSED]: colors.sound, default: colors.lineStrong },
-    backgroundColor: {
-      [PRESSED]: colors.soundWash,
-      default: colors.surface,
-      ":hover": { [HOVER]: colors.sunken, default: null },
-    },
-    color: { [PRESSED]: colors.soundInk, default: colors.ink },
   },
   feedback: { gap: space.s3, alignItems: "center", display: "flex", flexWrap: "wrap" },
   prompt: { color: colors.inkSoft },
@@ -39,11 +27,7 @@ export function MarkAsRead({ slug }: { slug: string }) {
   const { read, setRead } = useReadLessons();
   const isRead = read.has(slug);
   return (
-    <Toggle
-      pressed={isRead}
-      onPressedChange={(pressed) => setRead(slug, pressed)}
-      {...stylex.props(type.control, buttonStyles.base, styles.read)}
-    >
+    <Toggle pressed={isRead} onPressedChange={(pressed) => setRead(slug, pressed)}>
       <Icon icon={isRead ? CircleCheck : Circle} />
       {isRead ? "Read" : "Mark as read"}
     </Toggle>

@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 import { lessons, topics, totals } from "@/content/catalog";
-import { OgCard, ogSize } from "./ogImage";
+import { OgCard, ogSize } from "@/components/shell/OgCard";
 
 export const alt = "Patternbook: short lessons on common software engineering problems";
 export const size = ogSize;

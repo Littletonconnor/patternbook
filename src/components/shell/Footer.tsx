@@ -1,9 +1,7 @@
-import NextLink from "next/link";
 import * as stylex from "@stylexjs/stylex";
-import { colors, radius, space } from "@/tokens/tokens.stylex";
+import { colors, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
-
-const HOVER = "@media (hover: hover)";
+import { Link } from "@/ui/Link";
 
 const styles = stylex.create({
   footer: {
@@ -18,15 +16,6 @@ const styles = stylex.create({
     paddingTop: space.s6,
   },
   links: { gap: space.s4, display: "flex", flexWrap: "wrap" },
-  link: {
-    borderRadius: radius.mark,
-    color: { default: colors.inkMuted, ":hover": { [HOVER]: colors.ink, default: null } },
-    outlineColor: colors.focus,
-    outlineOffset: 2,
-    outlineStyle: { default: "none", ":focus-visible": "solid" },
-    outlineWidth: 2,
-    textDecorationLine: "none",
-  },
 });
 
 const links = [
@@ -43,9 +32,9 @@ export function Footer() {
       <span>Patternbook</span>
       <nav aria-label="Footer" {...stylex.props(styles.links)}>
         {links.map((link) => (
-          <NextLink key={link.label} href={link.href} {...stylex.props(styles.link)}>
+          <Link key={link.label} variant="nav" href={link.href}>
             {link.label}
-          </NextLink>
+          </Link>
         ))}
       </nav>
     </footer>
