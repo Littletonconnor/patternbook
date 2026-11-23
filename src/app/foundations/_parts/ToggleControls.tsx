@@ -29,7 +29,10 @@ export function SwitchExample() {
           ["Status", "Built: src/ui/Switch.tsx, Base UI Switch"],
           ["Props", "label (required) · checked / defaultChecked / onCheckedChange · disabled"],
           ["Track", "36 × 22 · radius 11 · off lineStrong · on ink · :is([data-checked])"],
-          ["Thumb", "18 × 18 surface, 2px inset, hairline shadow · moves 14px over motion.move"],
+          [
+            "Thumb",
+            "18 × 18 surfaceRaised, 2px inset, shadows.raised · moves 14px over motion.move",
+          ],
           ["Label", "type.control · gap 10 · the whole row is clickable"],
           ["Focus", "ring around the track"],
         ]}

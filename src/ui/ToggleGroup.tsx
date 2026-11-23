@@ -6,7 +6,7 @@ import * as stylex from "@stylexjs/stylex";
 import { useState } from "react";
 import type { ReactNode } from "react";
 
-import { colors, radius, space } from "@/tokens/tokens.stylex";
+import { colors, radius, shadows, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
 
 const HOVER = "@media (hover: hover)";
@@ -22,13 +22,14 @@ const styles = stylex.create({
   },
   trackSmall: { display: "flex", minWidth: "100%", width: "max-content" },
   item: {
-    borderColor: { [PRESSED]: colors.line, default: "transparent" },
+    borderColor: "transparent",
     borderRadius: 6,
     borderStyle: "solid",
     borderWidth: 1,
     paddingBlock: 5,
     paddingInline: space.s3,
-    backgroundColor: { [PRESSED]: colors.surface, default: "transparent" },
+    backgroundColor: { [PRESSED]: colors.surfaceRaised, default: "transparent" },
+    boxShadow: { [PRESSED]: shadows.raised, default: "none" },
     color: {
       [PRESSED]: colors.ink,
       default: colors.inkSoft,

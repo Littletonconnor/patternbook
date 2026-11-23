@@ -2,23 +2,6 @@
 
 Open work first, roughly in the order to do it. Finished phases are under [Done](#done) at the bottom. Board numbers refer to the design canvas.
 
-## Shadows
-
-The current set in `src/tokens/tokens.stylex.ts` is three one-off values (`thumb`, `popover`, `sheet`), and none have dark mode values.
-
-- [ ] Design a shadow scale (for example raised, overlay, sheet) with light and dark values
-- [ ] Replace the current tokens and update `Switch`, `Tooltip` and `Drawer`
-- [ ] Add a "Shadows" section to `/foundations` showing each level
-
-## Branding
-
-The current mark (a dot-grid square with an orange dot) and the "Patternbook" wordmark were placeholders. Replace them with something more professional.
-
-- [ ] Design a new logo: mark and wordmark, light and dark versions
-- [ ] Update `Brand` in the top bar to use it
-- [ ] New favicon and app icons from the mark (`src/app/favicon.ico`, `manifest.ts`)
-- [ ] New Open Graph image (`OgCard`, site and lesson `opengraph-image.tsx`)
-
 ## 6. Diagram kit (`src/diagrams`)
 
 The part that matters most. Board 02.
@@ -215,3 +198,20 @@ Design: [RFC 0004: Lint](rfc/0004-lint.md).
 - [x] Local rules: no comments, no `enum`, colours and type only from tokens, effects and timers only inside hooks, storage, cookies and clipboard only through `src/hooks`
 - [x] Spacing ratchet (`npm run spacing`, part of `verify`)
 - [x] Switch Prettier to oxfmt, with import sorting
+
+### Shadows
+
+Three levels (`raised`, `overlay`, `sheet`) with light and dark values, plus `surfaceRaised` and `surfaceOverlay` for dark mode. Board 01, section 04.
+
+- [x] Design a shadow scale (for example raised, overlay, sheet) with light and dark values
+- [x] Replace the current tokens and update `Switch`, `Tooltip` and `Drawer`
+- [x] Add a "Shadows" section to `/foundations` showing each level
+
+### Branding
+
+A 3 by 3 dot grid with one signal dot off the grid, and a lowercase "patternbook" wordmark. Board 01, section 05.
+
+- [x] Design a new logo: mark and wordmark, light and dark versions
+- [x] Update `Brand` in the top bar to use it
+- [x] New favicon and app icons from the mark (`src/app/favicon.ico`, `manifest.ts`)
+- [x] New Open Graph image (`OgCard`, site and lesson `opengraph-image.tsx`)

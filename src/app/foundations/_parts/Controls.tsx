@@ -79,7 +79,10 @@ export function ToggleGroupExample() {
             "Item",
             "padding 5 × 12, type.control · small: 6 × 0, type.caption, items share the width",
           ],
-          ["On", "surface, 1px line border, ink, weight 500 · styled with :is([data-pressed])"],
+          [
+            "On",
+            "surfaceRaised, shadows.raised, ink, weight 500 · styled with :is([data-pressed])",
+          ],
           ["Motion", "none: the switch is instant so a diagram can be compared before and after"],
         ]}
       />
@@ -167,7 +170,10 @@ export function SliderExample() {
           ["Status", "Built: src/ui/Slider.tsx, Base UI Slider"],
           ["Props", "label · unit · value / defaultValue / onValueChange · min, max, step"],
           ["Track", "2px · line · filled part ink · hit area 20 high"],
-          ["Thumb", "14 × 14 surface, 1.5px ink border · hover and drag: scale 1.15 · focus ring"],
+          [
+            "Thumb",
+            "14 × 14 surfaceRaised, 1.5px ink border, shadows.raised · hover and drag: scale 1.15 · focus ring",
+          ],
           ["Label", "type.ui inkSoft on the left · value in type.value on the right"],
         ]}
       />

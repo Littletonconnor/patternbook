@@ -32,7 +32,7 @@ const styles = stylex.create({
   popup: {
     overscrollBehavior: "contain",
     paddingInline: space.s4,
-    backgroundColor: colors.surface,
+    backgroundColor: colors.surfaceOverlay,
     boxShadow: shadows.sheet,
     outlineStyle: "none",
     transform: {

@@ -87,7 +87,7 @@ export function Layout() {
           </div>
           <p {...stylex.props(type.small, styles.note)}>
             Borders are 1 px Line. Marks inside diagrams use a 1.5 px Ink stroke. No shadows on the
-            page; one soft shadow is reserved for things that float.
+            page; things that sit above it use the three levels in Elevation.
           </p>
         </Card>
 

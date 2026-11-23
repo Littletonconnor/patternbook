@@ -24,7 +24,7 @@ const styles = stylex.create({
 export function Primitives() {
   return (
     <Section
-      eyebrow="04 · Primitives · src/ui"
+      eyebrow="06 · Primitives · src/ui"
       title="Controls: Base UI for behaviour, StyleX for the look"
       note="Hover, press and Tab to see the states. Disabled is the only one a page can show at rest."
     >

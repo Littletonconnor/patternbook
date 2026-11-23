@@ -2,7 +2,7 @@ import * as stylex from "@stylexjs/stylex";
 import NextLink from "next/link";
 import type { ComponentProps } from "react";
 
-import { colors, motion, radius, space } from "@/tokens/tokens.stylex";
+import { colors, motion, radius, shadows, space } from "@/tokens/tokens.stylex";
 
 const HOVER = "@media (hover: hover)";
 const PREVIEW_HOVER = ":is([data-preview=hover])";
@@ -20,6 +20,11 @@ const styles = stylex.create({
     borderWidth: 1,
     overflow: "hidden",
     backgroundColor: colors.surface,
+    boxShadow: {
+      [PREVIEW_HOVER]: shadows.raised,
+      default: "none",
+      ":hover": { [HOVER]: shadows.raised, default: null },
+    },
     color: colors.ink,
     display: "flex",
     flexDirection: "column",
@@ -29,7 +34,7 @@ const styles = stylex.create({
     outlineWidth: 2,
     textDecorationLine: "none",
     transitionDuration: motion.press,
-    transitionProperty: "border-color",
+    transitionProperty: "border-color, box-shadow",
     transitionTimingFunction: motion.easeOut,
   },
   padded: { padding: space.s4 },

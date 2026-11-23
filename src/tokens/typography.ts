@@ -73,6 +73,13 @@ export const type = stylex.create({
     fontWeight: 500,
     lineHeight: "20px",
   },
+  wordmark: {
+    fontFamily: fonts.sans,
+    fontSize: 15,
+    fontWeight: 600,
+    letterSpacing: "-0.035em",
+    lineHeight: "20px",
+  },
   ui: {
     fontFamily: fonts.sans,
     fontSize: 14,

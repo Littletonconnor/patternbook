@@ -13,7 +13,7 @@ const styles = stylex.create({
 
 export function PageParts() {
   return (
-    <Section eyebrow="05 · Page parts · src/components" title="The furniture around a lesson">
+    <Section eyebrow="07 · Page parts · src/components" title="The furniture around a lesson">
       <TooltipProvider>
         <div {...stylex.props(styles.grid)}>
           <TopBarPart />

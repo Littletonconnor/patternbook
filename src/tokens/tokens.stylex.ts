@@ -5,6 +5,8 @@ const DARK = "@media (prefers-color-scheme: dark)";
 export const colors = stylex.defineVars({
   paper: { default: "#FBFBF9", [DARK]: "#0F1114" },
   surface: { default: "#FFFFFF", [DARK]: "#171A1F" },
+  surfaceRaised: { default: "#FFFFFF", [DARK]: "#1E2228" },
+  surfaceOverlay: { default: "#FFFFFF", [DARK]: "#23272E" },
   sunken: { default: "#F4F4F1", [DARK]: "#0A0B0D" },
   line: { default: "#E4E4DF", [DARK]: "#2A2E35" },
   lineStrong: { default: "#CFCFC8", [DARK]: "#3D424B" },
@@ -30,9 +32,23 @@ export const colors = stylex.defineVars({
 });
 
 export const shadows = stylex.defineVars({
-  thumb: "0 0 0 0.5px rgb(22 24 29 / 0.12), 0 1px 2px rgb(22 24 29 / 0.16)",
-  popover: "0 6px 20px rgb(22 24 29 / 0.16)",
-  sheet: "0 -6px 20px rgb(22 24 29 / 0.16)",
+  raised: {
+    default:
+      "0 1px 1px rgb(22 24 29 / 0.06), 0 2px 2px rgb(22 24 29 / 0.06), 0 0 0 0.5px rgb(22 24 29 / 0.08)",
+    [DARK]: "0 1px 1px rgb(0 0 0 / 0.3), 0 2px 2px rgb(0 0 0 / 0.3)",
+  },
+  overlay: {
+    default:
+      "0 1px 1px rgb(22 24 29 / 0.05), 0 2px 2px rgb(22 24 29 / 0.05), 0 4px 4px rgb(22 24 29 / 0.05), 0 8px 8px rgb(22 24 29 / 0.05), 0 16px 16px rgb(22 24 29 / 0.05)",
+    [DARK]:
+      "0 1px 1px rgb(0 0 0 / 0.25), 0 2px 2px rgb(0 0 0 / 0.25), 0 4px 4px rgb(0 0 0 / 0.25), 0 8px 8px rgb(0 0 0 / 0.25), 0 16px 16px rgb(0 0 0 / 0.25)",
+  },
+  sheet: {
+    default:
+      "0 -1px 1px rgb(22 24 29 / 0.05), 0 -2px 2px rgb(22 24 29 / 0.05), 0 -4px 4px rgb(22 24 29 / 0.05), 0 -8px 8px rgb(22 24 29 / 0.05), 0 -16px 16px rgb(22 24 29 / 0.05)",
+    [DARK]:
+      "0 -1px 1px rgb(0 0 0 / 0.25), 0 -2px 2px rgb(0 0 0 / 0.25), 0 -4px 4px rgb(0 0 0 / 0.25), 0 -8px 8px rgb(0 0 0 / 0.25), 0 -16px 16px rgb(0 0 0 / 0.25)",
+  },
 });
 
 export const fonts = stylex.defineVars({

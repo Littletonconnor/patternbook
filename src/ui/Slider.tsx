@@ -2,7 +2,7 @@ import { Slider as BaseSlider } from "@base-ui/react/slider";
 import * as stylex from "@stylexjs/stylex";
 import type { ComponentProps, ReactNode } from "react";
 
-import { colors, motion, space } from "@/tokens/tokens.stylex";
+import { colors, motion, shadows, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
 
 const HOVER = "@media (hover: hover)";
@@ -38,7 +38,8 @@ const styles = stylex.create({
     borderRadius: "50%",
     borderStyle: "solid",
     borderWidth: 1.5,
-    backgroundColor: colors.surface,
+    backgroundColor: colors.surfaceRaised,
+    boxShadow: shadows.raised,
     outlineColor: colors.focus,
     outlineOffset: 2,
     outlineStyle: { default: "none", ":has(:focus-visible)": "solid" },

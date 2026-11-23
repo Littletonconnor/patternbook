@@ -108,7 +108,10 @@ export function PagerPart() {
       <Specs
         rows={[
           ["Layout", "two columns, gap 16 · stacks below 560px · Next is right-aligned"],
-          ["Card", "surface · 1px line · radius.frame · padding 16 × 20 · hover border lineStrong"],
+          [
+            "Card",
+            "surface · 1px line · radius.frame · padding 16 × 20 · hover border lineStrong, shadows.raised",
+          ],
           ["Ends", "pass only previous or next on the first and last lesson"],
         ]}
       />

@@ -51,7 +51,7 @@ export function CardLinkExample() {
           ["Status", "Built: src/ui/CardLink.tsx, on next/link"],
           ["Props", "padding: default (space.s4) | none · every next/link prop"],
           ["Frame", "surface · 1px line border · radius.frame · column flex"],
-          ["Hover", "border turns lineStrong over motion.press"],
+          ["Hover", "border turns lineStrong and shadows.raised fades in over motion.press"],
           ["Focus", "2px focus ring, offset 2"],
           ["Content", "lay out children in one inner element; the card sets no gap"],
         ]}

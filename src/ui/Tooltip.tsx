@@ -11,7 +11,7 @@ const REDUCED = "@media (prefers-reduced-motion: reduce)";
 const styles = stylex.create({
   popup: {
     backgroundColor: colors.ink,
-    boxShadow: shadows.popover,
+    boxShadow: shadows.overlay,
     color: colors.paper,
     opacity: { [HIDDEN]: 0, default: 1 },
     transform: { [HIDDEN]: "translateY(4px)", default: "translateY(0)" },

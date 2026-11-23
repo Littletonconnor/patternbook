@@ -37,8 +37,8 @@ const styles = stylex.create({
   },
   thumb: {
     borderRadius: "50%",
-    backgroundColor: colors.surface,
-    boxShadow: shadows.thumb,
+    backgroundColor: colors.surfaceRaised,
+    boxShadow: shadows.raised,
     position: "absolute",
     transform: { [CHECKED]: "translateX(14px)", default: "translateX(0)" },
     transitionDuration: { [REDUCED]: "0s", default: motion.move },

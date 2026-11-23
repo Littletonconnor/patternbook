@@ -4,7 +4,9 @@ import type { Metadata } from "next";
 import { colors, measure, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
 
+import { Brand } from "./_parts/Brand";
 import { Colour } from "./_parts/Colour";
+import { Elevation } from "./_parts/Elevation";
 import { Layout } from "./_parts/Layout";
 import { PageParts } from "./_parts/PageParts";
 import { Primitives } from "./_parts/Primitives";
@@ -41,6 +43,8 @@ export default function Foundations() {
       <Colour />
       <Typography />
       <Layout />
+      <Elevation />
+      <Brand />
       <Primitives />
       <PageParts />
     </main>
