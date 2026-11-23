@@ -64,13 +64,13 @@ Escape hatches are not repeated here. RFC 0004 bans `any`, assertions other than
 
 These options are added to `tsconfig.json`, each for the reason given. All exist in TypeScript 5.8 and later [[4]](#sources) [[5]](#sources).
 
-| Option | What it does | Errors today |
-| --- | --- | --- |
-| `noUncheckedIndexedAccess` | Adds `undefined` to every read by index or computed key, so a missing element must be handled. | 12 |
-| `exactOptionalPropertyTypes` | An optional property can be absent, but cannot be set to `undefined` unless its type says so. | 3 |
-| `noImplicitReturns` | Every path through a function that returns a value must return one. | 0 |
-| `verbatimModuleSyntax` | Imports without `type` stay in the output and imports with `type` are removed, so what you read is what runs. | 0 |
-| `erasableSyntaxOnly` | Bans syntax that needs code generation: `enum`, namespaces with runtime code, parameter properties, `import =`. | 0 |
+| Option                       | What it does                                                                                                    | Errors today |
+| ---------------------------- | --------------------------------------------------------------------------------------------------------------- | ------------ |
+| `noUncheckedIndexedAccess`   | Adds `undefined` to every read by index or computed key, so a missing element must be handled.                  | 12           |
+| `exactOptionalPropertyTypes` | An optional property can be absent, but cannot be set to `undefined` unless its type says so.                   | 3            |
+| `noImplicitReturns`          | Every path through a function that returns a value must return one.                                             | 0            |
+| `verbatimModuleSyntax`       | Imports without `type` stay in the output and imports with `type` are removed, so what you read is what runs.   | 0            |
+| `erasableSyntaxOnly`         | Bans syntax that needs code generation: `enum`, namespaces with runtime code, parameter properties, `import =`. | 0            |
 
 **Why these five.** `noUncheckedIndexedAccess` and `exactOptionalPropertyTypes` close the gaps described in the Problem section, and they are the only two that report errors today. `noImplicitReturns` catches a branch that forgets to return: without it, the inferred return type quietly widens to include `undefined`. `verbatimModuleSyntax` is the compiler side of the `consistent-type-imports` lint rule. The lint rule tells the author to write `import type`, and the compiler option guarantees what is erased and what is kept.
 
@@ -144,19 +144,19 @@ This is the existing signature in `src/hooks/useLocalStorage.ts`, and the storag
 
 ### Sources
 
-| # | Source | Type | What it says |
-| --- | --- | --- | --- |
-| 1 | [Gao, Bird and Barr 2017, To Type or Not to Type](https://discovery-pp.ucl.ac.uk/id/eprint/10064729/1/typestudy.pdf) | Peer-reviewed (ICSE) | Of 400 public JavaScript bugs, TypeScript and Flow annotations would each have detected 60, about 15% (interval 11.5% to 18.5%). |
-| 2 | [Mündler et al. 2025, Type-Constrained Code Generation with Language Models](https://arxiv.org/abs/2504.09246) | Peer-reviewed (PLDI) | Language models frequently produce type errors; constraining generation with type information cuts compilation errors by more than half. |
-| 3 | Bunge 2019, Adopting TypeScript at Scale (Airbnb, JSConf Hawaii) | Industry report, self-reported | Reports that 38% of bugs in Airbnb's postmortems could have been prevented by TypeScript. |
-| 4 | [TypeScript, TSConfig reference](https://www.typescriptlang.org/tsconfig/) | Official docs | Definitions of `strict` and of each option in part 1. |
-| 5 | [TypeScript 5.8 release notes](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-8.html) | Official docs | Introduces `erasableSyntaxOnly` for code run by type-stripping runtimes. |
-| 6 | [Node.js, Modules: TypeScript](https://nodejs.org/api/typescript.html) | Official docs | Type stripping is stable from Node 24.12; recommends `erasableSyntaxOnly` and `verbatimModuleSyntax`; enums, namespaces and parameter properties need transformation. |
-| 7 | [Next.js, typedRoutes](https://nextjs.org/docs/app/api-reference/config/next-config-js/typedRoutes) | Official docs | Generates route types and checks `Link` hrefs against them. |
-| 8 | [tsconfig/bases, strictest](https://github.com/tsconfig/bases) | Community config | A published configuration that adds `noUncheckedIndexedAccess`, `exactOptionalPropertyTypes`, `noImplicitReturns` and others to `strict`. |
-| 9 | [King 2019, Parse, don't validate](https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate/) | Engineering essay | Turn unstructured input into a precise type once, at the boundary, instead of checking it and passing the original along. |
-| 10 | [TypeScript wiki, Breaking changes](https://github.com/microsoft/TypeScript/wiki/Breaking-Changes) | Official docs | Lists the breaking changes in each minor release. |
-| 11 | [RFC 0004: Lint](0004-lint.md), [RFC 0002: Architecture](0002-architecture.md), [RFC 0001: Agent-first repository](0001-agent-first-repo.md) | This repository | Escape-hatch bans, type-aware rules, layer placement and the priority pyramid this RFC builds on. |
+| #   | Source                                                                                                                                       | Type                           | What it says                                                                                                                                                          |
+| --- | -------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | [Gao, Bird and Barr 2017, To Type or Not to Type](https://discovery-pp.ucl.ac.uk/id/eprint/10064729/1/typestudy.pdf)                         | Peer-reviewed (ICSE)           | Of 400 public JavaScript bugs, TypeScript and Flow annotations would each have detected 60, about 15% (interval 11.5% to 18.5%).                                      |
+| 2   | [Mündler et al. 2025, Type-Constrained Code Generation with Language Models](https://arxiv.org/abs/2504.09246)                               | Peer-reviewed (PLDI)           | Language models frequently produce type errors; constraining generation with type information cuts compilation errors by more than half.                              |
+| 3   | Bunge 2019, Adopting TypeScript at Scale (Airbnb, JSConf Hawaii)                                                                             | Industry report, self-reported | Reports that 38% of bugs in Airbnb's postmortems could have been prevented by TypeScript.                                                                             |
+| 4   | [TypeScript, TSConfig reference](https://www.typescriptlang.org/tsconfig/)                                                                   | Official docs                  | Definitions of `strict` and of each option in part 1.                                                                                                                 |
+| 5   | [TypeScript 5.8 release notes](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-8.html)                               | Official docs                  | Introduces `erasableSyntaxOnly` for code run by type-stripping runtimes.                                                                                              |
+| 6   | [Node.js, Modules: TypeScript](https://nodejs.org/api/typescript.html)                                                                       | Official docs                  | Type stripping is stable from Node 24.12; recommends `erasableSyntaxOnly` and `verbatimModuleSyntax`; enums, namespaces and parameter properties need transformation. |
+| 7   | [Next.js, typedRoutes](https://nextjs.org/docs/app/api-reference/config/next-config-js/typedRoutes)                                          | Official docs                  | Generates route types and checks `Link` hrefs against them.                                                                                                           |
+| 8   | [tsconfig/bases, strictest](https://github.com/tsconfig/bases)                                                                               | Community config               | A published configuration that adds `noUncheckedIndexedAccess`, `exactOptionalPropertyTypes`, `noImplicitReturns` and others to `strict`.                             |
+| 9   | [King 2019, Parse, don't validate](https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate/)                                      | Engineering essay              | Turn unstructured input into a precise type once, at the boundary, instead of checking it and passing the original along.                                             |
+| 10  | [TypeScript wiki, Breaking changes](https://github.com/microsoft/TypeScript/wiki/Breaking-Changes)                                           | Official docs                  | Lists the breaking changes in each minor release.                                                                                                                     |
+| 11  | [RFC 0004: Lint](0004-lint.md), [RFC 0002: Architecture](0002-architecture.md), [RFC 0001: Agent-first repository](0001-agent-first-repo.md) | This repository                | Escape-hatch bans, type-aware rules, layer placement and the priority pyramid this RFC builds on.                                                                     |
 
 The figures for source 1 were checked against a secondary summary of the paper; the paper itself was not read in full. Source 3 is a conference talk that could not be read, and its figure is self-reported, so no decision rests on it. Repository counts are from this repository as it is today.
 
