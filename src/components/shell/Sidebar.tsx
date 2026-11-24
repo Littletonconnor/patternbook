@@ -4,6 +4,8 @@ import * as stylex from "@stylexjs/stylex";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
+import { lessonSlugFromPath } from "@/content/catalog";
+import type { LessonSlug, TopicSlug } from "@/content/catalog";
 import type { Lesson, Topic } from "@/content/types";
 import { levelFilterOptions, setLevelFilter, useLevelFilter } from "@/hooks/useLevelFilter";
 import type { LevelFilter } from "@/hooks/useLevelFilter";
@@ -74,7 +76,7 @@ const styles = stylex.create({
 
 type SidebarProps = {
   topics: readonly Topic[];
-  currentSlug?: string;
+  currentSlug?: LessonSlug;
   closable?: boolean;
 };
 
@@ -89,14 +91,14 @@ function visibleTopics(topics: readonly Topic[], level: LevelFilter): VisibleTop
     .filter((t) => t.lessons.length > 0);
 }
 
-function countLessons(visible: readonly VisibleTopic[], read: ReadonlySet<string>) {
+function countLessons(visible: readonly VisibleTopic[], read: ReadonlySet<LessonSlug>) {
   const lessons = visible.flatMap((t) => t.lessons);
   return { total: lessons.length, read: lessons.filter((l) => read.has(l.slug)).length };
 }
 
-function useOpenTopics(topics: readonly Topic[], currentSlug: string | undefined) {
+function useOpenTopics(topics: readonly Topic[], currentSlug: LessonSlug | undefined) {
   const topicOfCurrent = topics.find((t) => t.lessons.some((l) => l.slug === currentSlug))?.slug;
-  const [open, setOpen] = useState<ReadonlySet<string>>(
+  const [open, setOpen] = useState<ReadonlySet<TopicSlug>>(
     () => new Set(topicOfCurrent ? [topicOfCurrent] : []),
   );
   const [openedFor, setOpenedFor] = useState(topicOfCurrent);
@@ -107,7 +109,7 @@ function useOpenTopics(topics: readonly Topic[], currentSlug: string | undefined
     }
   }
 
-  function toggle(slug: string, isOpen: boolean) {
+  function toggle(slug: TopicSlug, isOpen: boolean) {
     setOpen((prev) => {
       const next = new Set(prev);
       if (isOpen) {
@@ -126,7 +128,7 @@ export function Sidebar({ topics, currentSlug: slugProp, closable = false }: Sid
   const { read } = useReadLessons();
   const level = useLevelFilter();
   const pathname = usePathname();
-  const currentSlug = slugProp ?? pathname.match(/^\/lessons\/([^/]+)/)?.[1];
+  const currentSlug = slugProp ?? lessonSlugFromPath(pathname);
   const { open, toggle, collapseAll } = useOpenTopics(topics, currentSlug);
   const visible = visibleTopics(topics, level);
   const counts = countLessons(visible, read);

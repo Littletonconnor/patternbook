@@ -68,9 +68,5 @@ export const diagrams: Diagram[] = [
 ];
 
 export function diagramLesson(diagram: Diagram) {
-  const lesson = lessonBySlug(diagram.lesson);
-  if (!lesson) {
-    throw new Error(`Diagram ${diagram.number} points at a missing lesson: ${diagram.lesson}`);
-  }
-  return lesson;
+  return lessonBySlug(diagram.lesson);
 }

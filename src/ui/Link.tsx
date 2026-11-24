@@ -1,7 +1,7 @@
 import * as stylex from "@stylexjs/stylex";
 import { ArrowUpRight } from "lucide-react";
 import NextLink from "next/link";
-import type { ComponentProps } from "react";
+import type { LinkProps as NextLinkProps } from "next/link";
 
 import { colors, motion, radius } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
@@ -69,7 +69,7 @@ const styles = stylex.create({
   },
 });
 
-type LinkProps = Omit<ComponentProps<typeof NextLink>, "className" | "style"> & {
+type LinkProps<RouteType> = Omit<NextLinkProps<RouteType>, "className" | "style"> & {
   variant?: "inline" | "nav" | "plain" | "external";
   current?: boolean;
 };
@@ -80,7 +80,10 @@ const variantStyles = {
   plain: styles.plain,
 };
 
-function ExternalLink({ children, ...props }: Omit<LinkProps, "variant" | "current">) {
+function ExternalLink<RouteType>({
+  children,
+  ...props
+}: Omit<LinkProps<RouteType>, "variant" | "current">) {
   return (
     <NextLink
       target="_blank"
@@ -96,7 +99,12 @@ function ExternalLink({ children, ...props }: Omit<LinkProps, "variant" | "curre
   );
 }
 
-export function Link({ variant = "inline", current = false, children, ...props }: LinkProps) {
+export function Link<RouteType>({
+  variant = "inline",
+  current = false,
+  children,
+  ...props
+}: LinkProps<RouteType>) {
   if (variant === "external") {
     return <ExternalLink {...props}>{children}</ExternalLink>;
   }

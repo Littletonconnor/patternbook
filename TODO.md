@@ -53,7 +53,7 @@ Design: [RFC 0002: Architecture](rfc/0002-architecture.md). Done, see [Agent-dri
 
 ### 2. Types
 
-Design: [RFC 0003: Types](rfc/0003-types.md).
+Design: [RFC 0003: Types](rfc/0003-types.md). Done, see [Agent-driven repo: Types](#agent-driven-repo-types) under Done.
 
 ### 3. Lint rules
 
@@ -198,6 +198,20 @@ Design: [RFC 0004: Lint](rfc/0004-lint.md).
 - [x] Local rules: no comments, no `enum`, colours and type only from tokens, effects and timers only inside hooks, storage, cookies and clipboard only through `src/hooks`
 - [x] Spacing ratchet (`npm run spacing`, part of `verify`)
 - [x] Switch Prettier to oxfmt, with import sorting
+
+### Agent-driven repo: Types
+
+Design: [RFC 0003: Types](rfc/0003-types.md).
+
+- [x] Compiler options beyond `strict`: `noUncheckedIndexedAccess`, `exactOptionalPropertyTypes`, `noImplicitReturns`, `noFallthroughCasesInSwitch`, `noImplicitOverride`, `verbatimModuleSyntax`, `erasableSyntaxOnly`; `allowJs` off
+- [x] Catalog written `as const satisfies`, with `LessonSlug` and `TopicSlug` derived from it. Every topic has at least one lesson (non-empty tuple types)
+- [x] Slug unions used everywhere a slug goes: lesson registry, diagrams, thumbnails, topic icons (`Record<TopicSlug, …>`), sidebar, read state
+- [x] Boundaries narrowed: route params and pathnames through `isLessonSlug`, stored read state filtered to known slugs, `isArray` in `src/lib` instead of `Array.isArray` (which narrows to `any[]`)
+- [x] Typed links: `typedRoutes: true`, link primitives generic over the route, MDX links must point at a lesson, a `#heading` or an `https://` URL
+- [x] `typecheck` runs `next typegen` first, so a clean checkout type-checks without a build
+- [x] Lint: no unnecessary conditions, function properties instead of method signatures, `fetch` banned outside a client module, `?: T | undefined` only in `<Name>Props` types
+- [x] TypeScript pinned to an exact version
+- [x] Type coverage at 100% (`npm run typecheck:coverage`, strict mode, part of `verify`)
 
 ### Shadows
 

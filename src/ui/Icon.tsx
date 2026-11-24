@@ -3,7 +3,7 @@ import type { LucideIcon } from "lucide-react";
 type IconProps = {
   icon: LucideIcon;
   size?: 12 | 14 | 16 | 20;
-  label?: string;
+  label?: string | undefined;
 };
 
 export function Icon({ icon: Glyph, size = 16, label }: IconProps) {

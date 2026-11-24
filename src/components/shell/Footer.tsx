@@ -1,4 +1,5 @@
 import * as stylex from "@stylexjs/stylex";
+import type { Route } from "next";
 
 import { colors, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
@@ -19,12 +20,11 @@ const styles = stylex.create({
   links: { gap: space.s4, display: "flex", flexWrap: "wrap" },
 });
 
-const links = [
+const links: { label: string; href: Route }[] = [
   { label: "Diagrams", href: "/diagrams" },
   { label: "About", href: "/about" },
   { label: "Foundations", href: "/foundations" },
   { label: "GitHub", href: "https://github.com/Littletonconnor/patternbook" },
-  { label: "RSS", href: "/rss.xml" },
 ];
 
 export function Footer() {

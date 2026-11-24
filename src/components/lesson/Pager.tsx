@@ -26,7 +26,13 @@ const styles = stylex.create({
 
 type PagerLesson = Pick<Lesson, "number" | "slug" | "title" | "hook">;
 
-export function Pager({ previous, next }: { previous?: PagerLesson; next?: PagerLesson }) {
+export function Pager({
+  previous,
+  next,
+}: {
+  previous: PagerLesson | undefined;
+  next: PagerLesson | undefined;
+}) {
   return (
     <nav aria-label="Lessons" {...stylex.props(styles.pager)}>
       {previous && <PagerCard lesson={previous} label="Previous" />}

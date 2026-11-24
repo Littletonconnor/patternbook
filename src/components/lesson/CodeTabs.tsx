@@ -41,7 +41,7 @@ export function CodeTabs({ tabs }: { tabs: readonly CodeTab[] }) {
 
   return (
     <div {...stylex.props(styles.box)}>
-      <Tabs value={active} onValueChange={(value) => setActive(Number(value))}>
+      <Tabs value={active} onValueChange={(value: unknown) => setActive(Number(value))}>
         <div {...stylex.props(styles.header)}>
           <div {...stylex.props(styles.tabs)}>
             <TabsList>

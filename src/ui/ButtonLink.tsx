@@ -1,17 +1,21 @@
 import * as stylex from "@stylexjs/stylex";
 import NextLink from "next/link";
-import type { ComponentProps } from "react";
+import type { LinkProps as NextLinkProps } from "next/link";
 
 import { type } from "@/tokens/typography";
 
 import { buttonHovers, buttonStyles, buttonVariants } from "./Button";
 
-type ButtonLinkProps = Omit<ComponentProps<typeof NextLink>, "className" | "style"> & {
+type ButtonLinkProps<RouteType> = Omit<NextLinkProps<RouteType>, "className" | "style"> & {
   variant?: keyof typeof buttonVariants;
   size?: "default" | "small" | "large";
 };
 
-export function ButtonLink({ variant = "secondary", size = "default", ...props }: ButtonLinkProps) {
+export function ButtonLink<RouteType>({
+  variant = "secondary",
+  size = "default",
+  ...props
+}: ButtonLinkProps<RouteType>) {
   return (
     <NextLink
       {...props}

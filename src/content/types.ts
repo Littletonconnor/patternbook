@@ -1,10 +1,11 @@
+import type { LessonSlug, TopicSlug } from "./catalog";
+
 export type Level = "foundations" | "core" | "advanced";
 
 export type LessonStatus = "published" | "planned";
 
-export type Lesson = {
+type LessonFields = {
   number: number;
-  slug: string;
   title: string;
   hook: string;
   level: Level;
@@ -13,15 +14,27 @@ export type Lesson = {
   starter?: boolean;
 };
 
-export type Topic = {
-  slug: string;
+type TopicFields = {
   title: string;
   description: string;
-  lessons: Lesson[];
+};
+
+export type LessonEntry = LessonFields & { slug: string };
+
+export type TopicEntry = TopicFields & {
+  slug: string;
+  lessons: readonly [LessonEntry, ...LessonEntry[]];
+};
+
+export type Lesson = LessonFields & { slug: LessonSlug };
+
+export type Topic = TopicFields & {
+  slug: TopicSlug;
+  lessons: readonly [Lesson, ...Lesson[]];
 };
 
 export function lessonHref(lesson: Pick<Lesson, "slug">) {
-  return `/lessons/${lesson.slug}`;
+  return `/lessons/${lesson.slug}` as const;
 }
 
 export type DiagramKind = "playground" | "race" | "timeline" | "flow" | "structure" | "meter";
@@ -30,5 +43,5 @@ export type Diagram = {
   number: string;
   kind: DiagramKind;
   title: string;
-  lesson: string;
+  lesson: LessonSlug;
 };

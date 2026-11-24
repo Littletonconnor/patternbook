@@ -1,13 +1,12 @@
 import { LessonEnd } from "@/components/lesson/LessonEnd";
 import { Pager } from "@/components/lesson/Pager";
 import { Table } from "@/components/lesson/Table";
+import { neighbours } from "@/content/catalog";
 
 import { ResourceList } from "./ResourceList";
-import { sampleLesson, sampleTopics } from "./sample";
+import { sampleLesson } from "./sample";
 import { Card, Specs } from "./Section";
 import { Preview } from "./StateMatrix";
-
-const apis = sampleTopics[1];
 
 export function TablePart() {
   return (
@@ -103,7 +102,7 @@ export function PagerPart() {
   return (
     <Card title="Pager">
       <Preview>
-        <Pager previous={apis.lessons[1]} next={apis.lessons[3]} />
+        <Pager {...neighbours(sampleLesson)} />
       </Preview>
       <Specs
         rows={[

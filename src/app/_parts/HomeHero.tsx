@@ -1,7 +1,7 @@
 import * as stylex from "@stylexjs/stylex";
 import { ArrowRight } from "lucide-react";
 
-import { lessons, topics, totals } from "@/content/catalog";
+import { firstLesson, topics, totals } from "@/content/catalog";
 import { lessonHref } from "@/content/types";
 import { colors, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
@@ -59,7 +59,7 @@ export function HomeHero() {
           visible, which is usually where these bugs hide.
         </p>
         <div {...stylex.props(styles.actions)}>
-          <ButtonLink variant="primary" size="large" href={lessonHref(lessons[0])}>
+          <ButtonLink variant="primary" size="large" href={lessonHref(firstLesson)}>
             Start with lesson 1
             <Icon icon={ArrowRight} size={14} />
           </ButtonLink>

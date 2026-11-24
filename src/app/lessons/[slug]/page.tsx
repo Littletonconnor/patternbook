@@ -6,7 +6,8 @@ import { LessonEnd } from "@/components/lesson/LessonEnd";
 import { LessonHeader } from "@/components/lesson/LessonHeader";
 import { Pager } from "@/components/lesson/Pager";
 import { H2, P, Prose } from "@/components/lesson/Prose";
-import { lessonBySlug, lessons, neighbours, topicOf } from "@/content/catalog";
+import { isLessonSlug, lessonBySlug, lessons, neighbours, topicOf } from "@/content/catalog";
+import type { LessonSlug } from "@/content/catalog";
 import { hasLessonSource, lessonHeadings, loadLesson } from "@/content/lessonSource";
 
 import { LessonLayout } from "./_parts/LessonLayout";
@@ -18,23 +19,28 @@ export function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: PageProps<"/lessons/[slug]">): Promise<Metadata> {
-  const lesson = lessonBySlug((await params).slug);
-  return lesson
-    ? {
-        title: lesson.title,
-        description: lesson.hook,
-        openGraph: {
-          type: "article",
-          siteName: "Patternbook",
-          title: lesson.title,
-          description: lesson.hook,
-        },
-      }
-    : {};
+  const { slug } = await params;
+  if (!isLessonSlug(slug)) {
+    return {};
+  }
+  const lesson = lessonBySlug(slug);
+  return {
+    title: lesson.title,
+    description: lesson.hook,
+    openGraph: {
+      type: "article",
+      siteName: "Patternbook",
+      title: lesson.title,
+      description: lesson.hook,
+    },
+  };
 }
 
 export default async function LessonPage({ params }: PageProps<"/lessons/[slug]">) {
   const { slug } = await params;
+  if (!isLessonSlug(slug)) {
+    notFound();
+  }
   const written = hasLessonSource(slug);
   const rail = written ? lessonHeadings(slug) : [{ id: "coming-soon", label: "Coming soon" }];
 
@@ -47,12 +53,9 @@ export default async function LessonPage({ params }: PageProps<"/lessons/[slug]"
   );
 }
 
-async function LessonBody({ slug }: { slug: string }) {
+async function LessonBody({ slug }: { slug: LessonSlug }) {
   const lesson = lessonBySlug(slug);
-  const topic = lesson && topicOf(lesson);
-  if (!lesson || !topic) {
-    notFound();
-  }
+  const topic = topicOf(lesson);
   const { previous, next } = neighbours(lesson);
   const Body = await loadLesson(slug);
 

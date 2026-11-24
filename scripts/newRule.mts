@@ -37,7 +37,7 @@ run(() => {
     ),
   );
   editFile(config, (text) =>
-    insertAfterLine(text, /"patternbook\//, `  "patternbook/${name}": "error",`),
+    insertAfterLine(text, /^ {2}"patternbook\//, `  "patternbook/${name}": "error",`),
   );
   finish([file], [plugin, config]);
 });

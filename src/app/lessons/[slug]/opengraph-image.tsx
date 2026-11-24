@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 import { OgCard, ogSize } from "@/components/shell/OgCard";
-import { lessonBySlug, lessons, topicOf } from "@/content/catalog";
+import { isLessonSlug, lessonBySlug, lessons, topicOf } from "@/content/catalog";
 
 export const alt = "A Patternbook lesson";
 export const size = ogSize;
@@ -14,14 +14,15 @@ export function generateStaticParams() {
 }
 
 export default async function Image({ params }: { params: Promise<{ slug: string }> }) {
-  const lesson = lessonBySlug((await params).slug);
-  const topic = lesson && topicOf(lesson);
-  if (!lesson || !topic) {
+  const { slug } = await params;
+  if (!isLessonSlug(slug)) {
     return new ImageResponse(
       <OgCard eyebrow="Patternbook" title="Lesson not found" lede="" />,
       size,
     );
   }
+  const lesson = lessonBySlug(slug);
+  const topic = topicOf(lesson);
   return new ImageResponse(
     <OgCard
       eyebrow={`Lesson ${lesson.number} · ${topic.title}`}

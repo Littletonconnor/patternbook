@@ -1,6 +1,6 @@
 import * as stylex from "@stylexjs/stylex";
 
-import { formatMinutes, lessons, lessonsByLevel, totals } from "@/content/catalog";
+import { firstLesson, formatMinutes, lessonsByLevel, totals } from "@/content/catalog";
 import { lessonHref } from "@/content/types";
 import type { Level } from "@/content/types";
 import { colors, space } from "@/tokens/tokens.stylex";
@@ -37,15 +37,13 @@ const segment = stylex.create({
 });
 
 export function LevelCards() {
-  const counts = levels.map(({ level }) => lessonsByLevel(level).length);
-
   return (
     <div {...stylex.props(styles.grid)}>
       {levels.map(({ level, blurb }) => {
         const list = lessonsByLevel(level);
         const { minutes } = totals(list);
         return (
-          <CardLink key={level} href={lessonHref(list[0] ?? lessons[0])}>
+          <CardLink key={level} href={lessonHref(list[0] ?? firstLesson)}>
             <span {...stylex.props(styles.body)}>
               <span {...stylex.props(styles.top)}>
                 <Badge level={level} />
@@ -55,12 +53,12 @@ export function LevelCards() {
               </span>
               <span {...stylex.props(type.small, styles.blurb)}>{blurb}</span>
               <span aria-hidden="true" {...stylex.props(styles.bar)}>
-                {levels.map((other, i) => (
+                {levels.map((other) => (
                   <span
                     key={other.level}
                     {...stylex.props(
                       styles.segment,
-                      segment.grow(counts[i]),
+                      segment.grow(lessonsByLevel(other.level).length),
                       other.level === level && styles.active,
                     )}
                   />

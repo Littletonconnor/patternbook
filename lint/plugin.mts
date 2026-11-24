@@ -6,6 +6,7 @@ import { noBarrelFiles } from "./rules/noBarrelFiles.mts";
 import { noCatchAllNames } from "./rules/noCatchAllNames.mts";
 import { noComments } from "./rules/noComments.mts";
 import { noEnum } from "./rules/noEnum.mts";
+import { optionalUndefinedOnlyInProps } from "./rules/optionalUndefinedOnlyInProps.mts";
 import { typeFromTokens } from "./rules/typeFromTokens.mts";
 
 const plugin = {
@@ -20,6 +21,7 @@ const plugin = {
     "no-enum": noEnum,
     "browser-apis-in-hooks": browserApisInHooks,
     "type-from-tokens": typeFromTokens,
+    "optional-undefined-only-in-props": optionalUndefinedOnlyInProps,
   },
 };
 

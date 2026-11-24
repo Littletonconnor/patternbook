@@ -5,7 +5,6 @@ import {
   Braces,
   Container,
   Database,
-  FileText,
   FlaskConical,
   Gauge,
   GitBranch,
@@ -21,6 +20,7 @@ import {
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
+import type { LessonSlug, TopicSlug } from "@/content/catalog";
 import type { Lesson, Topic } from "@/content/types";
 import { colors, space } from "@/tokens/tokens.stylex";
 import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from "@/ui/Collapsible";
@@ -30,7 +30,7 @@ import { SidebarLessonRow } from "./SidebarLessonRow";
 
 const OPEN = ":is([data-panel-open])";
 
-const topicIcons: Record<string, LucideIcon> = {
+const topicIcons: Record<TopicSlug, LucideIcon> = {
   "how-the-web-works": Globe,
   "the-terminal-and-linux": SquareTerminal,
   git: GitBranch,
@@ -78,8 +78,8 @@ type SidebarTopicProps = {
   lessons: readonly Lesson[];
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  currentSlug: string | undefined;
-  read: ReadonlySet<string>;
+  currentSlug: LessonSlug | undefined;
+  read: ReadonlySet<LessonSlug>;
 };
 
 export function SidebarTopic({
@@ -95,7 +95,7 @@ export function SidebarTopic({
     <Collapsible open={open} onOpenChange={onOpenChange}>
       <CollapsibleTrigger meta={open ? `${readHere}/${lessons.length}` : undefined}>
         <span {...stylex.props(styles.topicIcon)}>
-          <Icon icon={topicIcons[topic.slug] ?? FileText} />
+          <Icon icon={topicIcons[topic.slug]} />
         </span>
         <span title={topic.title} {...stylex.props(styles.truncate)}>
           {topic.title}

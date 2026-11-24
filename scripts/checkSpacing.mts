@@ -77,10 +77,9 @@ function readBaseline(): Record<string, number> {
   if (typeof parsed !== "object" || parsed === null) {
     return {};
   }
+  const entries: [string, unknown][] = Object.entries(parsed);
   return Object.fromEntries(
-    Object.entries(parsed).filter(
-      (entry): entry is [string, number] => typeof entry[1] === "number",
-    ),
+    entries.filter((entry): entry is [string, number] => typeof entry[1] === "number"),
   );
 }
 

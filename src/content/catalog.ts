@@ -1,6 +1,6 @@
-import type { Level, Lesson, Topic } from "./types";
+import type { Lesson, Level, Topic, TopicEntry } from "./types";
 
-export const topics: Topic[] = [
+const entries = [
   {
     slug: "how-the-web-works",
     title: "How the web works",
@@ -908,16 +908,51 @@ export const topics: Topic[] = [
       },
     ],
   },
-];
+] as const satisfies readonly [TopicEntry, ...TopicEntry[]];
 
-export const lessons: Lesson[] = topics.flatMap((topic) => topic.lessons);
+export type TopicSlug = (typeof entries)[number]["slug"];
 
-export function lessonBySlug(slug: string) {
-  return lessons.find((lesson) => lesson.slug === slug);
+export type LessonSlug = (typeof entries)[number]["lessons"][number]["slug"];
+
+export const topics: readonly [Topic, ...Topic[]] = entries;
+
+export const lessons: readonly Lesson[] = topics.flatMap((topic) => topic.lessons);
+
+export const firstLesson = topics[0].lessons[0];
+
+const lessonSlugs: ReadonlySet<string> = new Set(lessons.map((lesson) => lesson.slug));
+
+export function isLessonSlug(slug: string): slug is LessonSlug {
+  return lessonSlugs.has(slug);
+}
+
+export function lessonSlugFromPath(pathname: string) {
+  const slug = /^\/lessons\/([^/]+)/.exec(pathname)?.[1];
+  return slug !== undefined && isLessonSlug(slug) ? slug : undefined;
+}
+
+export function lessonBySlug(slug: LessonSlug) {
+  const lesson = lessons.find((l) => l.slug === slug);
+  if (!lesson) {
+    throw new Error(`Lesson ${slug} is in the slug union but not in the catalog.`);
+  }
+  return lesson;
+}
+
+export function topicBySlug(slug: TopicSlug) {
+  const topic = topics.find((t) => t.slug === slug);
+  if (!topic) {
+    throw new Error(`Topic ${slug} is in the slug union but not in the catalog.`);
+  }
+  return topic;
 }
 
 export function topicOf(lesson: Pick<Lesson, "slug">) {
-  return topics.find((topic) => topic.lessons.some((l) => l.slug === lesson.slug));
+  const topic = topics.find((t) => t.lessons.some((l) => l.slug === lesson.slug));
+  if (!topic) {
+    throw new Error(`Lesson ${lesson.slug} has no topic.`);
+  }
+  return topic;
 }
 
 export function neighbours(lesson: Pick<Lesson, "slug">) {

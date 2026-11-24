@@ -1,6 +1,6 @@
 import * as stylex from "@stylexjs/stylex";
 import NextLink from "next/link";
-import type { ComponentProps } from "react";
+import type { LinkProps as NextLinkProps } from "next/link";
 
 import { colors, motion, radius, shadows, space } from "@/tokens/tokens.stylex";
 
@@ -40,11 +40,11 @@ const styles = stylex.create({
   padded: { padding: space.s4 },
 });
 
-type CardLinkProps = Omit<ComponentProps<typeof NextLink>, "className" | "style"> & {
+type CardLinkProps<RouteType> = Omit<NextLinkProps<RouteType>, "className" | "style"> & {
   padding?: "default" | "none";
 };
 
-export function CardLink({ padding = "default", ...props }: CardLinkProps) {
+export function CardLink<RouteType>({ padding = "default", ...props }: CardLinkProps<RouteType>) {
   return (
     <NextLink
       {...props}

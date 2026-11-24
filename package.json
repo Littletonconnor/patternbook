@@ -11,10 +11,12 @@
     "lint:directives": "! grep -rnE '(oxlint|eslint)-disable' src",
     "structure": "node scripts/checkStructure.mts",
     "spacing": "node scripts/checkSpacing.mts",
-    "typecheck": "tsc --noEmit",
+    "typegen": "next typegen",
+    "typecheck": "next typegen && tsc --noEmit",
+    "typecheck:coverage": "type-coverage --strict --at-least 100 --ignore-files '.next/**'",
     "format": "oxfmt",
     "format:check": "oxfmt --check",
-    "verify": "npm run format:check && npm run lint && npm run lint:directives && npm run typecheck && npm run structure && npm run spacing",
+    "verify": "npm run format:check && npm run typegen && npm run lint && npm run lint:directives && npm run typecheck && npm run typecheck:coverage && npm run structure && npm run spacing",
     "new:primitive": "node scripts/newPrimitive.mts",
     "new:lesson": "node scripts/newLesson.mts",
     "new:diagram": "node scripts/newDiagram.mts",
@@ -46,6 +48,7 @@
     "oxfmt": "0.79.0",
     "oxlint": "1.94.0",
     "oxlint-tsgolint": "7.0.2008",
-    "typescript": "^5"
+    "type-coverage": "2.31.2",
+    "typescript": "5.9.3"
   }
 }

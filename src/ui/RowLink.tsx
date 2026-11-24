@@ -1,6 +1,6 @@
 import * as stylex from "@stylexjs/stylex";
 import NextLink from "next/link";
-import type { ComponentProps } from "react";
+import type { LinkProps as NextLinkProps } from "next/link";
 
 import { colors, motion, radius, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
@@ -53,12 +53,16 @@ const styles = stylex.create({
   },
 });
 
-type RowLinkProps = Omit<ComponentProps<typeof NextLink>, "className" | "style"> & {
+type RowLinkProps<RouteType> = Omit<NextLinkProps<RouteType>, "className" | "style"> & {
   size?: "default" | "compact";
   current?: boolean;
 };
 
-export function RowLink({ size = "default", current = false, ...props }: RowLinkProps) {
+export function RowLink<RouteType>({
+  size = "default",
+  current = false,
+  ...props
+}: RowLinkProps<RouteType>) {
   return (
     <NextLink
       aria-current={current ? "page" : undefined}

@@ -4,9 +4,9 @@ import type { Metadata } from "next";
 import { PageIntro } from "@/components/shell/PageIntro";
 import { PageShell } from "@/components/shell/PageShell";
 import { lessonBySlug } from "@/content/catalog";
+import type { LessonSlug } from "@/content/catalog";
 import { diagramLesson, diagrams } from "@/content/diagrams";
 import { lessonHref } from "@/content/types";
-import type { Lesson } from "@/content/types";
 import { colors, radius, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
 import { RowLink } from "@/ui/RowLink";
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     "Every interactive diagram on Patternbook, filterable by kind, each linked to its lesson.",
 };
 
-const craftSlugs = [
+const craftSlugs: readonly LessonSlug[] = [
   "building-interactive-svg-explainers",
   "animating-svg-paths",
   "scroll-driven-diagrams",
@@ -75,9 +75,7 @@ export default function DiagramsPage() {
     const { number, slug, title } = diagramLesson(diagram);
     return { diagram, lesson: { number, slug, title } };
   });
-  const craft = craftSlugs
-    .map((slug) => lessonBySlug(slug))
-    .filter((lesson): lesson is Lesson => lesson !== undefined);
+  const craft = craftSlugs.map((slug) => lessonBySlug(slug));
 
   return (
     <PageShell current="diagrams">

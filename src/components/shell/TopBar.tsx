@@ -2,6 +2,7 @@
 
 import * as stylex from "@stylexjs/stylex";
 import { Menu } from "lucide-react";
+import type { Route } from "next";
 import type { ReactNode } from "react";
 
 import { colors, measure, radius, space } from "@/tokens/tokens.stylex";
@@ -63,14 +64,14 @@ const styles = stylex.create({
 
 export type Section = "lessons" | "diagrams" | "about";
 
-const links: { section: Section; label: string; href: string }[] = [
+const links: { section: Section; label: string; href: Route }[] = [
   { section: "lessons", label: "Lessons", href: "/lessons" },
   { section: "diagrams", label: "Diagrams", href: "/diagrams" },
   { section: "about", label: "About", href: "/about" },
 ];
 
 type TopBarProps = {
-  current?: Section;
+  current?: Section | undefined;
   drawer?: ReactNode;
   start?: ReactNode;
   fluid?: boolean;

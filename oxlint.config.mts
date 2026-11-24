@@ -303,6 +303,22 @@ const typeSafety = {
     },
   ],
   "typescript/switch-exhaustiveness-check": "error",
+  // A condition the types say is always true or always false is either dead
+  // code or a type that is wrong, so both are reported.
+  "typescript/no-unnecessary-condition": "error",
+  // Method signatures have their parameters checked loosely even in strict
+  // mode, so members are written as function properties, which are checked fully.
+  "typescript/method-signature-style": ["error", "property"],
+  // A response is only as safe as the parser it goes through, so each external
+  // service gets one client module that parses every response, exempted here.
+  "no-restricted-globals": [
+    "error",
+    {
+      name: "fetch",
+      message:
+        "Call an external service through its client module, which parses every response into a typed value.",
+    },
+  ],
   // One way to declare object and array types: `type` and `T[]`.
   "typescript/consistent-type-definitions": ["error", "type"],
   "typescript/array-type": ["error", { default: "array" }],
@@ -545,6 +561,7 @@ const repository = {
   "patternbook/colours-from-tokens": "error",
   "patternbook/type-from-tokens": "error",
   "patternbook/effects-in-hooks": "error",
+  "patternbook/optional-undefined-only-in-props": "error",
   "max-lines": ["error", { max: 200, skipBlankLines: true, skipComments: false }],
   "max-lines-per-function": ["error", { max: 60, skipBlankLines: true }],
   "react/jsx-max-depth": ["error", { max: 5 }],

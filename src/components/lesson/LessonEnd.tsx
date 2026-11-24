@@ -4,6 +4,7 @@ import * as stylex from "@stylexjs/stylex";
 import { Circle, CircleCheck } from "lucide-react";
 import { useState } from "react";
 
+import type { LessonSlug } from "@/content/catalog";
 import { useReadLessons } from "@/hooks/useReadLessons";
 import { colors, space } from "@/tokens/tokens.stylex";
 import { type } from "@/tokens/typography";
@@ -24,7 +25,7 @@ const styles = stylex.create({
   thanks: { color: colors.inkMuted },
 });
 
-export function MarkAsRead({ slug }: { slug: string }) {
+export function MarkAsRead({ slug }: { slug: LessonSlug }) {
   const { read, setRead } = useReadLessons();
   const isRead = read.has(slug);
   return (
@@ -49,7 +50,7 @@ export function Feedback() {
   );
 }
 
-export function LessonEnd({ slug }: { slug: string }) {
+export function LessonEnd({ slug }: { slug: LessonSlug }) {
   return (
     <div {...stylex.props(styles.end)}>
       <MarkAsRead slug={slug} />
