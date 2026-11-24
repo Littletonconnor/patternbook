@@ -34,7 +34,7 @@ The register is a technical design document, not a conversation.
 - **Start with the why.** The Summary and Problem explain the objective and why the current state falls short before naming any tool or design. Never open with a tool, a preset, or another team's setup; external examples are evidence and belong in the sources.
 - **Record the decision, not the work behind it.** No scratch runs, prototypes, experiments, session notes, or "we tried". State facts and cite sources. Repository facts are stated as they are today.
 - **Explain every concept the argument depends on.** If a reader needs to know what a term means to follow the reasoning (a lint category, a preset, a backend), define it where it first appears.
-- **Lead with practices, not people.** State the best practice and the evidence for it. Names of authors, people, and companies appear only in the Research section's source table. In the body, cite with numbered links such as `[[4]](#sources)`.
+- **Lead with practices, not people.** State the best practice and the evidence for it. Names of authors, people, and companies appear only in the Research section's source list. In the body, cite with numbered links such as `[[4]](#sources)`.
 - **Group the problem by practice.** Each problem names a practice, explains with evidence why it causes harm, and says what changes. Repository specifics support the argument; they are never the argument.
 - **No personal framing.** Never write what someone wants, said, or prefers. Write what the evidence shows and what the design does.
 - **Order by priority.** When a proposal has several parts, order them by impact or by how deterministic they are, and say why that order holds.

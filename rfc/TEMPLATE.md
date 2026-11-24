@@ -20,9 +20,7 @@ The design, ordered by priority, with a diagram where structure matters (`assets
 
 ### Sources
 
-| #   | Source                    | Type                                                                  | What it says      |
-| --- | ------------------------- | --------------------------------------------------------------------- | ----------------- |
-| 1   | [Author year, Title](url) | Peer-reviewed, preprint, industry report, official docs, or secondary | One line, factual |
+1. [Author year, Title](url). Peer-reviewed, preprint, industry report, official docs, or secondary. One line, factual.
 
 Note any source that could not be read, and any figure that is self-reported. Cite published sources only: an RFC never refers to scratch runs, prototypes, or other working notes.
 
