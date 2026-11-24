@@ -42,6 +42,10 @@ A barrel file is an `index.ts` that re-exports everything in a folder, so other 
 
 Code placed in a shared folder before a second user exists is a guess about reuse, and it moves the code away from the one place that explains it. Code left beside one route after a second route starts importing it becomes a hidden dependency between two routes. Keeping code as close as possible to where it is used, and moving it only when that changes, keeps both mistakes visible [[10]](#sources).
 
+### Tests without a fixed home
+
+Tests drift the same way code does. Without a rule, each test ends up wherever its first author put it: beside its file, in a `tests/` folder, or in a `__tests__` folder one level up. An agent about to change a module then cannot find that module's tests, so it does not run them, and it writes a new set in yet another place. Test helpers drift too: a fixture built for one test gets imported by production code, or copied into a second test folder where it goes out of date.
+
 ## Goals
 
 1. **Every file has exactly one valid location.** Given what a file is and who imports it, the placement rules in this RFC name one folder. Measured by a structural check that fails on any file in `src` outside an allowed path, once the repository has a test runner.
@@ -51,10 +55,11 @@ Code placed in a shared folder before a second user exists is a guess about reus
 5. **One supported way to do each task.** Base UI is imported only in `src/ui`, `next/link` only in `src/ui/Link`, Lucide only in `src/ui/Icon`, and `localStorage` only in `src/hooks`. Each is enforced by lint.
 6. **New modules start in the right place.** Every repeated addition (primitives, lessons, diagrams, pages, lint rules, RFCs) and every promotion out of `_parts/` is done by a generator command, so its location, names and registration are never written by hand.
 7. **Files stay small enough to read whole.** No file in `src` passes 200 lines and no function passes 60, outside the named data files. Measured by `max-lines` and `max-lines-per-function` at zero violations.
+8. **Every test has one home.** Every unit, integration and component test sits beside the file it tests and shares its name, every end-to-end test sits in `e2e/`, and no production file imports a test, a fixture or `src/testing`. Measured by the structural check and lint at zero violations.
 
 ## Proposal
 
-The parts are ordered by how much each one prevents. The import direction comes first because it is fully enforced by lint and stops the most damaging kind of drift, coupling between parts that should stay separate. Fixed homes come next, because they decide where each file goes. Colocation and naming refine those homes. Wrappers and generators make the correct path the easiest one. Enforcement closes the RFC.
+The parts are ordered by how much each one prevents. The import direction comes first because it is fully enforced by lint and stops the most damaging kind of drift, coupling between parts that should stay separate. Fixed homes come next, because they decide where each file goes. Colocation and naming refine those homes, and the same rules then place tests. Wrappers and generators make the correct path the easiest one. Enforcement closes the RFC.
 
 ### 1. Layers and import direction
 
@@ -92,6 +97,8 @@ src/
     lessons/<slug>/    One lesson: its MDX and its diagrams
   tokens/              Design values
   lib/                 Pure functions
+  testing/             Test helpers and fixtures shared by two or more test folders
+e2e/                   End-to-end tests, one file per user journey
 lint/                  Local lint rules
 scripts/               Repository scripts, such as screenshots and generators
 rfc/                   Decisions
@@ -101,7 +108,7 @@ rfc/                   Decisions
 
 Areas come from how modules are used, not from a decision made in advance, so the repository can tell when a new one is needed. An area is defined by the routes that use its modules: `shell` holds modules used by every route, `lesson` holds modules used only by lesson routes, and `catalog` holds modules used by the routes that list lessons and diagrams.
 
-- **Placing a promoted module.** When a module leaves `_parts/`, the `promote` generator (part 6) looks at which routes import it and moves it into the area whose routes match.
+- **Placing a promoted module.** When a module leaves `_parts/`, the `promote` generator (part 7) looks at which routes import it and moves it into the area whose routes match.
 - **Creating an area.** If no existing area matches, the module waits for company. Once three promoted modules share the same set of importing routes that no area covers, `promote` creates a new area for them, named after what those routes have in common. Three is the threshold because one or two modules are a coincidence, while three are a pattern worth a folder.
 - **Splitting an area.** An area that grows past about fifteen files has stopped describing its contents. The structural check reports it, along with any module whose importers no longer match its area, and the fix is to split the area by the same rule.
 
@@ -141,7 +148,42 @@ When a limit fails, the error message says to extract the largest named block in
 - **No catch-all names.** No file or folder is named `utils`, `helpers`, `common`, `misc` or `shared`. A helper is named after what it does and placed in the layer it belongs to.
 - **No barrel files.** Every import names the file it comes from. This keeps imports fast, keeps cycles visible, and keeps modules that are not imported from outside effectively private [[8]](#sources) [[9]](#sources).
 
-### 5. One supported way to do each task
+### 5. Where tests live
+
+Tests are code, so they follow the same placement rules as code: each kind has one home, it starts next to what it checks, and its name says what it is.
+
+The kinds of test (unit, integration, component and end-to-end) differ in how much of the system they run. That difference decides where each one lives: a test that checks one file sits beside that file, and a test that checks a whole journey through the product sits outside `src`, because no single file owns it.
+
+#### Unit, integration and component tests
+
+- **Beside the file they test, with the same name.** `src/content/catalog.ts` is tested by `src/content/catalog.test.ts`, a route handler `route.ts` by `route.test.ts`, a component `MarkAsRead.tsx` by `MarkAsRead.test.tsx`, and a lint rule `lint/rules/noEnum.mts` by `lint/rules/noEnum.test.mts`. The suffix names the kind of file: `.test.ts` runs in Node, `.test.tsx` runs in a real browser. This is the convention across language ecosystems: Go puts each `_test.go` file in the directory of the package it tests, Rust keeps unit tests in the file they test, and Angular's style guide puts each spec in the same folder as its code and advises against a separate tests folder [[22]](#sources) [[23]](#sources) [[24]](#sources).
+- **Why beside, not in a mirror tree.** A test beside its file is found without searching, moves with the file when it is promoted, and is deleted with it. A separate `tests/` tree that mirrors `src` has to be kept in step by hand, and it drifts the same way any duplicated structure does [[10]](#sources).
+- **A test belongs to its file's layer.** It follows the import rules of the folder it sits in, so a test in `src/lib` can import only what `src/lib` can. A test that needs a higher layer to set up is a sign that the code under test reaches above its layer.
+- **Nothing imports a test.** Production code never imports a `.test` file. Test files are leaves of the import graph.
+- **Inside `app`, tests sit beside their route.** Next.js turns only special files such as `page.tsx` and `route.ts` into URLs, so a `route.test.ts` beside `route.ts` is never served [[5]](#sources).
+- **Integration tests use the same rule.** An integration test runs several real parts together, but it is still about one entry point, such as one route handler or one API client, and sits beside it.
+
+#### End-to-end tests
+
+End-to-end tests live in a top-level `e2e/` folder, one file per journey, named after what the user does: `e2e/readLesson.e2e.ts`.
+
+- **Why outside `src`.** A journey starts on one route and usually crosses several, so there is no single file for it to sit beside. It also tests the built application from outside, through a browser, and imports nothing from `src`. Rust puts its integration tests, which use a crate only through its public interface, in a top-level `tests/` folder for the same reason [[23]](#sources).
+- **Why a separate suffix.** The browser runner is pointed at `e2e/` and matches only `.e2e.ts`. Its default pattern matches every `.test` and `.spec` file [[25]](#sources), which would pull in unit tests. The suffix also tells a reader which runner owns the file and that it is slow.
+- **Imports.** An end-to-end test may import other files in `e2e/` and nothing in `src`. If a journey needs data, it reads it through the page, the way a user does.
+
+#### Test helpers and fixtures
+
+A fixture is data or setup a test needs: a saved API response, a function that starts a test database, or request handlers for a network mocking tool. Fixtures follow the colocation rule in part 3.
+
+- **A fixture starts beside the one test that uses it**, named `<name>.fixture.ts` or `<name>.fixture.json`, so it is visibly test-only.
+- **When a second folder needs it, it moves to `src/testing/`.** `src/testing` is not a layer in the import stack. It may import any layer, and only test files may import it.
+- **Production code never imports a fixture or `src/testing`.** Lint fails on such an import, so test-only code cannot leak into the build.
+
+#### Generators create the first test
+
+A generator that creates a module with logic of its own, such as a lint rule or a check script, also creates its test file beside it, with one accepted and one rejected case to fill in. The first test then starts in the right place with the right name, and the next one copies it.
+
+### 6. One supported way to do each task
 
 When the same job can be done two ways, agents use both, and the codebase carries two behaviours where there should be one. For each common task there is one module that does it, and the underlying library is imported nowhere else:
 
@@ -150,7 +192,7 @@ When the same job can be done two ways, agents use both, and the codebase carrie
 - **Icons** render through `<Icon>`, so stroke width and size come from one place.
 - **Browser storage** is read and written only in `src/hooks`, so each stored value has exactly one writer and one format [[11]](#sources).
 
-### 6. Generators
+### 7. Generators
 
 A generator is a command that creates the files for a new piece of the codebase, in the right place, with the right names and the agreed shape, and wires them into anything that needs to know they exist. It turns "the right way" into "the easiest way" to add a file [[17]](#sources). Rails, Nx and Plop all ship generators for this reason: to keep new code consistent with existing conventions without anyone hunting for the current best example [[16]](#sources) [[17]](#sources) [[18]](#sources).
 
@@ -179,7 +221,7 @@ A task suits a generator when it is repeated, when its output follows a fixed sh
 
 Generators live in `scripts/`, and their templates are ordinary `.ts` and `.tsx` files checked by the same type checker and linter as the rest of the code. When a convention changes, its generator changes in the same commit, so new code never starts from an old pattern.
 
-### 7. Enforcement
+### 8. Enforcement
 
 Every rule above is checked by a tool. Describing the structure in prose does not make agents follow it [[12]](#sources); failing the build does [[3]](#sources) [[4]](#sources).
 
@@ -188,6 +230,7 @@ Every rule above is checked by a tool. Describing the structure in prose does no
 - **File and function size** use `max-lines`, `max-lines-per-function`, `react/jsx-max-depth`, `complexity`, `max-depth` and `max-params`, as set out in part 3.
 - **Barrels and catch-all names** are reported by a small local rule that checks the file path.
 - **Placement** is checked by the structural check once a test runner exists. Its failure message says where the file belongs.
+- **Test placement** is checked by the structural check, which fails on a `.test` file with no source file of the same name beside it and on an `.e2e.ts` file outside `e2e/`. Lint fails on any import of a `.test` file, a `.fixture` file or `src/testing` from production code, and on any import of `src` from `e2e/`.
 
 ## Research
 
@@ -214,6 +257,10 @@ Every rule above is checked by a tool. Describing the structure in prose does no
 19. [Wen et al. 2019](https://www.inf.usi.ch/faculty/lanza/PUBS/P/Wen2019a.pdf). Peer-reviewed (ICPC). Only 13% to 20% of code changes come with changes to the related comments.
 20. [React, Thinking in React](https://react.dev/learn/thinking-in-react). Official docs. A component should be concerned with one thing; when it grows, it is decomposed into smaller subcomponents.
 21. [Yang et al. 2024, SWE-agent](https://arxiv.org/abs/2405.15793). Peer-reviewed (NeurIPS). A 100-line file viewer resolved 18.0% of tasks, against 14.3% for 30 lines and 12.7% for whole files.
+22. [Go, Package testing](https://pkg.go.dev/testing). Official docs. Test files end in `_test.go` and sit in the package they test, or in a matching `_test` package for black-box tests.
+23. [The Rust Programming Language, Test organization](https://doc.rust-lang.org/book/ch11-03-test-organization.html). Official docs. Unit tests live in each file with the code they test; integration tests live in a top-level `tests` directory next to `src`.
+24. [Angular, Style guide](https://angular.dev/style-guide). Official docs. Unit tests live in the same directory as the code under test and end in `.spec.ts`; avoid collecting unrelated tests into a single `tests` directory.
+25. [Playwright, Test configuration](https://playwright.dev/docs/test-configuration). Official docs. `testDir` sets the folder searched for tests; by default every `.spec` and `.test` file is matched.
 
 Speed figures in sources 8 and 9 are self-reported by their authors, from single projects. Source 3 is an industry report whose throughput figures are not used here.
 
@@ -227,6 +274,7 @@ Speed figures in sources 8 and 9 are self-reported by their authors, from single
 6. Describing a structure in prose does not change agent behaviour; enforcing it does [3] [12].
 7. Generating repeated code is more reliable than describing it: generator tools exist to make the conventional path the easiest one, and scaffolding is deterministic work best kept out of the model [15] [16] [17] [18]. Snippets in documentation are unchecked text and drift like comments [19].
 8. Small, single-purpose files help agents as well as people. An agent edits more accurately seeing about 100 lines at a time than a whole file [21], and React's guidance is to split a component once it does more than one thing [20].
+9. Language ecosystems agree that a test of one unit sits with that unit, and the tests that use a whole program from outside sit in a separate top-level folder [22] [23] [24]. Browser test runners are configured by folder and file pattern, which is what lets end-to-end tests live apart from unit tests [25].
 
 The strongest counter-argument is the Next.js position itself: any organisation works if it is consistent [5]. This RFC agrees, and treats consistency as the thing to enforce, since without enforcement no organisation stays consistent [2].
 
@@ -237,6 +285,8 @@ The strongest counter-argument is the Next.js position itself: any organisation 
 - **`components/<page>/` instead of `_parts/`.** Keeps every component in one tree. Not chosen because route-only code ends up far from its route, and the folder name does not say who may import it.
 - **A flat `components/` folder.** Fewer placement decisions. Not chosen because it mixes page parts, single-route sections and storage hooks today, and will roughly double as lessons and diagrams arrive.
 - **`eslint-plugin-boundaries` or `dependency-cruiser`.** Purpose-built for layer rules, with richer reports. Not chosen because `no-restricted-imports` in per-layer overrides covers eight folders with no new dependency and runs inside the single linter from RFC 0004.
+- **A top-level `tests/` tree that mirrors `src`.** Keeps production folders free of test files and puts every test in one place. Not chosen because the mirror has to be kept in step by hand: a moved or deleted module leaves its tests behind, and finding a module's tests means translating one path into another [10] [24].
+- **End-to-end tests beside the route where the journey starts.** Puts a journey next to its first page. Not chosen because most journeys cross several routes, so the choice of route is arbitrary, and end-to-end tests import nothing from `src` that would tie them to one folder.
 - **Keep barrels for `src/ui`.** Shorter imports for the most used folder. Not chosen because the costs in sources 8 and 9 apply to internal folders too, and named file imports keep each control's dependencies visible.
 
 ## Tradeoffs and risks
