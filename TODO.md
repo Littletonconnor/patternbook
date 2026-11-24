@@ -81,6 +81,12 @@ Not started. Everything that needs a test runner lives here, so the rest of the 
 - [ ] Content checks: every lesson marked written in `catalog.ts` has an MDX file, and every MDX file has a catalog entry.
 - [ ] Local lint rules: `RuleTester` cases in `lint/rules/*.test.ts`, at least one valid and one invalid example taken from real code in this repo.
 - [ ] Structure test: every file in `src` sits in an allowed path, and the failure message says where it belongs.
+- [ ] Test placement ([RFC 0002 part 5](rfc/0002-architecture.md#5-where-tests-live)), in the same change as the first test:
+  - [ ] `checkStructure.mts`: add `src/testing` as an allowed folder; allow `*.test.ts` beside route files in `src/app`; skip test and fixture files in the "no route imports this module" check and the area size count.
+  - [ ] `checkStructure.mts`: fail on a `.test` file with no source file of the same name beside it, and on an `.e2e.ts` file outside `e2e/`.
+  - [ ] Lint: production code may not import `*.test.*`, `*.fixture.*` or `src/testing`; `e2e/` may not import `src`; `src/testing` may import any layer.
+  - [ ] Confirm `unicorn/filename-case` accepts `catalog.test.ts`, and decide whether test files need a higher `max-lines-per-function` for `describe` blocks.
+  - [ ] Generators: `new:rule` (and any generator for a check script) also creates the test file beside it.
 - [ ] `AGENTS.md` files: line limits, and every file path they mention exists.
 
 ## Later
