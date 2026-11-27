@@ -1,6 +1,6 @@
 import { relative } from "node:path";
 
-export type Node = { type: string; parent?: Node };
+export type Node = { type: string; range: [number, number]; parent?: Node };
 
 type Location = { start: { line: number; column: number }; end: { line: number; column: number } };
 

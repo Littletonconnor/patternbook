@@ -9,7 +9,7 @@ type Stored = { width: number; collapsed: boolean };
 
 const fallback: Stored = { width: SIDEBAR.initial, collapsed: false };
 
-function parse(stored: unknown): Stored | undefined {
+export function parseSidebar(stored: unknown): Stored | undefined {
   if (typeof stored !== "object" || stored === null || !("width" in stored)) {
     return undefined;
   }
@@ -23,7 +23,7 @@ function parse(stored: unknown): Stored | undefined {
 }
 
 function read(): Stored {
-  return readLocalStorage(KEY, parse, fallback);
+  return readLocalStorage(KEY, parseSidebar, fallback);
 }
 
 export function clampWidth(width: number) {

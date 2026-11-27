@@ -11,18 +11,18 @@ import { readLocalStorage, useLocalStorage, writeLocalStorage } from "./useLocal
 const KEY = "patternbook:read";
 const none: LessonSlug[] = [];
 
-function parseSlugs(stored: unknown) {
+export function parseReadLessons(stored: unknown) {
   return isArray(stored)
     ? stored.filter((slug): slug is LessonSlug => typeof slug === "string" && isLessonSlug(slug))
     : undefined;
 }
 
 export function useReadLessons() {
-  const [slugs] = useLocalStorage(KEY, parseSlugs, none);
+  const [slugs] = useLocalStorage(KEY, parseReadLessons, none);
   const read = useMemo(() => new Set(slugs), [slugs]);
 
   const setRead = useCallback((slug: LessonSlug, isRead: boolean) => {
-    const next = new Set(readLocalStorage(KEY, parseSlugs, none));
+    const next = new Set(readLocalStorage(KEY, parseReadLessons, none));
     if (isRead) {
       next.add(slug);
     } else {

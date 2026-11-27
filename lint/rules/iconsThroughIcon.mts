@@ -35,7 +35,7 @@ export const iconsThroughIcon: Rule = {
         if (name !== undefined && icons.has(name)) {
           context.report({
             node,
-            message: `Render ${name} through <Icon icon={${name}} /> from @/ui/Icon, so stroke width and size come from one place (RFC 0002 part 5).`,
+            message: `Render ${name} through <Icon icon={${name}} /> from @/ui/Icon, so stroke width and size come from one place (RFC 0002 part 6).`,
           });
         }
       },

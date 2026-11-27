@@ -3,10 +3,24 @@ import { dirname, join, normalize, relative } from "node:path";
 
 export const moduleFile = /\.(ts|tsx|mts)$/;
 
-export function walk(dir: string): string[] {
+export const notOurs: ReadonlySet<string> = new Set([
+  "node_modules",
+  ".git",
+  ".next",
+  "out",
+  "build",
+  "coverage",
+  "test-results",
+  "playwright-report",
+]);
+
+export function walk(dir: string, skip: ReadonlySet<string> = new Set()): string[] {
   return readdirSync(dir).flatMap((name) => {
     const path = join(dir, name);
-    return statSync(path).isDirectory() ? walk(path) : [relative(process.cwd(), path)];
+    if (skip.has(name)) {
+      return [];
+    }
+    return statSync(path).isDirectory() ? walk(path, skip) : [relative(process.cwd(), path)];
   });
 }
 

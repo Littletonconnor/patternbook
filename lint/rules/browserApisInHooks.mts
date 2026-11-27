@@ -40,7 +40,8 @@ export const browserApisInHooks: Rule = {
     docs: { description: "Browser storage, cookies and the clipboard are used only in src/hooks." },
   },
   create(context) {
-    if (repoPath(context.filename).startsWith("src/hooks/")) {
+    const path = repoPath(context.filename);
+    if (path.startsWith("src/hooks/") || path.startsWith("src/testing/")) {
       return {};
     }
     return {

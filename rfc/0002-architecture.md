@@ -48,7 +48,7 @@ Tests drift the same way code does. Without a rule, each test ends up wherever i
 
 ## Goals
 
-1. **Every file has exactly one valid location.** Given what a file is and who imports it, the placement rules in this RFC name one folder. Measured by a structural check that fails on any file in `src` outside an allowed path, once the repository has a test runner.
+1. **Every file has exactly one valid location.** Given what a file is and who imports it, the placement rules in this RFC name one folder. Measured by a structural check that fails on any file in `src` outside an allowed path.
 2. **Imports only point down.** Any import that breaks the direction in part 1 fails `oxlint`. Measured by zero violations on a clean checkout.
 3. **No catch-all names and no barrels.** Zero files or folders in `src` named `utils`, `helpers`, `common`, `misc` or `shared`, and zero `index.ts` files.
 4. **Route-only code lives with its route.** Every module imported by one route sits in that route's `_parts/` folder. Every module imported by two or more routes sits in `src/components`.
@@ -229,7 +229,7 @@ Every rule above is checked by a tool. Describing the structure in prose does no
 - **File names** use `unicorn/filename-case`, with named overrides for Next.js special files.
 - **File and function size** use `max-lines`, `max-lines-per-function`, `react/jsx-max-depth`, `complexity`, `max-depth` and `max-params`, as set out in part 3.
 - **Barrels and catch-all names** are reported by a small local rule that checks the file path.
-- **Placement** is checked by the structural check once a test runner exists. Its failure message says where the file belongs.
+- **Placement** is checked by the structural check. Its failure message says where the file belongs.
 - **Test placement** is checked by the structural check, which fails on a `.test` file with no source file of the same name beside it and on an `.e2e.ts` file outside `e2e/`. Lint fails on any import of a `.test` file, a `.fixture` file or `src/testing` from production code, and on any import of `src` from `e2e/`.
 
 ## Research
@@ -293,6 +293,5 @@ The strongest counter-argument is the Next.js position itself: any organisation 
 
 - **Promotion moves files.** Moving a module when a second route needs it adds a file move to a change that was about something else. This is deliberate: the move is the signal that the module became shared.
 - **Strict layers can feel indirect.** Code that a lower layer needs from a higher one has to be passed down as a prop or moved down. That is the cost of being able to read each layer on its own.
-- **Placement is only partly enforced until tests exist.** Lint catches wrong imports and names, but not a file in the wrong folder that imports nothing wrong.
 
 Revisit if the site gains a second app, if areas start splitting often enough to suggest the rule is wrong, or if lint-based boundaries become too slow or too coarse.

@@ -81,6 +81,23 @@ const importsBannedEverywhere: ImportPattern[] = [
   },
 ];
 
+// Code that ships should never depend on code that only tests use, so tests,
+// fixtures and src/testing are imported only by tests and fixtures.
+const testOnlyImports: ImportPattern[] = [
+  {
+    regex: String.raw`\.(test|fixture)(\.|$)`,
+    message:
+      "Tests and fixtures are imported only by tests. Move what this file needs out of the test, into the layer it belongs to.",
+  },
+  {
+    regex: "^@/testing(/|$)",
+    message:
+      "src/testing holds test helpers, so only tests and fixtures may import it. Move what this file needs into the layer it belongs to.",
+  },
+];
+
+const shippedCodeBans = [...importsBannedEverywhere, ...testOnlyImports];
+
 // Every control and link should get the design system's styling and
 // behaviour. These libraries are wrapped by src/ui, so only src/ui may import
 // them.
@@ -104,8 +121,7 @@ function layerPatterns(own: Layer, label = `src/${own}`) {
   const allowed = allowedImports[own];
   const banned = bannedLayers(allowed, own);
   const allowedText = allowed.length > 0 ? allowed.join(", ") : "nothing else in src";
-  const patterns =
-    own === "ui" ? [...importsBannedEverywhere] : [...importsBannedEverywhere, ...wrappedLibraries];
+  const patterns = own === "ui" ? [...shippedCodeBans] : [...shippedCodeBans, ...wrappedLibraries];
   if (banned.length > 0) {
     patterns.push({
       regex: `^@/(${banned.join("|")})(/|$)`,
@@ -115,7 +131,13 @@ function layerPatterns(own: Layer, label = `src/${own}`) {
   return patterns;
 }
 
-function importOverride(files: string[], patterns: ImportPattern[]): OxlintOverride {
+type ImportRule = { files: string[]; patterns: ImportPattern[] };
+
+function importOverride(files: string[], patterns: ImportPattern[]): ImportRule {
+  return { files, patterns };
+}
+
+function toOverride({ files, patterns }: ImportRule): OxlintOverride {
   return { files, rules: { "no-restricted-imports": ["error", { patterns }] } };
 }
 
@@ -137,13 +159,62 @@ const lessonDiagramImports = importOverride(
 // is copied into.
 const notRelative = (pattern: ImportPattern) => pattern !== importsBannedEverywhere[0];
 const scriptImports = [
-  importOverride(["scripts/**"], wrappedLibraries),
+  importOverride(["scripts/**"], [...testOnlyImports, ...wrappedLibraries]),
   importOverride(["scripts/templates/ui/**"], layerPatterns("ui").filter(notRelative)),
   importOverride(["scripts/templates/app/**"], layerPatterns("app").filter(notRelative)),
   importOverride(
     ["scripts/templates/lesson/**"],
     layerPatterns("diagrams", "A lesson's diagrams").filter(notRelative),
   ),
+];
+
+// A test belongs to the layer of the file it tests and follows that layer's
+// import rules, and may also import fixtures and src/testing. So each import
+// override above gets a twin for the tests and fixtures in its folders, with
+// the test-only bans lifted.
+const testGlobs = ["*.test.ts", "*.test.tsx", "*.test.mts", "*.fixture.*"];
+const isTestOnlyBan = (pattern: ImportPattern) => testOnlyImports.includes(pattern);
+
+function testTwin({ files, patterns }: ImportRule): ImportRule {
+  return importOverride(
+    files.flatMap((glob) => testGlobs.map((test) => glob.replace(/\*\*$/, `**/${test}`))),
+    patterns.filter((pattern) => !isTestOnlyBan(pattern)),
+  );
+}
+
+// Files outside src, such as the local lint rules, follow the base import
+// rules, so their tests get a twin of those too.
+const baseImports = importOverride(["lint/**"], [...shippedCodeBans, ...wrappedLibraries]);
+
+// src/testing holds helpers for tests in any layer, so it may import every
+// layer. It is not part of the stack, and only tests may import it.
+const testingImports = importOverride(
+  ["src/testing/**"],
+  [...importsBannedEverywhere, ...wrappedLibraries],
+);
+
+// End-to-end tests drive the built site through a browser, the way a user
+// does, so they import nothing from src.
+const e2eImports = importOverride(
+  ["e2e/**"],
+  [
+    {
+      regex: String.raw`^\.\./`,
+      message: "End-to-end tests import only other files in e2e/.",
+    },
+    {
+      regex: "^@/",
+      message:
+        "End-to-end tests drive the built site through the browser and import nothing from src. Read what the test needs from the page.",
+    },
+  ],
+);
+
+const sourceImports = [
+  baseImports,
+  ...layerNames.map((name) => layerImports(name)),
+  lessonDiagramImports,
+  ...scriptImports,
 ];
 
 // The TypeScript compiler accepts some code that fails or misbehaves at
@@ -568,18 +639,80 @@ const repository = {
   complexity: ["error", { max: 10 }],
   "max-depth": ["error", { max: 3 }],
   "max-params": ["error", { max: 3 }],
-  "no-restricted-imports": [
-    "error",
-    { patterns: [...importsBannedEverywhere, ...wrappedLibraries] },
-  ],
+  "no-restricted-imports": ["error", { patterns: [...shippedCodeBans, ...wrappedLibraries] }],
   "no-nested-ternary": "error",
+} satisfies Rules;
+
+// A test is only useful while a failing run means broken code and a passing run
+// means working code. These rules stop the edits that break that: switching a
+// test off, asserting nothing, hiding an assertion behind a condition, mocking
+// a module, or storing a snapshot instead of an expected value.
+const tests = {
+  "vitest/no-focused-tests": "error",
+  "vitest/no-disabled-tests": "error",
+  "vitest/no-commented-out-tests": "error",
+  "vitest/expect-expect": "error",
+  "vitest/no-conditional-expect": "error",
+  "vitest/no-conditional-in-test": "error",
+  "vitest/no-conditional-tests": "error",
+  "vitest/no-standalone-expect": "error",
+  "vitest/valid-expect": "error",
+  "vitest/no-identical-title": "error",
+  "vitest/valid-title": "error",
+  "vitest/no-import-node-test": "error",
+  "vitest/no-restricted-vi-methods": [
+    "error",
+    {
+      mock: "Module mocks test the mock, not the code. Pass the dependency in as a parameter, or use the real one.",
+      doMock:
+        "Module mocks test the mock, not the code. Pass the dependency in as a parameter, or use the real one.",
+      unmock:
+        "Module mocks test the mock, not the code. Pass the dependency in as a parameter, or use the real one.",
+      hoisted:
+        "Module mocks test the mock, not the code. Pass the dependency in as a parameter, or use the real one.",
+    },
+  ],
+  "vitest/no-restricted-matchers": [
+    "error",
+    {
+      toMatchSnapshot:
+        "A snapshot states no expected value and one flag regenerates it. Write the expected value out.",
+      toMatchInlineSnapshot:
+        "A snapshot states no expected value and one flag regenerates it. Write the expected value out.",
+      toMatchFileSnapshot:
+        "A snapshot states no expected value and one flag regenerates it. Write the expected value out.",
+    },
+  ],
+} satisfies Rules;
+
+// Every test file is named *.test.ts, *.test.tsx or *.test.mts, so the runner
+// and the structure check agree on what a test is. This runs on every file, so
+// a *.spec.ts file is caught too.
+const testFileNames = {
+  "vitest/consistent-test-filename": [
+    "error",
+    {
+      pattern: String.raw`.*\.test\.(ts|tsx|mts)$`,
+      allTestPattern: String.raw`.*\.(test|spec)\.m?[jt]sx?$`,
+    },
+  ],
 } satisfies Rules;
 
 export default defineConfig({
   // Each plugin's rules have to be named before they can run. These are the
   // native plugins, Rust ports of ESLint plugins. Turning one on enables nothing
   // by itself.
-  plugins: ["typescript", "react", "nextjs", "jsx-a11y", "import", "unicorn", "promise", "oxc"],
+  plugins: [
+    "typescript",
+    "react",
+    "nextjs",
+    "jsx-a11y",
+    "import",
+    "unicorn",
+    "promise",
+    "oxc",
+    "vitest",
+  ],
   // StyleX's plugin and this repository's local rules have no native port, so
   // they run through Oxlint's support for ESLint-format plugins.
   jsPlugins: ["@stylexjs/eslint-plugin", "./lint/plugin.mts"],
@@ -616,8 +749,10 @@ export default defineConfig({
     ...accessibility,
     ...stylex,
     ...repository,
+    ...testFileNames,
   },
   overrides: [
+    { files: ["**/*.test.ts", "**/*.test.tsx", "**/*.test.mts"], rules: tests },
     // A catalog of every lesson is long by nature, and so is this config, so
     // these files are exempt from the line limit.
     {
@@ -632,6 +767,12 @@ export default defineConfig({
     // This config is the documentation for every rule, so it is the one file
     // where comments are allowed.
     { files: ["oxlint.config.mts"], rules: { "patternbook/no-comments": "off" } },
+    // A lint rule's tests hold the code it bans as sample strings, so the
+    // colour rule would report its own test cases.
+    {
+      files: ["lint/rules/coloursFromTokens.test.mts"],
+      rules: { "patternbook/colours-from-tokens": "off" },
+    },
     // The Open Graph image is rendered by next/og, which takes inline styles and
     // can't read StyleX, so it sets its type sizes directly.
     {
@@ -640,9 +781,12 @@ export default defineConfig({
     },
     // Each layer may only import the layers below it, so each gets an override
     // listing the imports it may not make.
-    ...layerNames.map((name) => layerImports(name)),
-    lessonDiagramImports,
-    ...scriptImports,
+    // A test follows the import rules of the folder it sits in, so every
+    // folder's override has a twin for its tests that lifts the test-only bans.
+    ...sourceImports.map(toOverride),
+    ...sourceImports.map(testTwin).map(toOverride),
+    toOverride(testingImports),
+    toOverride(e2eImports),
     // The compiler already reports these on TypeScript files, so they are off
     // there. no-throw-literal is replaced by its type-aware version,
     // only-throw-error.

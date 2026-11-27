@@ -20,7 +20,7 @@ function isLevelFilter(value: unknown): value is LevelFilter {
   return values.has(value);
 }
 
-function parseLevel(stored: unknown) {
+export function parseLevelFilter(stored: unknown) {
   return isLevelFilter(stored) ? stored : undefined;
 }
 
@@ -29,6 +29,6 @@ export function setLevelFilter(level: LevelFilter) {
 }
 
 export function useLevelFilter() {
-  const [level] = useLocalStorage(KEY, parseLevel, "all");
+  const [level] = useLocalStorage(KEY, parseLevelFilter, "all");
   return level;
 }

@@ -61,7 +61,7 @@ Design: [RFC 0004: Lint](rfc/0004-lint.md). Done, see [Agent-driven repo: Lint r
 
 ### 4. Tests
 
-Design: [RFC 0005: Tests](rfc/0005-tests.md).
+Design: [RFC 0005: Tests](rfc/0005-tests.md). Done, see [Agent-driven repo: Tests](#agent-driven-repo-tests) under Done. What waits until the site needs it is in [Tests for later](#tests-for-later).
 
 ### 5. Runtime verification
 
@@ -70,24 +70,6 @@ Design: [RFC 0006: Runtime verification](rfc/0006-runtime-verification.md).
 ### 6. Prose
 
 Design: [RFC 0007: Prose](rfc/0007-prose.md).
-
-## Testing
-
-Not started. Everything that needs a test runner lives here, so the rest of the list can land without one. When this section starts, `test` joins `verify`.
-
-- [ ] Set up Vitest (Connor installs it). Tests sit next to their file as `Foo.test.ts`. No module mocking (`vi.mock`): use real seams.
-- [ ] `test` script: all unit tests. `test:rules`: only the lint rule tests, so changing a rule is fast to check.
-- [ ] Catalog integrity: slugs unique, numbers 1 to 83 with no gaps, every topic has lessons, previous and next wrap correctly, starter lessons exist. Glossary terms unique.
-- [ ] Content checks: every lesson marked written in `catalog.ts` has an MDX file, and every MDX file has a catalog entry.
-- [ ] Local lint rules: `RuleTester` cases in `lint/rules/*.test.ts`, at least one valid and one invalid example taken from real code in this repo.
-- [ ] Structure test: every file in `src` sits in an allowed path, and the failure message says where it belongs.
-- [ ] Test placement ([RFC 0002 part 5](rfc/0002-architecture.md#5-where-tests-live)), in the same change as the first test:
-  - [ ] `checkStructure.mts`: add `src/testing` as an allowed folder; allow `*.test.ts` beside route files in `src/app`; skip test and fixture files in the "no route imports this module" check and the area size count.
-  - [ ] `checkStructure.mts`: fail on a `.test` file with no source file of the same name beside it, and on an `.e2e.ts` file outside `e2e/`.
-  - [ ] Lint: production code may not import `*.test.*`, `*.fixture.*` or `src/testing`; `e2e/` may not import `src`; `src/testing` may import any layer.
-  - [ ] Confirm `unicorn/filename-case` accepts `catalog.test.ts`, and decide whether test files need a higher `max-lines-per-function` for `describe` blocks.
-  - [ ] Generators: `new:rule` (and any generator for a check script) also creates the test file beside it.
-- [ ] `AGENTS.md` files: line limits, and every file path they mention exists.
 
 ## Later
 
@@ -219,6 +201,28 @@ Design: [RFC 0003: Types](rfc/0003-types.md).
 - [x] TypeScript pinned to an exact version
 - [x] Type coverage at 100% (`npm run typecheck:coverage`, strict mode, part of `verify`)
 
+### Agent-driven repo: Tests
+
+Design: [RFC 0005: Tests](rfc/0005-tests.md), with placement from [RFC 0002 part 5](rfc/0002-architecture.md#5-where-tests-live).
+
+- [x] Vitest (Node, random order, no retries, no `.only`, mocks and globals restored after each test). `test` runs once, `test:related` runs the tests for changed files, `test:rules` runs only the lint rule tests
+- [x] `test` and `test:count` are the last steps of `verify`
+- [x] Playwright end-to-end tests in `e2e/<journey>.e2e.ts` (`npm run test:e2e`, builds and starts the site, `.only` forbidden, no retries): reading lessons in order, the not found page, and the level filter
+- [x] Lint for tests: no focused, skipped or commented-out tests, every test asserts, no conditional assertions, no module mocks, no snapshots, one runner, test files named `*.test.ts`, `*.test.tsx` or `*.test.mts`
+- [x] Lint for placement: shipped code can't import tests, `*.fixture.*` or `src/testing`; tests follow their folder's import rules; `src/testing` may import any layer; `e2e/` imports nothing from `src`
+- [x] Structure check: a test needs a source file of the same name beside it, `.e2e.ts` files live in `e2e/`, fixtures sit beside a test or in `src/testing`; tests and fixtures are skipped by the route, `_parts` and area size checks. Split into pure functions (`scripts/structure.mts`, `scripts/testPlacement.mts`) with tests
+- [x] Spacing check split the same way (`scripts/spacing.mts`), with tests; test files don't count toward it
+- [x] Test-count ratchet: a Vitest reporter records the count, `test:count` fails if it drops below `scripts/testCountBaseline.json` and raises the baseline when it grows
+- [x] Every local lint rule has `RuleTester` tests with accepted and rejected samples and the exact message (shared tester in `lint/rules/ruleTester.fixture.mts`)
+- [x] `new:rule` also creates the rule's test file
+- [x] Data invariants: lesson numbers 1 to N with no gaps, unique slugs, topics and lessons agree, starter lessons exist, diagrams numbered after their lesson, glossary terms unique, every lesson folder registered and every published lesson has a source
+- [x] Logic: `formatMinutes`, `lessonSlugFromPath`, `neighbours`, `totals`, `headingId`, generator name and insert helpers
+- [x] Component tests in a real browser: `*.test.tsx` runs as a separate Vitest project in Chromium through Playwright, with StyleX compiled by `@stylexjs/unplugin`. Storage, cookies, the sidebar state on `<html>`, scroll and the 1280×800 viewport reset before each test (`src/testing/browserSetup.ts`)
+- [x] Component tests for every component with behaviour of its own: mark as read and feedback, the sidebar (current topic open, links for published lessons, level filter and its empty state, collapse all, read counts), code tabs (switching and copying), the page rail (current heading while scrolling, hidden below 1180px), lesson cards (details and the Read badge), the diagram index filter, the top bar (current section, phone menu) and hiding, showing and resizing the sidebar (button, `⌘\`, keyboard). The `src/ui` wrappers are covered through these rather than on their own
+- [x] `AGENTS.md` check (`npm run agents`, in `verify`): at most 150 lines, and every file path mentioned in a code span exists next to the file or at the repository root
+- [x] Unknown lesson URLs: kept at status 200 (the page streams before the slug is checked), with an end-to-end test that the not found page carries `noindex`
+- [x] Parser tests in `src/hooks` for the stored read lessons, level filter and sidebar state: accepted and rejected examples, plus property-based tests (fast-check) that any stored value parses to a valid result or to nothing, and that every value written reads back unchanged. `clampWidth` always gives a whole number within the limits
+
 ### Shadows
 
 Three levels (`raised`, `overlay`, `sheet`) with light and dark values, plus `surfaceRaised` and `surfaceOverlay` for dark mode. Board 01, section 04.
@@ -235,3 +239,12 @@ A 3 by 3 dot grid with one signal dot off the grid, and a lowercase "patternbook
 - [x] Update `Brand` in the top bar to use it
 - [x] New favicon and app icons from the mark (`src/app/favicon.ico`, `manifest.ts`)
 - [x] New Open Graph image (`OgCard`, site and lesson `opengraph-image.tsx`)
+
+## Tests for later
+
+Parts of [RFC 0005: Tests](rfc/0005-tests.md) that apply once the site has the code they test.
+
+- [ ] Route handler tests, beside each `route.ts`, once the site has one: call the handler with a real `Request` and check the status, headers and body
+- [ ] Database tests, once the site stores data: a throwaway database of the same engine (Testcontainers), and each test starts from a known state by resetting the tables or rolling back a transaction
+- [ ] External API tests, once the site calls one: Mock Service Worker intercepts requests under `fetch`, so the real client runs against responses saved from the real API (`*.fixture.json`), and unhandled requests fail the test
+- [ ] Mutation testing (Stryker), run on demand or on changed files, starting with the parsers in `src/hooks` and the catalog invariants. Each surviving change becomes a new test
